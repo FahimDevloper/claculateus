@@ -7,6 +7,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator compares your date of birth to today's date, carefully accounting for the actual number of days in each month and leap years, to produce your precise age. It also totals the number of days you've been alive and calculates how many days remain until your next birthday.",
     formula: "Age = (current date − date of birth), adjusted for calendar month lengths and leap years",
+    methodology:
+      "Age in years, months, and days can't be found through simple subtraction of date components, since months have different lengths and years can be leap years — the calculator instead counts complete years elapsed (checking whether this year's birthday has occurred yet), then complete months within the current partial year, then remaining days, borrowing from the actual calendar (not a fixed 30-day assumption) at each step.",
+    stepByStep: [
+      "Compare the birth year to the current year to find a base year count.",
+      "Check whether the birthday has occurred yet this year; if not, subtract one from the year count and borrow those months.",
+      "Find complete months elapsed since the most recent birthday, using actual calendar month lengths.",
+      "Find remaining days since the most recent monthly anniversary for the final day count.",
+    ],
+    edgeCases: [
+      "Someone born on February 29th in a leap year has their actual birthday only every four years — most systems treat February 28th (or March 1st) as the observed birthday in non-leap years.",
+      "Time zone differences right around midnight can shift which calendar day 'today' is, subtly affecting an age calculation done at that boundary.",
+      "This calculates age as of today's date by default — a historical age-on-a-specific-date calculation requires using that specific date instead of today.",
+      "Total days alive is a separate running count that increases by exactly one every calendar day, unlike the years/months/days breakdown, which resets each component at its own boundary.",
+    ],
     examples: [
       { title: "Exact age", body: "Someone born on March 15, 1995 checking on August 5, 2026 would be exactly 31 years, 4 months, and 21 days old." },
       { title: "Days alive", body: "That same birth date corresponds to over 11,000 total days alive by that same check-in date." },
@@ -38,6 +52,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator converts both dates into a single day count and finds the difference, which avoids the common pitfalls of manually counting across months with different numbers of days. It then converts that day count into weeks, approximate months, and approximate years for easier interpretation.",
     formula: "Days between = |end date − start date|, in days\nWeeks ≈ days ÷ 7, Years ≈ days ÷ 365.25",
+    methodology:
+      "Converting both dates into a single serial day count (a running total of days since a fixed reference point) sidesteps the whole problem of month-length variation entirely — subtracting two such counts always gives an exact day difference, regardless of which months or leap years fall in between. Converting that day count into weeks, months, or years afterward is just division by an average conversion factor, which is why those secondary units are approximate even though the underlying day count is exact.",
+    stepByStep: [
+      "Convert the start date into a single serial day number.",
+      "Convert the end date into a single serial day number.",
+      "Subtract the smaller from the larger to find the exact number of days between them.",
+      "Divide by 7 for an approximate week count, or by 365.25 for an approximate year count (accounting for the average effect of leap years).",
+    ],
+    edgeCases: [
+      "Whether the count should include or exclude the start and/or end date ('inclusive' versus 'exclusive' counting) is a common source of off-by-one confusion, and depends on the specific context (contract terms, age calculations, etc.).",
+      "Converting the day count to 'months' is inherently approximate, since months vary from 28 to 31 days — there's no single exact conversion factor the way there is for weeks.",
+      "365.25 (rather than a flat 365) is used for the year conversion specifically to account for the average effect of leap years across a multi-year span.",
+      "A reversed date order (end date earlier than start date) is handled by taking the absolute value, so the calculator always returns a positive day count.",
+    ],
     examples: [
       { title: "Short range", body: "From January 1 to March 15 of the same year is 73 days — not simply 2 months and 15 days when converted to other units." },
       { title: "Long range", body: "From January 1, 2020 to August 5, 2026 spans over 2,400 days, or roughly 6.6 years." },
@@ -69,6 +97,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "Each letter grade is converted to a grade point value (A = 4.0, B+ = 3.3, and so on), multiplied by the credit hours for that course, and summed across all courses. That total is then divided by your total credit hours to produce your GPA — which is why a high grade in a high-credit course impacts your GPA more than the same grade in a low-credit course.",
     formula: "GPA = Σ(grade points × credit hours) ÷ Σ(credit hours)",
+    methodology:
+      "GPA is a weighted average, using the same underlying math as any weighted average calculation — each course's grade point value gets weighted by its credit hours before summing, and the total is divided by total credit hours rather than by the number of courses. This is exactly why a 4-credit A contributes more to the overall GPA than a 1-credit A, even though both represent the identical letter grade.",
+    stepByStep: [
+      "Convert each letter grade to its standard grade point value (A = 4.0, A- = 3.7, B+ = 3.3, and so on down the scale).",
+      "Multiply each course's grade point value by its credit hours.",
+      "Sum all of those products together.",
+      "Divide by the total credit hours across all courses to find GPA.",
+    ],
+    edgeCases: [
+      "Pass/fail courses are typically excluded from GPA calculation entirely, rather than counted as a specific grade point value.",
+      "Some institutions use a weighted scale that gives extra grade points for honors or AP-level courses, which differs from the standard unweighted 4.0 scale used here.",
+      "Repeated courses are handled differently by different institutions — some replace the original grade in GPA calculations, others average both attempts.",
+      "The specific grade-point mapping for plus/minus grades (like B+ = 3.3 versus 3.33) can vary slightly by institution, though the standard values used here are widely applied.",
+    ],
     examples: [
       { title: "Balanced course load", body: "A, B+, A-, B, and C+ across 3, 4, 3, 3, and 2 credit hours respectively works out to a GPA of about 3.28." },
       { title: "Impact of credit weight", body: "The same grades with the A shifted to a 5-credit course (instead of 3) raises the overall GPA slightly, since that top grade now carries more weight." },
@@ -147,6 +189,19 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies the original price by the discount percentage to find your savings, then subtracts that from the original price to get the final sale price — the same math a store's register runs at checkout, just available before you're standing in line.",
     formula: "Savings = Price × (Discount % ÷ 100)\nSale price = Price − Savings",
+    methodology:
+      "A percentage discount is calculated on the original price, then subtracted from that same original price — this two-step process (find the dollar savings, then subtract) is mathematically equivalent to directly multiplying the original price by (1 minus the discount decimal), but doing it in two visible steps makes both the savings amount and the final price clear at once.",
+    stepByStep: [
+      "Convert the discount percentage to a decimal by dividing by 100.",
+      "Multiply the original price by that decimal to find the dollar savings.",
+      "Subtract the savings from the original price to find the sale price.",
+    ],
+    edgeCases: [
+      "Stacked discounts (a coupon applied on top of a sale price) apply sequentially, not additively — 20% off followed by another 10% off is not the same as a flat 30% off.",
+      "Sales tax is typically calculated on the discounted sale price, not the original price, in most jurisdictions.",
+      "A discount of 100% or more would produce a sale price of zero or negative, which isn't a realistic real-world scenario and usually signals an input error.",
+      "'Percent off' and 'percent of original price you pay' are complementary but different framings — 25% off means paying 75% of the original price, not 25%.",
+    ],
     examples: [
       { title: "Standard discount", body: "An $80 item at 25% off saves you $20, bringing the sale price to $60." },
       { title: "Deep discount", body: "The same $80 item at 60% off saves $48, for a final price of $32." },
@@ -177,6 +232,19 @@ export const everydayContent: Record<string, SeoContent> = {
       "Figuring out what date falls 30, 60, or 90 days from now — or before a past date — comes up constantly for deadlines, contracts, and planning. Our Add or Subtract Days Calculator finds that exact date instantly.",
     howItWorks:
       "The calculator adds or subtracts your entered number of days from your starting date, correctly handling month-length differences and leap years automatically since it works in raw days rather than approximating months.",
+    methodology:
+      "Working with a serial day count (converting the calendar date into a single running number of days since a fixed reference point) rather than manipulating month and day fields directly is what makes this reliable — adding or subtracting a number of days is then just simple arithmetic on that serial number, and converting the result back to a calendar date automatically handles any month or year boundary crossed along the way, including leap year adjustments.",
+    stepByStep: [
+      "Convert the starting date into a serial day number.",
+      "Add the specified number of days for a future date, or subtract for a past date.",
+      "Convert the resulting serial day number back into a calendar date.",
+    ],
+    edgeCases: [
+      "Subtracting more days than have elapsed since a fixed calendar epoch would produce an invalid date, though this is rarely relevant for typical everyday use.",
+      "Crossing from December into January (or vice versa when subtracting) correctly increments or decrements the year automatically as part of the serial-day conversion.",
+      "This calculates calendar days, not business days — skipping weekends or holidays requires separate, additional logic not included in this basic day-add calculation.",
+      "Time zone doesn't affect a pure calendar-date calculation like this, since no specific time of day is involved.",
+    ],
     examples: [
       { title: "Adding days", body: "Adding 30 days to a given start date gives the exact resulting date, correctly crossing month boundaries as needed." },
       { title: "Subtracting days", body: "Subtracting 90 days instead finds the date exactly three months prior, useful for deadline or lookback calculations." },
@@ -207,6 +275,19 @@ export const everydayContent: Record<string, SeoContent> = {
       "Whether you're curious what day a historical event fell on or need to confirm a future date's day of the week, our Day of the Week Calculator answers instantly for any date.",
     howItWorks:
       "The calculator uses standard calendar algorithms to determine which day of the week any given date falls on, correctly accounting for leap years and the Gregorian calendar's rules.",
+    methodology:
+      "Determining a day of the week from a date relies on the same serial-day-count principle used across these date calculators — every calendar date maps to a specific day count since a fixed reference point, and since the seven-day week cycles with perfect regularity, taking that day count modulo 7 directly reveals which day of the week it falls on, once calibrated against a known reference date and its known weekday.",
+    stepByStep: [
+      "Convert the target date into a serial day number using standard Gregorian calendar rules.",
+      "Divide that serial number by 7 and find the remainder.",
+      "Map that remainder to the corresponding day of the week, calibrated against a known reference date.",
+    ],
+    edgeCases: [
+      "Dates before the Gregorian calendar's adoption (which varied by country, generally in the 1500s-1700s) may not align with this calculation if compared against historical Julian calendar records.",
+      "This works identically for both past and future dates, since the underlying weekly cycle is perfectly regular and doesn't depend on 'now.'",
+      "Leap years add an extra day to February, which shifts the day-of-week alignment for all dates later in that same year compared to a non-leap year.",
+      "Different date input formats (day/month/year versus month/day/year) can produce a completely different, incorrect date if misinterpreted before this calculation runs.",
+    ],
     examples: [
       { title: "Future planning", body: "Checking what day of the week a specific future date falls on helps confirm whether an event lands on a weekday or weekend." },
       { title: "Historical curiosity", body: "Looking up the day of the week for a historical date, like a birthday decades in the past, satisfies simple curiosity with an exact answer." },
@@ -237,6 +318,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Knowing exactly which day number of the year today is — and how many remain — is useful for tracking annual goals, deadlines, or general planning. Our Day of the Year Counter finds both instantly for any date.",
     howItWorks:
       "The calculator counts the number of days from January 1st of that year up to and including your entered date, then subtracts from the total days in that year (365 or 366, correctly accounting for leap years) to find days remaining.",
+    methodology:
+      "This sums the actual number of days in each calendar month leading up to the target date (accounting for February having 28 or 29 days depending on whether it's a leap year), then adds the day-of-month itself — the result is the same 'day-of-year' or 'ordinal date' figure used in scientific and technical contexts like Julian day notation, satellite data logging, and some programming date formats.",
+    stepByStep: [
+      "Sum the number of days in every complete month before the target date's month.",
+      "Add the target date's day-of-month to that running total for the day-of-year number.",
+      "Determine whether the year is a leap year to find total days in the year (365 or 366).",
+      "Subtract the day-of-year number from total days in the year to find days remaining.",
+    ],
+    edgeCases: [
+      "A date in a leap year after February 29th has a day-of-year number one higher than the identical calendar date would have in a non-leap year.",
+      "December 31st always has a day-of-year number equal to the total days in that year (365 or 366), with zero days remaining.",
+      "January 1st is always day 1 of the year, not day 0, under standard convention.",
+      "This is distinct from 'week number' calculations, which use a completely different weekly-based counting system.",
+    ],
     examples: [
       { title: "Mid-year check", body: "A date in early July typically falls around day 182-183 of the year, with roughly half the year remaining." },
       { title: "Leap year adjustment", body: "The same calendar date in a leap year shifts slightly in its day-of-year count after February 29th, since that extra day changes the running total." },
@@ -267,6 +362,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Counting down to a big event — a wedding, a launch date, a deadline — is more motivating with an exact figure than a rough guess. Our Countdown Calculator finds the precise time remaining until any future date.",
     howItWorks:
       "The calculator finds the difference between now and your target date, breaking it down into days and hours remaining, and also shows the total hours for a different way of visualizing the same countdown.",
+    methodology:
+      "Unlike a pure calendar-date difference, a countdown needs the exact current moment (including time of day), not just today's date, since 'time remaining' changes continuously rather than just once per day — the calculator finds the difference between the precise current timestamp and the target date's timestamp, then breaks that raw duration down into whole days plus remaining hours for a more readable format.",
+    stepByStep: [
+      "Determine the exact current date and time.",
+      "Determine the target date (and time, if specified) being counted down to.",
+      "Subtract the current timestamp from the target timestamp to find total time remaining.",
+      "Break that duration down into whole days plus remaining hours, and separately express it as total hours.",
+    ],
+    edgeCases: [
+      "A target date entered without a specific time typically defaults to midnight, which can shift the countdown by nearly a full day compared to an intended end-of-day target.",
+      "Time zone differences between the person viewing the countdown and the actual event location can make a displayed countdown technically inaccurate for a global audience.",
+      "A target date already in the past produces a negative duration, which should be flagged clearly rather than shown as a confusing negative countdown.",
+      "This countdown recalculates based on the current moment, so revisiting it later naturally shows a shorter remaining time, unlike a fixed date-difference calculation.",
+    ],
     examples: [
       { title: "Weeks away", body: "A target date a few weeks out shows a specific day-and-hour countdown, updating precisely based on the exact current time." },
       { title: "Already passed", body: "Entering a date that's already in the past clearly flags that the date has passed, rather than showing a confusing negative countdown." },
@@ -297,6 +406,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Calculating the duration between two times of day — like a meeting's length or a shift's hours — is simple until it crosses midnight, where manual subtraction breaks down. Our Time Duration Calculator handles both cases correctly.",
     howItWorks:
       "The calculator converts both times into total minutes since midnight, finds the difference, and if the end time is earlier than the start time (indicating the duration crosses midnight), adds a full 24 hours to correctly calculate the overnight duration.",
+    methodology:
+      "Converting each time to minutes-since-midnight turns time-of-day into a plain number, making subtraction straightforward — but a naive subtraction breaks when the end time is numerically smaller than the start time (like a 10 PM start and 6 AM end), since that actually represents a duration that wraps past midnight into the next day. Detecting that case and adding a full 24 hours (1,440 minutes) before subtracting corrects for the wraparound.",
+    stepByStep: [
+      "Convert the start time into total minutes since midnight.",
+      "Convert the end time into total minutes since midnight.",
+      "If the end time's minute value is smaller than the start time's, add 1,440 minutes (24 hours) to the end time to account for crossing midnight.",
+      "Subtract start from end to find total duration in minutes, then convert to hours and minutes.",
+    ],
+    edgeCases: [
+      "A duration that appears to be exactly 24 hours (identical start and end time) is ambiguous — it could mean zero duration or a full day, depending on context, and typically needs to be resolved by the specific use case.",
+      "This calculates raw clock-time duration and doesn't automatically subtract any break time — a separate step or dedicated calculator handles that.",
+      "AM/PM entry errors (especially confusing 12 AM/PM at the boundaries of the day) are a common source of incorrect duration calculations.",
+      "This assumes both times fall on the same 24-hour cycle without an explicit date component — durations spanning more than 24 hours require a full date-and-time calculation instead.",
+    ],
     examples: [
       { title: "Same-day duration", body: "A start time of 9:00 AM and end time of 5:30 PM gives a duration of 8 hours 30 minutes." },
       { title: "Crossing midnight", body: "A start time of 10:00 PM and end time of 6:00 AM correctly calculates an 8-hour duration, properly handling the crossover past midnight." },
@@ -327,6 +450,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Coordinating across time zones for calls, travel, or remote work means converting a time from one UTC offset to another — easy to get wrong when the conversion crosses midnight or a date boundary. Our Time Zone Converter handles it precisely.",
     howItWorks:
       "The calculator finds the difference between your target and source UTC offsets, applies that difference in minutes to your entered time, and correctly wraps the result to a new day (forward or backward) if the conversion crosses midnight.",
+    methodology:
+      "Every time zone is defined by its offset from UTC (Coordinated Universal Time), a single global reference point — converting between two time zones is really just converting each to UTC and back, which simplifies to directly applying the difference between the two offsets. Wrapping the result to the next or previous calendar day when the adjusted time crosses midnight is the same logic used in time-duration calculations, just applied to a time zone shift instead of an elapsed duration.",
+    stepByStep: [
+      "Identify the source time zone's UTC offset and the target time zone's UTC offset.",
+      "Find the difference between the two offsets.",
+      "Apply that difference (in minutes) to the entered time.",
+      "If the result crosses midnight in either direction, shift the calendar date forward or backward by one day accordingly.",
+    ],
+    edgeCases: [
+      "Daylight saving time shifts a region's effective UTC offset for part of the year, which a calculation based on a fixed standard offset won't automatically capture unless updated seasonally.",
+      "Some regions use non-whole-hour offsets (like UTC+5:30 or UTC+9:45), which this calculation must handle in minutes, not just whole hours.",
+      "A large time difference (many hours) more frequently results in the conversion landing on a different calendar day than the original.",
+      "Two locations can share the same UTC offset without being in the 'same' time zone in a colloquial sense, since time zone boundaries don't perfectly align with offset boundaries everywhere.",
+    ],
     examples: [
       { title: "Standard conversion", body: "2:00 PM Eastern Time (UTC-5) converts to 8:00 PM Central European Time (UTC+1) — a 6-hour difference applied directly." },
       { title: "Crossing a day boundary", body: "A late-evening time converted to a time zone many hours ahead can roll over into the next calendar day, which the calculator flags explicitly." },
@@ -357,6 +494,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Calculating total hours worked from a clock-in and clock-out time, minus a lunch break, is basic but error-prone math that timesheets rely on constantly. Our Work Hours Calculator handles it precisely, with optional pay calculation.",
     howItWorks:
       "The calculator finds the raw duration between clock-in and clock-out times, subtracts your break minutes, and — if you provide an hourly rate — multiplies the resulting decimal hours by that rate to show pay for the shift.",
+    methodology:
+      "This builds directly on the same time-duration math used elsewhere — clock-in to clock-out is a straightforward duration calculation (with the same midnight-crossing handling for overnight shifts), and subtracting unpaid break minutes narrows that down to actual worked time. Converting the result to decimal hours (like 8.5 instead of 8 hours 30 minutes) is what makes the optional pay calculation a simple multiplication against an hourly rate.",
+    stepByStep: [
+      "Calculate the raw duration between clock-in and clock-out times.",
+      "Subtract unpaid break minutes from that raw duration.",
+      "Convert the result to decimal hours for easier pay calculation.",
+      "If an hourly rate is provided, multiply decimal hours by the rate to find shift pay.",
+    ],
+    edgeCases: [
+      "Only unpaid breaks should be subtracted — paid breaks are still compensated time and shouldn't reduce the pay calculation, even though they might be excluded from 'hours worked' for other purposes.",
+      "A shift crossing midnight needs the same wraparound handling as any overnight time-duration calculation.",
+      "Overtime pay rates (often 1.5x beyond a threshold) aren't factored into this base hourly calculation and require a separate overtime-specific calculation.",
+      "Rounding rules for payroll purposes (some employers round to the nearest quarter-hour) can differ from this calculator's precise decimal-hour result.",
+    ],
     examples: [
       { title: "Standard shift", body: "Clocking in at 9:00 AM and out at 5:30 PM with a 30-minute break gives 8 hours worked exactly." },
       { title: "With pay calculation", body: "That same 8-hour shift at a $20/hour rate calculates to $160 in pay for the shift, shown alongside the hours breakdown." },
@@ -388,6 +539,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator splits your total hours worked into regular hours (up to your standard threshold, commonly 40) and overtime hours (anything beyond that), applying your regular rate to the first group and your rate multiplied by the overtime multiplier to the second, then sums both for total pay.",
     formula: "Regular pay = regular hours × hourly rate\nOvertime pay = overtime hours × hourly rate × OT multiplier\nTotal pay = regular pay + overtime pay",
+    methodology:
+      "Overtime rules split total hours worked into two distinct buckets at a specific threshold (commonly 40 hours per week in the US under federal law) — hours up to that threshold are paid at the standard rate, while hours beyond it are paid at an elevated rate (commonly 1.5x, called 'time-and-a-half'). This split-then-sum approach is why overtime pay isn't simply 'total hours times an elevated rate' — only the hours actually beyond the threshold get the higher rate, with regular hours unaffected.",
+    stepByStep: [
+      "Compare total hours worked against the standard threshold (commonly 40 hours per week).",
+      "Any hours up to the threshold are regular hours; any hours beyond it are overtime hours.",
+      "Multiply regular hours by the standard hourly rate for regular pay.",
+      "Multiply overtime hours by the hourly rate times the overtime multiplier, then add to regular pay for total pay.",
+    ],
+    edgeCases: [
+      "Some jurisdictions calculate overtime based on daily hours (like anything over 8 hours in a single day) rather than purely weekly totals, which changes the calculation structure.",
+      "Double-time (2x rate, common for holidays or excessive daily hours in some jurisdictions) uses the same split logic but with a different multiplier than standard 1.5x overtime.",
+      "Salaried, exempt employees are often not entitled to overtime pay under labor law, regardless of hours worked — this calculation applies to hourly, non-exempt work.",
+      "Local labor law ultimately governs the exact threshold and multiplier that legally apply, and can vary meaningfully between jurisdictions.",
+    ],
     examples: [
       { title: "Standard overtime", body: "46 hours worked at a $22/hour rate with a 40-hour standard threshold and 1.5x multiplier produces $880 in regular pay plus $198 in overtime pay, for $1,078 total." },
       { title: "No overtime", body: "The same $22/hour rate at exactly 40 hours or fewer produces regular pay only, with zero overtime hours and zero overtime pay." },
@@ -418,6 +583,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Totaling up a full week's worth of daily clock-in and clock-out times by hand is tedious and error-prone — our Weekly Time Card Calculator does it in one step across all five workdays.",
     howItWorks:
       "The calculator parses each day's entered time range (formatted like '9:00-17:00'), calculates the duration for each day, sums all five days together, and — if an hourly rate is provided — calculates total weekly pay from the combined hours.",
+    methodology:
+      "This runs the same time-duration calculation independently for each of the five workdays, then sums those five individual durations into one weekly total — treating a full week's timesheet as five separate single-day duration problems solved and combined, rather than one continuous calculation, which is what allows each day to have its own independent start and end time.",
+    stepByStep: [
+      "For each day, parse the entered start and end time.",
+      "Calculate that day's duration using standard time-duration math.",
+      "Repeat for all five workdays.",
+      "Sum all five daily durations for the weekly total, and multiply by an hourly rate if provided for weekly pay.",
+    ],
+    edgeCases: [
+      "This version doesn't include a separate per-day break deduction field, unlike the single-day Work Hours Calculator — break time would need to be reflected directly in the entered time range if relevant.",
+      "An incorrectly formatted time range for any single day will prevent that day (and potentially the weekly total) from calculating correctly.",
+      "A week with fewer than five working days, or with weekend hours included, would need the input structure adjusted to reflect the actual days worked.",
+      "This produces a weekly total only — it doesn't separately calculate overtime beyond a 40-hour threshold, which would need the dedicated Overtime Pay Calculator.",
+    ],
     examples: [
       { title: "Standard 5-day week", body: "Five days of 9:00-17:00 (8 hours each) totals 40 hours for the week, with weekly pay calculated if an hourly rate is entered." },
       { title: "Varying daily hours", body: "A week with a shorter Friday (9:00-16:00, 7 hours) instead of the standard 8 correctly totals to 39 hours instead of 40, reflecting the actual daily variation." },
@@ -449,6 +628,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator rearranges the weighted grade formula algebraically, solving for the final exam score needed given your current grade, the final's weight in the overall grade, and your desired final grade outcome.",
     formula: "Score needed = (desired grade − current grade × (1 − final weight)) ÷ final weight",
+    methodology:
+      "Your final overall grade is a weighted blend: (current grade × the weight of everything except the final) plus (final exam score × the final's weight). Setting that blend equal to your desired grade and algebraically solving for the one unknown (final exam score) is exactly what this formula does — rearranging the weighted-average relationship to isolate the variable you actually want to find, rather than the more common direction of computing a final grade from a known final score.",
+    stepByStep: [
+      "Identify your current grade (before the final), the final exam's weight as a decimal, and your desired final overall grade.",
+      "Multiply current grade by (1 minus the final's weight) to find the non-final portion's contribution.",
+      "Subtract that from the desired grade.",
+      "Divide by the final's weight to find the exact score needed on the final.",
+    ],
+    edgeCases: [
+      "A required score above 100% means the target grade is mathematically unreachable through the final exam alone, given the current grade and final's weight.",
+      "A required score at or below 0% means the target grade is already secured even with a zero on the final.",
+      "This assumes the final exam's weight is stated precisely — an incorrect weight input produces a materially wrong required score.",
+      "Extra credit, grade curves, or dropped-lowest-score policies that a course might apply aren't reflected in this straightforward weighted calculation.",
+    ],
     examples: [
       { title: "Achievable target", body: "An 85% current grade with a final exam worth 20% of the total grade, targeting a 90% final grade, requires a 110% on the final — flagged as not achievable, since exam scores typically can't exceed 100%." },
       { title: "More realistic target", body: "The same 85% current grade targeting an 87% final grade instead requires only a 95% on the final — a much more achievable target given the same weighting." },
@@ -480,6 +673,19 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides points earned by total points possible to find a percentage, then maps that percentage onto a standard letter grade scale (A, A-, B+, B, and so on) using commonly used grade boundary thresholds.",
     formula: "Percentage = (points earned ÷ total points) × 100",
+    methodology:
+      "Converting points earned to a percentage normalizes any point scale (out of 20, 50, 100, or any other total) onto the same universal 0-100 basis, which is what makes it possible to map onto a single consistent letter grade scale regardless of how many total points a specific assignment was worth. The letter grade mapping itself is a lookup table of percentage boundaries (like 90-100% = A, 87-89% = B+, and so on) applied to that normalized percentage.",
+    stepByStep: [
+      "Divide points earned by total points possible.",
+      "Multiply by 100 to express the result as a percentage.",
+      "Compare that percentage against the letter grade scale's boundary thresholds to find the corresponding letter grade.",
+    ],
+    edgeCases: [
+      "Letter grade boundary thresholds vary somewhat between institutions — a percentage right at a boundary (like exactly 90%) could fall into different letter grades depending on the specific scale used.",
+      "A percentage above 100% (from extra credit) needs special handling depending on whether the grading scale allows for grades above the standard maximum.",
+      "This calculates a single assignment's percentage — a full-course grade typically requires combining multiple assignments through a Weighted Average or GPA calculation instead.",
+      "Some schools use plus/minus letter grades (B+, B, B-) while others use only whole letter grades, affecting how finely the percentage-to-letter mapping is divided.",
+    ],
     examples: [
       { title: "Standard case", body: "88 points earned out of 100 total gives a percentage of 88% and a letter grade of B+." },
       { title: "Different point scale", body: "The same percentage calculated from a different point scale — say, 44 out of 50 — still correctly produces the same 88% and B+ letter grade." },
@@ -511,6 +717,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator applies both your tax and tip percentages to the subtotal to find the full bill total, then divides that total evenly among your entered number of people.",
     formula: "Total = subtotal × (1 + tax% + tip%)\nEach person pays = total ÷ number of people",
+    methodology:
+      "Adding tax and tip percentages together before applying them to the subtotal in one step (rather than calculating each separately and summing) works because both are simple percentages of the same base amount — combining the rates first is mathematically equivalent to adding tax, then tip, then summing everything, just with fewer steps. Dividing that combined total by the number of people then assumes an even split, the simplest and most common way to divide a shared bill.",
+    stepByStep: [
+      "Add the tax percentage and tip percentage together.",
+      "Convert that combined percentage to a decimal and add 1 (to include the original subtotal).",
+      "Multiply the subtotal by that combined factor to find the full bill total.",
+      "Divide the total by the number of people splitting the bill.",
+    ],
+    edgeCases: [
+      "Some diners prefer calculating tip on the subtotal alone (before tax), while this combined approach applies tip proportionally across the whole bill — worth clarifying with the group if it matters.",
+      "Uneven orders among the group make an even split technically 'unfair' in the sense that heavier spenders pay less than their actual share — an itemized split would be needed instead.",
+      "A pre-existing service charge already included in the subtotal shouldn't have tip added on top of it a second time.",
+      "Rounding the final per-person amount to a clean, practical payment figure is a separate step from the exact mathematical division.",
+    ],
     examples: [
       { title: "Standard group dinner", body: "A $120 subtotal with 8% tax and 18% tip among 4 people comes to a total bill of $151.20, or $37.80 per person." },
       { title: "Larger group", body: "The same subtotal, tax, and tip split among 6 people instead brings each person's share down to $25.20." },
@@ -542,6 +762,19 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides each option's price by its quantity to find the true cost per unit for both options, then compares the two to identify which one offers the better value.",
     formula: "Unit price = price ÷ quantity",
+    methodology:
+      "Total price alone doesn't reveal value, since it conflates cost with quantity — dividing price by quantity strips out the quantity variable entirely, leaving a normalized cost-per-single-unit figure that can be directly compared across packages of any size. This is exactly the calculation printed on many store shelf tags, just not always consistently applied across every product or unit type.",
+    stepByStep: [
+      "For each option being compared, divide its price by its quantity to find unit price.",
+      "Ensure both options' quantities are expressed in the same unit of measurement.",
+      "Compare the two unit prices directly — the lower figure represents the better per-unit value.",
+    ],
+    edgeCases: [
+      "Comparing quantities in different units (like ounces versus grams, or count versus weight) requires converting to a common unit before the comparison is meaningful.",
+      "A lower unit price doesn't automatically mean the better overall choice if the larger package leads to spoilage or waste before it can be used.",
+      "Store-applied coupons or member discounts change the effective price and should be factored in before calculating unit price for an accurate comparison.",
+      "Store shelf tags sometimes calculate unit price inconsistently (different reference units for similar products), making an independent check worthwhile.",
+    ],
     examples: [
       { title: "Bulk isn't always better", body: "A $4.99 package of 12 units ($0.416/unit) compared against an $8.49 package of 24 units ($0.354/unit) shows the larger package actually offers better value per unit in this case." },
       { title: "When bulk isn't worth it", body: "In other cases, a 'bulk' option's price doesn't scale proportionally, meaning the smaller package can sometimes actually be the better per-unit value — this calculator catches that either way." },
@@ -573,6 +806,18 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides your trip distance by your vehicle's fuel economy (mpg) to find gallons needed, then multiplies by the price per gallon to find total fuel cost.",
     formula: "Gallons needed = distance ÷ mpg\nTotal cost = gallons needed × price per gallon",
+    methodology:
+      "Fuel economy (mpg) expresses how far a vehicle travels per gallon consumed, so dividing total trip distance by that figure directly gives the number of gallons the trip will require — the inverse relationship between distance and fuel is what makes division (rather than multiplication) the correct operation here. Multiplying gallons needed by price per gallon then converts that fuel quantity into a dollar cost.",
+    stepByStep: [
+      "Divide total trip distance by the vehicle's fuel economy (mpg) to find gallons needed.",
+      "Multiply gallons needed by the price per gallon to find total fuel cost.",
+    ],
+    edgeCases: [
+      "A vehicle's advertised (EPA-estimated) mpg often differs from its real-world average, which varies with driving style, terrain, and vehicle condition.",
+      "Highway and city driving typically have meaningfully different fuel economy, so using a blended or route-appropriate mpg figure improves accuracy.",
+      "Fuel prices vary geographically along a route, so a single flat price-per-gallon figure is necessarily an approximation for longer trips.",
+      "This estimates fuel cost only — it doesn't include other trip costs like tolls, parking, or maintenance wear.",
+    ],
     examples: [
       { title: "Standard trip", body: "A 300-mile trip in a vehicle getting 28 mpg at $3.50/gallon requires about 10.7 gallons, costing approximately $37.50." },
       { title: "Less efficient vehicle", body: "The same 300-mile trip in a vehicle getting only 20 mpg increases fuel needed to 15 gallons, raising the cost to $52.50 — showing how much fuel economy affects trip cost." },
@@ -604,6 +849,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides your entered miles driven by the gallons of fuel used over that distance to find your actual real-world miles per gallon.",
     formula: "MPG = miles driven ÷ gallons used",
+    methodology:
+      "This is the direct, empirical measurement of fuel economy — rather than relying on a manufacturer's standardized test-cycle estimate, dividing actual miles driven by actual gallons consumed over a real fill-up captures your specific vehicle's real-world performance under your actual driving conditions, which routinely differs from the EPA sticker figure.",
+    stepByStep: [
+      "Reset the trip odometer at a fill-up (filling the tank completely).",
+      "Drive normally until the next fill-up, again filling the tank completely.",
+      "Record the miles driven since the reset and the gallons required to refill the tank.",
+      "Divide miles driven by gallons used to find real-world mpg.",
+    ],
+    edgeCases: [
+      "A partial fill-up (not completely topping off the tank) introduces error into the gallons-used figure, since the true amount consumed isn't fully captured.",
+      "Fuel economy naturally varies between tanks based on driving conditions (highway versus city, weather, cargo load), so a single measurement is a snapshot, not a fixed constant.",
+      "Tracking mpg across many consecutive fill-ups reveals meaningful trends — a gradual decline can signal a maintenance issue worth investigating.",
+      "Comparing a single real-world mpg reading directly against the manufacturer's estimate without accounting for driving conditions can be misleading either way.",
+    ],
     examples: [
       { title: "Standard calculation", body: "Driving 320 miles on 11.5 gallons of fuel gives a real-world fuel economy of about 27.83 mpg." },
       { title: "Tracking over time", body: "Recalculating this after each fill-up over several tanks reveals trends — a declining mpg over time can signal a maintenance issue worth investigating." },
@@ -634,6 +893,19 @@ export const everydayContent: Record<string, SeoContent> = {
       "Planning a road trip budget means estimating fuel cost for the full round-trip distance ahead of time. Our Trip Cost Calculator finds that total from your round-trip distance, vehicle's fuel economy, and current gas prices.",
     howItWorks:
       "The calculator divides your round-trip distance by your vehicle's fuel economy to find total gallons needed for the trip, then multiplies by the price per gallon to estimate total fuel cost for the entire journey.",
+    methodology:
+      "This applies the exact same distance-divided-by-mpg-times-price relationship as the Fuel Cost Calculator, specifically framed around a round-trip total rather than a one-way distance — since fuel consumption scales linearly with distance, doubling a one-way trip to a round trip simply doubles the gallons needed and, proportionally, the total cost, assuming consistent driving conditions in both directions.",
+    stepByStep: [
+      "Determine the full round-trip distance (there and back).",
+      "Divide that distance by the vehicle's fuel economy to find total gallons needed.",
+      "Multiply gallons needed by price per gallon to find total estimated fuel cost for the trip.",
+    ],
+    edgeCases: [
+      "If only the one-way distance is known, it must be doubled first to reflect the full round trip, a step easy to forget.",
+      "Fuel prices can differ between the outbound and return legs, especially for longer trips crossing multiple regions or states.",
+      "Different driving conditions in each direction (elevation changes, traffic, wind) can cause outbound and return fuel economy to differ meaningfully.",
+      "This estimates fuel cost alone — a complete road trip budget should add tolls, lodging, food, and other trip expenses separately.",
+    ],
     examples: [
       { title: "Standard road trip", body: "A 600-mile round trip in a vehicle getting 26 mpg at $3.60/gallon comes to an estimated fuel cost around $83.08 for the full journey." },
       { title: "Comparing routes or vehicles", body: "Running the same distance through a more fuel-efficient vehicle, or comparing against a shorter alternate route, shows how much each choice affects total trip fuel cost." },
@@ -665,6 +937,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator rearranges the basic distance-rate-time relationship algebraically depending on which value you're solving for — dividing distance by time to find speed, multiplying speed by time to find distance, or dividing distance by speed to find time.",
     formula: "Distance = Speed × Time\nSpeed = Distance ÷ Time\nTime = Distance ÷ Speed",
+    methodology:
+      "All three formulas are algebraic rearrangements of the single underlying relationship distance = speed × time — a definition of what 'speed' fundamentally means (distance covered per unit of time). Whichever variable is unknown, isolating it just means moving the other two to the opposite side of that same equation, which is why knowing any two of the three values always determines the third exactly.",
+    stepByStep: [
+      "Identify which two values are known and which one is unknown.",
+      "If solving for distance: multiply speed by time.",
+      "If solving for speed: divide distance by time.",
+      "If solving for time: divide distance by speed.",
+    ],
+    edgeCases: [
+      "Units must be consistent across all three values — mixing miles with kilometers, or hours with minutes, produces an incorrect result unless explicitly converted first.",
+      "This formula gives average speed over the entire distance and time, not instantaneous speed at any single moment during a real trip.",
+      "A time value of zero makes solving for speed undefined, since it would require dividing by zero.",
+      "Real-world travel time often includes stops or delays not reflected in a pure distance-and-average-speed calculation.",
+    ],
     examples: [
       { title: "Solving for time", body: "Traveling 120 miles at 60 mph takes exactly 2 hours, found by dividing distance by speed." },
       { title: "Solving for speed", body: "Covering 120 miles in a known time of 2 hours implies an average speed of 60 mph, found by dividing distance by time instead." },
@@ -695,6 +981,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "A strong, random password is one of the simplest ways to protect an online account, and our Password Generator creates one instantly with customizable length and character sets.",
     howItWorks:
       "The generator builds a character pool from your selected options (lowercase letters always included, plus optional uppercase, numbers, and symbols), then randomly selects characters from that pool to build a password of your specified length.",
+    methodology:
+      "A password's resistance to brute-force guessing depends on its 'entropy' — how many possible combinations an attacker would need to try — which grows with both the size of the character pool used and the password's length. Adding uppercase letters, numbers, and symbols each expand the pool of possible characters per position, and every additional character in length multiplies the total combination count, which is why length matters at least as much as character variety for genuine password strength.",
+    stepByStep: [
+      "Select which character types to include (uppercase, numbers, symbols), in addition to lowercase letters, which are always included.",
+      "Combine the selected character types into one pool.",
+      "Randomly select characters from that pool, one per position, for the specified password length.",
+      "Combine the selected characters into the final generated password.",
+    ],
+    edgeCases: [
+      "A longer password with fewer character types can still be stronger than a shorter password with more character types, since length has an exponential effect on total combinations.",
+      "This generates passwords using standard randomness, not a cryptographically secure random number generator — for extremely high-security use cases, a dedicated password manager's generator may use stronger randomness sourcing.",
+      "Some websites restrict which symbols are allowed, which can require regenerating or manually adjusting a password that includes an unsupported character.",
+      "A generated password provides no security benefit if it's reused across multiple accounts — each account should have its own unique password.",
+    ],
     examples: [
       { title: "Maximum strength", body: "A 16-character password with uppercase, numbers, and symbols all enabled draws from a large character pool, making it extremely resistant to brute-force guessing." },
       { title: "Simpler password", body: "A shorter password with only lowercase letters enabled is easier to type but significantly weaker — useful only for low-stakes, non-sensitive use cases." },
@@ -725,6 +1025,19 @@ export const everydayContent: Record<string, SeoContent> = {
       "Whether you're picking a raffle winner, assigning teams, or choosing who goes first, our Random Name Picker selects fairly and randomly from any list of names you provide.",
     howItWorks:
       "The generator selects one name at random from your entered list with equal probability for every name, using the same underlying random selection process regardless of list length.",
+    methodology:
+      "Fair random selection from a list means every entry has exactly the same probability of being chosen, regardless of its position in the list — this is achieved by generating a uniformly random index within the list's range and selecting whichever name occupies that position, the same fundamental approach used by the Random Number Generator, just mapped onto list positions instead of numeric ranges.",
+    stepByStep: [
+      "Enter the full list of names, one per entry.",
+      "The generator counts the total number of names and assigns each an equal probability of selection.",
+      "A random selection is made from the list with that uniform probability.",
+    ],
+    edgeCases: [
+      "Duplicate names in the list effectively increase that name's chance of being selected, since each entry (even if identical text) is treated as a separate, equally likely option.",
+      "A list with only one name will always select that name, with no actual randomness involved.",
+      "Selecting multiple winners without repeats requires removing each selected name from the list before the next draw, which this basic single-pick tool doesn't automate.",
+      "For maximum trust in high-stakes drawings, communicating the exact list and selection method to participants beforehand adds transparency.",
+    ],
     examples: [
       { title: "Raffle drawing", body: "Entering a list of raffle entrants and picking selects one winner with completely equal odds for everyone on the list." },
       { title: "Team or task assignment", body: "The same tool works equally well for randomly assigning who goes first in a game, who presents first in a meeting, or any other fair random selection need." },
@@ -755,6 +1068,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Whether you're playing a tabletop game that needs unusual dice (like a d20) or just don't have physical dice handy, our Dice Roller simulates rolling any number of dice with any number of sides.",
     howItWorks:
       "The roller generates a random result between 1 and your specified number of sides for each die, repeating for however many dice you're rolling, and sums all results into a total alongside the individual rolls.",
+    methodology:
+      "Each die roll is an independent uniform random selection from 1 to the number of sides — independent meaning one die's result has no influence on any other die's result, exactly matching how physical dice behave. Summing multiple dice produces a combined total whose probability distribution is no longer uniform (rolling 2d6, for example, makes a 7 far more likely than a 2 or 12), a well-known statistical property of summing multiple independent random values.",
+    stepByStep: [
+      "Specify the number of sides per die (matching the physical die type you're simulating, like d6 or d20).",
+      "Specify how many dice to roll.",
+      "Generate an independent random result between 1 and the number of sides for each die.",
+      "Sum all individual results for the combined total.",
+    ],
+    edgeCases: [
+      "Summing multiple dice produces a bell-curve-like distribution, not a flat uniform one — middle totals become more probable than extreme totals as more dice are added.",
+      "A single die roll (like a lone d20 in tabletop gaming) remains perfectly uniform, since there's no summing involved to skew the distribution.",
+      "This basic roller doesn't apply game-specific modifiers or reroll rules (like rerolling 1s) automatically — those need to be applied manually to the raw result.",
+      "This should never be used for real-money gambling decisions, regardless of how genuinely random the underlying simulation is.",
+    ],
     examples: [
       { title: "Standard roll", body: "Rolling 2 six-sided dice produces two random results between 1 and 6 each, plus their combined total — a classic board game roll." },
       { title: "Tabletop RPG dice", body: "Rolling a single 20-sided die (common in tabletop role-playing games) gives a random result between 1 and 20, useful when physical dice aren't available." },
@@ -785,6 +1112,19 @@ export const everydayContent: Record<string, SeoContent> = {
       "For quick decisions or games needing a fair 50/50 outcome, our Coin Flip Simulator flips one or more virtual coins instantly.",
     howItWorks:
       "The simulator generates a random heads-or-tails result with equal 50% probability for each flip, repeating for however many flips you request, and tallies the total heads versus tails count.",
+    methodology:
+      "Each simulated flip is an independent binary random choice with exactly equal probability assigned to each outcome, modeling an idealized fair coin — unlike a real physical coin, which can carry very slight bias from its specific weighting or flipping mechanics, this simulation guarantees a mathematically perfect 50/50 probability on every single flip, with no memory of previous results influencing the next one.",
+    stepByStep: [
+      "Specify how many coins to flip.",
+      "Generate an independent random heads-or-tails result for each flip, with equal probability.",
+      "Tally the total count of heads versus tails across all flips.",
+    ],
+    edgeCases: [
+      "A small number of flips can easily produce streaks (like several heads in a row) purely by chance — true randomness doesn't guarantee an even split until many flips accumulate.",
+      "The 'gambler's fallacy' — expecting tails to be 'due' after several heads in a row — is a common misconception, since each flip remains independently 50/50 regardless of prior results.",
+      "This models an idealized fair coin, while real physical coins can have extremely slight (though typically negligible) bias from asymmetric weighting.",
+      "Like dice rolling, this shouldn't be used for real-money gambling decisions despite the genuine randomness involved.",
+    ],
     examples: [
       { title: "Single flip", body: "A single coin flip produces either heads or tails with equal probability — a fair, unbiased 50/50 outcome." },
       { title: "Multiple flips", body: "Flipping 20 coins at once shows the individual sequence of results plus the total heads-versus-tails tally, useful for probability demonstrations." },
@@ -816,6 +1156,19 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator uses the combination formula (nCr) to find the total number of possible unique combinations from your entered number pool size and how many numbers are picked, since lottery odds are fundamentally a combinations problem — order doesn't matter in how numbers are drawn.",
     formula: "Total combinations = C(pool size, numbers picked)",
+    methodology:
+      "Lottery drawings pick a specific unordered subset of numbers from a larger pool — the order the balls are drawn in doesn't matter, only which numbers end up selected — which makes this precisely a combinations problem, using the same nCr formula that counts unordered selections in any combinatorics context. The odds of matching all drawn numbers with a single ticket are exactly 1 in that total combination count, since only one specific combination wins the top prize.",
+    stepByStep: [
+      "Identify the lottery's number pool size and how many numbers are drawn.",
+      "Calculate the combination count C(pool size, numbers drawn) using the standard combinations formula.",
+      "That result is the total number of equally likely possible outcomes — your odds of matching all numbers with one ticket are 1 divided by that total.",
+    ],
+    edgeCases: [
+      "Lotteries with an additional separate bonus number (like Powerball's red ball) multiply the base combination count by the bonus pool size, further lengthening the true odds beyond this base calculation.",
+      "Odds of matching a subset of numbers (for smaller prize tiers) require a different, more involved combinatorics calculation than the single top-prize odds shown here.",
+      "Buying multiple tickets improves odds linearly (twice as many tickets roughly doubles your chance), but the odds of any single ticket remain unchanged.",
+      "Lottery combination counts routinely reach into the tens of millions even for modestly sized number pools, which is why lottery odds are so famously long.",
+    ],
     examples: [
       { title: "Standard lottery format", body: "A lottery drawing 5 numbers from a pool of 69 (a common US lottery format) has odds of 1 in 11,238,513 — illustrating just how long these odds really are." },
       { title: "Smaller pool", body: "A lottery with a smaller number pool or fewer picks produces dramatically better (though still long) odds, showing how sensitive lottery odds are to the specific pool size and pick count." },
@@ -846,6 +1199,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Whether you're hitting a word count requirement for an essay or checking character limits for a social post, our Word & Character Counter analyzes any text instantly.",
     howItWorks:
       "The calculator splits your text on whitespace to count words, counts total characters both with and without spaces, and counts sentences by splitting on sentence-ending punctuation marks.",
+    methodology:
+      "Word counting works by splitting text wherever whitespace occurs and counting the resulting fragments — a reasonable approximation, though it means hyphenated terms or certain punctuation patterns can be counted differently than a platform-specific word processor might handle them. Character counts are simpler, direct tallies (one with spaces included, one without), and sentence counting looks for sentence-ending punctuation marks (periods, question marks, exclamation points) as boundaries, which works well for standard prose but can be thrown off by abbreviations or unconventional punctuation.",
+    stepByStep: [
+      "Split the text on whitespace and count the resulting word fragments.",
+      "Count every character in the text for the with-spaces total.",
+      "Remove whitespace and count remaining characters for the without-spaces total.",
+      "Split the text on sentence-ending punctuation to estimate sentence count.",
+    ],
+    edgeCases: [
+      "Different platforms count hyphenated words, contractions, and numbers differently — there's no single universal standard for what counts as 'one word.'",
+      "Character limits on social platforms sometimes count spaces and sometimes don't, so checking the specific platform's own counting convention matters.",
+      "Abbreviations with periods (like 'Dr.' or 'U.S.') can cause sentence-splitting logic to overcount sentences, since the period isn't actually ending a sentence there.",
+      "Pasted text from a formatted source (like a word processor) can carry hidden characters that affect counts in ways not visible on screen.",
+    ],
     examples: [
       { title: "Essay word count", body: "Pasting a full essay draft instantly shows whether it meets a required word count, along with character and sentence counts for additional context." },
       { title: "Social media character limit", body: "Checking a post against a platform's character limit before posting helps avoid truncation or rejection." },
@@ -877,6 +1244,19 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides your word count by your chosen reading speed (words per minute) to estimate total reading time, using the widely cited average adult reading speed of around 200 words per minute as a default.",
     formula: "Reading time (minutes) = word count ÷ words per minute",
+    methodology:
+      "Words-per-minute is a rate, and dividing total word count by that rate directly gives the time needed — the same distance-rate-time relationship used in physical travel calculations, just applied to reading instead of movement. The commonly cited 200-250 wpm average for adult silent reading comes from research studies measuring typical reading speed across general-audience prose, though actual speed varies considerably by individual and content type.",
+    stepByStep: [
+      "Determine the total word count of the text.",
+      "Select a reading speed in words per minute (200 wpm is a commonly used average default).",
+      "Divide word count by words per minute to find estimated reading time.",
+    ],
+    edgeCases: [
+      "Technical, dense, or unfamiliar-vocabulary content is typically read more slowly than casual prose, even by the same reader.",
+      "This estimates time spent reading text specifically — images, videos, code blocks, or other embedded media add time not captured by a pure word-count calculation.",
+      "Reading speed varies significantly by individual, language proficiency, and familiarity with the subject matter, making any single average an approximation for a specific reader.",
+      "Reading aloud is meaningfully slower than silent reading, so a spoken presentation's timing shouldn't be estimated using this same silent-reading-speed assumption.",
+    ],
     examples: [
       { title: "Standard article", body: "A 1,500-word article at the average 200 wpm reading speed takes about 7.5 minutes to read." },
       { title: "Faster reader", body: "The same article read by someone at 300 wpm (a faster-than-average reading speed) takes only 5 minutes instead." },
@@ -907,6 +1287,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Converting text between uppercase, lowercase, title case, and sentence case by hand is tedious for anything longer than a few words — our Text Case Converter handles all four formats instantly.",
     howItWorks:
       "The calculator applies standard capitalization rules for each case format: uppercase converts every letter, lowercase does the reverse, title case capitalizes the first letter of every word, and sentence case capitalizes only the first letter of the entire text.",
+    methodology:
+      "Each case format applies a different rule to the same underlying text without changing the actual words. Uppercase and lowercase apply their transformation uniformly to every character. Title case operates word-by-word, capitalizing the first letter of each — this basic version doesn't apply style-guide exceptions for short articles or prepositions, which more sophisticated title-case tools sometimes do. Sentence case treats the whole text as a single unit, capitalizing only the very first letter, mimicking standard sentence-starting capitalization.",
+    stepByStep: [
+      "Enter or paste the source text.",
+      "For uppercase: convert every letter to its capital form.",
+      "For lowercase: convert every letter to its lowercase form.",
+      "For title case: capitalize the first letter of every word; for sentence case: capitalize only the first letter of the entire text.",
+    ],
+    edgeCases: [
+      "Basic title case capitalizes every word, including short articles and prepositions (a, the, of, in) that many style guides specifically keep lowercase — proper style-guide-compliant title case requires additional exception rules.",
+      "Proper nouns need manual review after any case conversion, since automated rules don't know which words are names requiring specific capitalization regardless of the chosen case.",
+      "Case conversion doesn't correct spelling or grammar — it only changes letter capitalization.",
+      "Text with existing mixed capitalization (like acronyms or stylized brand names) may need manual correction after a blanket case conversion is applied.",
+    ],
     examples: [
       { title: "Multiple formats at once", body: "The text 'the quick brown fox' converts simultaneously to 'THE QUICK BROWN FOX' (uppercase), 'the quick brown fox' (lowercase), 'The Quick Brown Fox' (title case), and 'The quick brown fox' (sentence case)." },
     ],
@@ -936,6 +1330,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Roman numerals still show up on clock faces, movie credits, and formal documents, and converting between them and standard numbers isn't always intuitive. Our Roman Numeral Converter handles it instantly in both directions.",
     howItWorks:
       "The calculator works through Roman numeral values from largest to smallest (M, CM, D, CD, C, XC, L, XL, X, IX, V, IV, I), repeatedly subtracting the largest value that fits and appending its symbol, until the full number is converted.",
+    methodology:
+      "This is a greedy algorithm: at each step, it finds the largest Roman numeral value (from a fixed ordered list including subtractive pairs like CM for 900 and IV for 4) that doesn't exceed the remaining number, appends that symbol, subtracts its value, and repeats until nothing remains. Including the subtractive pairs directly in the lookup list (rather than trying to detect subtraction patterns separately) is what correctly produces notation like 'IV' instead of the older, non-standard 'IIII' for four.",
+    stepByStep: [
+      "Starting with the full number, compare it against the largest Roman numeral value (1000, for M).",
+      "If the number is at least that large, append the symbol and subtract the value; otherwise move to the next smaller value in the list (including subtractive pairs like CM, XC, IV).",
+      "Repeat this process, working down through progressively smaller values.",
+      "Continue until the remaining number reaches zero, at which point the concatenated symbols form the complete Roman numeral.",
+    ],
+    edgeCases: [
+      "Standard Roman numerals only represent numbers from 1 to 3,999 — there's no standard symbol for zero or for numbers at or above 4,000 without special notation extensions.",
+      "Some historical Roman numeral usage predates the standardized subtractive notation and instead used purely additive forms (like IIII instead of IV) — this calculator uses the modern standardized subtractive convention.",
+      "Converting from Roman numerals back to standard numbers requires the reverse process, reading symbols left to right and handling subtractive pairs appropriately.",
+      "Lowercase Roman numerals (like 'iv' or 'mcmxciv') represent the same values as their uppercase forms and are sometimes used stylistically, particularly in outlines or page numbering.",
+    ],
     examples: [
       { title: "Standard year", body: "The number 1994 converts to MCMXCIV in Roman numerals — a good example of the subtractive notation (CM = 900, XC = 90, IV = 4) that makes Roman numerals tricky to read manually." },
       { title: "Simple case", body: "The number 8 converts simply to VIII, adding three I's after the base V (5)." },
@@ -967,6 +1375,19 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator checks whether a year is divisible by 4 (making it a leap year candidate), then applies the century exception: years divisible by 100 are NOT leap years, unless they're also divisible by 400, in which case they are.",
     formula: "Leap year if: (divisible by 4 AND not divisible by 100) OR divisible by 400",
+    methodology:
+      "The Gregorian calendar adds a leap day roughly every 4 years to keep the calendar year synchronized with Earth's actual orbital period (about 365.2422 days) — but a plain 'every 4 years' rule slightly overcorrects, so century years are excluded from the pattern, except that every 400th year the correction is needed again. This three-tier rule was specifically designed by Pope Gregory XIII's calendar reform in 1582 to keep the average calendar year extremely close to the true astronomical year over long time spans.",
+    stepByStep: [
+      "Check if the year is divisible by 4 — if not, it isn't a leap year.",
+      "If divisible by 4, check if it's also divisible by 100 — if not, it is a leap year.",
+      "If divisible by both 4 and 100, check if it's also divisible by 400 — if so, it is a leap year; if not, it isn't.",
+    ],
+    edgeCases: [
+      "Century years not divisible by 400 (like 1900 or 2100) are NOT leap years, despite being divisible by 4 — a frequently overlooked exception.",
+      "Century years divisible by 400 (like 2000) ARE leap years, since they satisfy the final exception to the exception.",
+      "This rule specifically applies to the Gregorian calendar — other calendar systems (Julian, various lunar calendars) use different leap year rules entirely.",
+      "The Gregorian rule still isn't perfectly exact (it slightly overcorrects), but the residual error is small enough that further correction isn't needed for thousands of years.",
+    ],
     examples: [
       { title: "Standard leap year", body: "2028 is divisible by 4 and not divisible by 100, so it's a leap year." },
       { title: "Century exception", body: "2100 is divisible by 4 and by 100, but not by 400, so despite being divisible by 4, it is NOT a leap year — one of the trickier cases in the rule." },
@@ -997,6 +1418,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Shoe sizing differs across US, UK, and EU systems, which gets confusing when shopping from international retailers or checking a size chart. Our Shoe Size Converter translates between them instantly.",
     howItWorks:
       "The calculator applies standard approximate offset conversions between men's US sizing and UK and EU equivalents, plus a centimeter foot-length approximation, based on commonly used sizing conversion charts.",
+    methodology:
+      "Shoe sizing systems each developed independently around different measurement conventions — US sizing is based on a point system originally tied to barleycorn-length units, UK sizing uses a similar but offset point system, and EU (Paris point) sizing is based on the shoe's inner length in a specific unit — since none share a common mathematical basis, conversions between them rely on empirically derived offset tables rather than a single clean formula, which is also why brand-to-brand variation can be more significant here than in more standardized measurement conversions.",
+    stepByStep: [
+      "Identify the starting size and sizing system (US, UK, or EU).",
+      "Apply the standard conversion offset for the target system (commonly around a 0.5 size difference between US and UK).",
+      "For EU sizing, apply the separate standard EU conversion table.",
+      "Cross-check against a centimeter foot-length measurement when precision matters.",
+    ],
+    edgeCases: [
+      "Men's and women's sizing use different numbering conventions even within the same country's system, so gender-specific conversion tables should be used, not a single unisex table.",
+      "Different shoe brands and even different styles from the same brand can vary in actual fit at the identical labeled size, sometimes called 'vanity sizing.'",
+      "Children's shoe sizing uses an entirely separate numbering system from adult sizing in most countries.",
+      "For the most reliable fit, measuring actual foot length in centimeters and comparing against a specific brand's own size chart outperforms a generic size-number conversion.",
+    ],
     examples: [
       { title: "US to UK/EU", body: "A US men's size 10 converts to approximately a UK size 9.5 and an EU size 43." },
       { title: "Why 'approximate' matters", body: "Different shoe brands and styles can vary slightly in their actual sizing even at the 'same' labeled size, which is why this conversion is a helpful starting point rather than an exact guarantee of fit." },
@@ -1028,6 +1463,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your slab's length, width, and depth (converted from inches to feet) to find total cubic feet, converts that to cubic yards (the standard unit concrete is typically ordered in), and separately estimates the number of 80lb bags needed if you're mixing your own instead of ordering ready-mix.",
     formula: "Cubic feet = length × width × (depth in inches ÷ 12)\nCubic yards = cubic feet ÷ 27",
+    methodology:
+      "A slab's volume is simply length times width times depth — the same rectangular-prism volume formula used generally — but concrete is conventionally measured and ordered in cubic yards rather than cubic feet, so the calculation includes converting the depth from inches to feet first (dividing by 12) to keep all three dimensions in consistent units, then dividing the resulting cubic feet total by 27 (since one cubic yard equals 3×3×3 = 27 cubic feet) to reach the final ordering unit.",
+    stepByStep: [
+      "Measure the slab's length and width in feet.",
+      "Measure the desired depth in inches, then divide by 12 to convert to feet.",
+      "Multiply length, width, and depth (all in feet) together to find cubic feet.",
+      "Divide cubic feet by 27 to find cubic yards, the standard concrete ordering unit.",
+    ],
+    edgeCases: [
+      "Adding a small buffer (often 5-10%) beyond the calculated minimum accounts for uneven ground, spillage, and measurement imprecision in a real pour.",
+      "Bagged concrete's actual yield per bag can vary slightly by brand and product, so checking the specific bag's stated yield improves bag-count accuracy.",
+      "For large pours, ordering ready-mix concrete by the cubic yard from a supplier is typically far more practical than mixing many individual bags by hand.",
+      "Irregularly shaped slabs (not simple rectangles) need to be broken into multiple rectangular sections, each calculated separately and summed.",
+    ],
     examples: [
       { title: "Standard patio slab", body: "A 10×10 foot slab at 4 inches deep requires about 1.23 cubic yards of concrete, or approximately 56 bags of 80lb pre-mixed concrete." },
       { title: "Ordering ready-mix vs. bagged", body: "For larger pours, ordering ready-mix concrete by the cubic yard from a supplier is typically far more practical and cost-effective than mixing dozens of individual bags by hand." },
@@ -1059,6 +1508,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your total wall area by the number of coats you plan to apply, then divides by your paint's coverage rate per gallon (typically around 350 square feet, though this varies by product) to find gallons needed.",
     formula: "Gallons needed = (wall area × coats) ÷ coverage per gallon",
+    methodology:
+      "Multiplying wall area by the number of coats effectively calculates the total painted area across every layer — two coats over 400 square feet means 800 square feet of total paint application, not 400 — and dividing that total by the paint's coverage rate per gallon (a figure specific to each product, typically printed on the can) converts painted area into the actual volume of paint needed.",
+    stepByStep: [
+      "Calculate total wall area to be painted, in square feet.",
+      "Multiply by the number of coats planned.",
+      "Divide by the paint's coverage rate per gallon (check the specific product label for its actual rate).",
+      "Round up to the next practical gallon or can size when purchasing.",
+    ],
+    edgeCases: [
+      "Subtracting door and window area from total wall area before calculating gives a more precise (typically slightly lower) paint requirement.",
+      "A dramatic color change (especially painting over a dark color with a light one) often requires an additional coat or a primer coat not reflected in a standard 2-coat estimate.",
+      "Textured surfaces (like stucco or heavily textured drywall) typically require more paint than the smooth-surface coverage rate printed on most paint cans.",
+      "Rounding down to save money risks a mid-project shortage — rounding up to the next full can is the safer default when the calculated amount is close to a boundary.",
+    ],
     examples: [
       { title: "Standard room", body: "400 square feet of wall area with 2 coats and 350 sq ft coverage per gallon requires about 2.29 gallons — likely rounding up to 3 gallons when buying." },
       { title: "Single coat vs. two coats", body: "The same wall area with just 1 coat instead of 2 roughly halves the paint needed — though most professional painters recommend 2 coats for even, durable coverage." },
@@ -1090,6 +1553,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your garden bed's length and width by your desired depth (converted from inches to feet) to find total cubic feet, then converts to cubic yards, the standard unit mulch and soil are typically sold in.",
     formula: "Cubic feet = length × width × (depth in inches ÷ 12)\nCubic yards = cubic feet ÷ 27",
+    methodology:
+      "This uses the identical rectangular-volume calculation as the Concrete Calculator — length times width times depth, with depth converted from inches to feet for unit consistency, then the total converted from cubic feet to cubic yards (dividing by 27) since mulch and soil, like concrete, are conventionally sold and delivered by the cubic yard for bulk orders.",
+    stepByStep: [
+      "Measure the garden bed's length and width in feet.",
+      "Determine the desired mulch or soil depth in inches, then convert to feet by dividing by 12.",
+      "Multiply length, width, and depth together to find cubic feet.",
+      "Divide by 27 to find cubic yards.",
+    ],
+    edgeCases: [
+      "Mulch typically needs at least 2-3 inches of depth to effectively suppress weeds and retain soil moisture — thinner applications are less effective for those purposes.",
+      "Mulch naturally settles and decomposes over time, gradually reducing its effective depth after initial application.",
+      "Bagged mulch is commonly sold in 2-cubic-foot bags, a different purchasing unit than bulk cubic-yard delivery — converting between the two requires knowing this conversion factor.",
+      "Irregularly shaped garden beds should be broken into simpler rectangular sections for accurate volume calculation, rather than treated as one uniform shape.",
+    ],
     examples: [
       { title: "Standard garden bed", body: "A 20×10 foot garden bed at 3 inches deep requires about 1.85 cubic yards of mulch or soil." },
       { title: "Deeper application", body: "The same bed at a deeper 4-inch application increases the volume needed to about 2.47 cubic yards, showing how sensitive the total is to depth." },
@@ -1121,6 +1598,20 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator finds your total room area, divides by your tile's individual square footage to find the base tile count needed, then adds your waste allowance percentage on top to account for cuts, breakage, and pattern matching.",
     formula: "Tiles needed = (room area ÷ tile area) × (1 + waste %)",
+    methodology:
+      "Dividing room area by a single tile's area gives the theoretical minimum tile count needed to cover the space with zero waste — a number that's never actually achievable in practice, since tiles must be cut to fit around edges, fixtures, and pattern alignment. Multiplying by (1 + waste percentage) scales that theoretical minimum up to a realistic purchase quantity that accounts for cuts, breakage, and a reasonable buffer for mistakes.",
+    stepByStep: [
+      "Calculate total room area to be tiled.",
+      "Divide by a single tile's area to find the base tile count.",
+      "Convert the waste percentage to a decimal and add 1.",
+      "Multiply the base tile count by that factor, then round up to a whole number of tiles.",
+    ],
+    edgeCases: [
+      "Complex layouts (diagonal patterns, intricate cuts around fixtures) typically warrant a higher waste allowance, often 15-20% instead of the standard 10%.",
+      "Tile pattern matching (for tiles with a directional grain or design) can increase actual waste beyond what a standard percentage allowance anticipates.",
+      "A tile's actual coverage area should be verified against the box label, since nominal tile dimensions and true coverage-per-box figures don't always align perfectly.",
+      "Rounding the final tile count up to the next whole box (rather than just the next whole tile) is often more practical, since tiles are typically sold by the box, not individually.",
+    ],
     examples: [
       { title: "Standard room", body: "A 12×10 foot room (120 sq ft) using 12×12 inch tiles (1 sq ft each) with a 10% waste allowance requires 132 tiles." },
       { title: "Diagonal or complex layouts", body: "A more complex tile layout (diagonal patterns, intricate cuts around fixtures) typically warrants a higher waste allowance, often 15-20% instead of the standard 10%, to account for additional cutting." },
@@ -1151,6 +1642,19 @@ export const everydayContent: Record<string, SeoContent> = {
       "Finding your Western zodiac sign from a birth date is simple once you know the date ranges — our Zodiac Sign Calculator looks it up instantly for any date of birth.",
     howItWorks:
       "The calculator compares your entered birth date against the standard Western (tropical) zodiac date ranges, each spanning roughly a month, to identify which of the twelve zodiac signs your birth date falls within.",
+    methodology:
+      "The Western tropical zodiac divides the year into twelve roughly month-long segments, each historically associated with the sun's apparent position relative to a particular constellation at the time the system was codified in ancient astronomy — the calculator simply checks which of those twelve fixed date ranges a given birth date falls within, a straightforward lookup rather than a calculation involving any real astronomical measurement.",
+    stepByStep: [
+      "Take the entered birth date's month and day.",
+      "Compare against the twelve standard zodiac sign date ranges in order.",
+      "Return the sign whose date range includes the birth date.",
+    ],
+    edgeCases: [
+      "Birth dates falling exactly on or near a boundary (called a 'cusp') can be assigned differently by different sources, since exact cutoff dates vary very slightly between different zodiac references.",
+      "The Western tropical zodiac is entirely distinct from the Chinese zodiac, which uses a 12-year animal cycle rather than a 12-month system.",
+      "Due to the precession of Earth's axis over centuries, the zodiac's traditional date ranges no longer precisely align with the sun's actual position relative to the named constellations — the tropical zodiac used here is based on the traditional fixed calendar dates, not current astronomical positions.",
+      "This is a cultural and entertainment reference, not a scientifically validated personality or predictive system.",
+    ],
     examples: [
       { title: "Standard lookup", body: "A birth date in early July falls within the Cancer date range (June 21 - July 22)." },
       { title: "Date near a boundary", body: "Birth dates very close to a sign boundary (like July 22 or 23) can sometimes fall on either side depending on the exact source used, since different systems have very slightly different cutoff dates." },
@@ -1181,6 +1685,19 @@ export const everydayContent: Record<string, SeoContent> = {
       "Runners in the US typically think in minutes per mile, while much of the rest of the world uses minutes per kilometer — our Pace Converter translates between the two instantly.",
     howItWorks:
       "The calculator converts your entered pace to total seconds, applies the standard mile-to-kilometer conversion factor (1.60934) in the appropriate direction, then converts the result back into a minutes-and-seconds pace format.",
+    methodology:
+      "Since a kilometer is shorter than a mile (about 0.62 of a mile), the same running effort covers a kilometer faster than it covers a mile — converting a per-mile pace to per-kilometer means dividing by the mile-to-kilometer ratio (1.60934), effectively scaling the pace down proportionally to the shorter distance. Converting to total seconds first avoids the awkwardness of doing arithmetic directly on a minutes:seconds format, then the final result is converted back into that readable format.",
+    stepByStep: [
+      "Convert the entered pace (minutes and seconds) into total seconds.",
+      "Divide by 1.60934 to convert a per-mile pace to per-kilometer (or multiply by 1.60934 for the reverse direction).",
+      "Convert the resulting total seconds back into minutes and seconds format.",
+    ],
+    edgeCases: [
+      "Because a kilometer is shorter than a mile, a per-kilometer pace number is always faster (smaller) than the equivalent per-mile pace number for the same actual running speed.",
+      "This converts pace only — comparing paces across races run under very different conditions (elevation, terrain, weather) doesn't account for those real performance factors.",
+      "Race distances themselves (like a 10K versus a 10-mile race) are separate from pace unit conversion and shouldn't be confused with each other.",
+      "Precision matters at the margin for competitive runners — using the full 1.60934 conversion factor rather than a rounded approximation avoids small but potentially meaningful pace discrepancies.",
+    ],
     examples: [
       { title: "Mile to kilometer", body: "An 8:30 per mile pace converts to approximately 5:17 per kilometer, since a kilometer is a shorter distance than a mile." },
       { title: "Kilometer to mile", body: "A 5:00 per kilometer pace converts to approximately 8:03 per mile, the reverse direction of the same conversion factor." },
@@ -1211,6 +1728,20 @@ export const everydayContent: Record<string, SeoContent> = {
       "Writing out a number in full English words — common on checks, legal documents, and formal writing — is easy to get wrong for larger numbers. Our Number to Words Converter handles it instantly and correctly.",
     howItWorks:
       "The calculator breaks your number down into groups (ones, thousands, millions, and so on) and spells out each group using standard English number-word rules, then combines them into the full written-out form.",
+    methodology:
+      "English number-naming works in groups of three digits (ones-hundreds, thousands, millions, and so on), each group spelled out identically using the same ones-tens-hundreds word rules, then followed by that group's magnitude word (thousand, million). Breaking a large number into these three-digit chunks first, spelling each chunk with the same reusable logic, and appending the appropriate magnitude word is what lets the same core spelling rules handle numbers of any size up to the calculator's supported range.",
+    stepByStep: [
+      "Split the number into groups of three digits, working from the rightmost (ones) group leftward.",
+      "For each group, spell out its hundreds, tens, and ones digits using standard English number words.",
+      "Append the appropriate magnitude word (thousand, million, etc.) to each non-zero group except the final ones group.",
+      "Combine all the group phrases in order, applying standard hyphenation for compound numbers like 'thirty-four.'",
+    ],
+    edgeCases: [
+      "A group consisting entirely of zeros (like the thousands group in 1,000,234) is skipped entirely rather than spelled out as 'zero thousand.'",
+      "Numbers containing 'teen' values (11-19) follow irregular naming patterns distinct from the regular tens-and-ones pattern used for 20 and above.",
+      "This handles whole numbers up to a supported maximum (commonly 999,999,999) — decimal amounts or currency-specific formatting (like 'and 00/100' for checks) typically need to be added separately.",
+      "British English number-naming conventions differ slightly from American English for numbers above one million in some historical usages, though modern usage has largely converged.",
+    ],
     examples: [
       { title: "Standard number", body: "1,234 converts to 'one thousand two hundred thirty-four' — correctly handling the thousand grouping and compound number words." },
       { title: "Larger number", body: "A number in the hundreds of thousands or millions correctly spells out each grouping level (thousand, million) in proper sequence." },
