@@ -75,11 +75,25 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
       }
     : null;
 
+  const howToJsonLd = seoContent?.stepByStep && seoContent.stepByStep.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: `How to calculate ${def.shortTitle ?? def.title}`,
+        step: seoContent.stepByStep.map((text, i) => ({
+          "@type": "HowToStep",
+          position: i + 1,
+          text,
+        })),
+      }
+    : null;
+
   return (
     <div className="relative">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
+      {howToJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }} />}
       <ViewTracker slug={def.slug} title={def.title} />
 
       <div className="relative overflow-hidden border-b border-border">
