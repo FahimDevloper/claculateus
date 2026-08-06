@@ -8,6 +8,7 @@ import { isAdminEmail } from "@/lib/admin/config";
 
 const NAV = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/integrations", label: "Integrations" },
   { href: "/admin/posts", label: "Posts" },
   { href: "/admin/posts/new", label: "New Post" },
   { href: "/admin/calculators", label: "Calculators" },
