@@ -34,11 +34,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setLoading(false);
-    });
-    return unsubscribe;
+    // Starting the Firebase Auth SDK loads a ~90KB cross-origin iframe
+    // (firebaseapp.com/__/auth/iframe.js) for auth-state persistence, which
+    // has nothing to do with rendering the page. Deferring it to idle time
+    // keeps it off the critical path for FCP/LCP without changing behavior —
+    // callers already gate on `loading`, so this just extends that window
+    // by a beat rather than showing an incorrect signed-out flash.
+    let unsubscribe: (() => void) | undefined;
+    const supportsIdle = typeof window.requestIdleCallback === "function";
+    const start = () => {
+      unsubscribe = onAuthStateChanged(auth, (u) => {
+        setUser(u);
+        setLoading(false);
+      });
+    };
+    const handle = supportsIdle ? window.requestIdleCallback(start, { timeout: 2000 }) : window.setTimeout(start, 200);
+    return () => {
+      unsubscribe?.();
+      if (supportsIdle) window.cancelIdleCallback(handle);
+      else window.clearTimeout(handle);
+    };
   }, []);
 
   async function signInWithGoogle() {
