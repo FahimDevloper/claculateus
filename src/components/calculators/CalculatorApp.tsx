@@ -247,14 +247,14 @@ export default function CalculatorApp({ initialMode, onEquals, compact, showMode
           <button
             onClick={copyResult}
             aria-label="Copy result"
-            className="-m-1.5 rounded-lg p-1.5 text-muted transition hover:bg-surface-2 hover:text-primary"
+            className="rounded-lg p-1.5 text-muted transition hover:bg-surface-2 hover:text-primary"
           >
             <CopyIcon width={15} height={15} />
           </button>
           <button
             onClick={shareResult}
             aria-label="Share result"
-            className="-m-1.5 rounded-lg p-1.5 text-muted transition hover:bg-surface-2 hover:text-primary"
+            className="rounded-lg p-1.5 text-muted transition hover:bg-surface-2 hover:text-primary"
           >
             <ShareIcon width={15} height={15} />
           </button>
