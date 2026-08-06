@@ -110,6 +110,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <img
             src={post.featuredImageUrl}
             alt={post.title}
+            fetchPriority="high"
             className="h-56 w-full rounded-2xl border border-border object-cover sm:h-72 lg:h-96"
           />
         </div>
