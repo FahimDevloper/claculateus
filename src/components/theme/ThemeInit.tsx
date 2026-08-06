@@ -1,3 +1,5 @@
+import Script from "next/script";
+
 const THEME_SCRIPT = `
 (function () {
   try {
@@ -8,6 +10,11 @@ const THEME_SCRIPT = `
 })();
 `;
 
+// beforeInteractive (not a raw <script>) so Next places it in <head> through its own managed channel, avoiding a hydration mismatch with Next's out-of-band head mutation.
 export default function ThemeInit() {
-  return <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />;
+  return (
+    <Script id="theme-init" strategy="beforeInteractive">
+      {THEME_SCRIPT}
+    </Script>
+  );
 }

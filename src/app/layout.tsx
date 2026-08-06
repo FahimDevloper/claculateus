@@ -40,37 +40,53 @@ const siteUrl = "https://calculateus.com";
 // within the hour, which is fine for settings that aren't time-critical.
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: "Calculateus.com — Free Online Calculators for Finance, Health & Math",
-    template: "%s | Calculateus.com",
-  },
-  description:
-    "220+ free, fast, accurate online calculators for mortgages, loans, health, fitness, math, and everyday life. No sign-up, no clutter — just answers.",
-  keywords: ["calculator", "online calculator", "mortgage calculator", "bmi calculator", "loan calculator", "free calculators"],
-  openGraph: {
-    type: "website",
-    url: siteUrl,
-    siteName: "Calculateus.com",
-    title: "Calculateus.com — Free Online Calculators",
-    description: "220+ free, fast, accurate online calculators for finance, health, math and everyday life.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Calculateus.com — Free Online Calculators",
-    description: "220+ free, fast, accurate online calculators for finance, health, math and everyday life.",
-  },
-  icons: {
-    icon: "/favicon.svg",
-    apple: "/favicon.svg",
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Calculateus",
-  },
-};
+// Async because verification/AdSense meta tags depend on admin-configured integrations.
+export async function generateMetadata(): Promise<Metadata> {
+  const integrations = await getIntegrationsSettings();
+
+  const verificationOther: Record<string, string> = {};
+  if (integrations.bingVerification) verificationOther["msvalidate.01"] = integrations.bingVerification;
+  if (integrations.pinterestVerification) verificationOther["p:domain_verify"] = integrations.pinterestVerification;
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: "Calculateus.com — Free Online Calculators for Finance, Health & Math",
+      template: "%s | Calculateus.com",
+    },
+    description:
+      "220+ free, fast, accurate online calculators for mortgages, loans, health, fitness, math, and everyday life. No sign-up, no clutter — just answers.",
+    keywords: ["calculator", "online calculator", "mortgage calculator", "bmi calculator", "loan calculator", "free calculators"],
+    openGraph: {
+      type: "website",
+      url: siteUrl,
+      siteName: "Calculateus.com",
+      title: "Calculateus.com — Free Online Calculators",
+      description: "220+ free, fast, accurate online calculators for finance, health, math and everyday life.",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Calculateus.com — Free Online Calculators",
+      description: "220+ free, fast, accurate online calculators for finance, health, math and everyday life.",
+    },
+    icons: {
+      icon: "/favicon.svg",
+      apple: "/favicon.svg",
+    },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: "Calculateus",
+    },
+    verification: {
+      google: integrations.gscVerification || undefined,
+      other: verificationOther,
+    },
+    other: {
+      ...(integrations.adsensePublisherId ? { "google-adsense-account": integrations.adsensePublisherId } : {}),
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: [
@@ -109,7 +125,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head>
+      {/* No manual <head>: Next owns it via generateMetadata; hand-written <head> script/meta siblings raced its out-of-band mutation and swapped content during hydration. */}
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeInit />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
@@ -120,19 +137,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             }}
           />
         )}
-        {integrations.gscVerification && <meta name="google-site-verification" content={integrations.gscVerification} />}
-        {integrations.bingVerification && <meta name="msvalidate.01" content={integrations.bingVerification} />}
-        {integrations.pinterestVerification && <meta name="p:domain_verify" content={integrations.pinterestVerification} />}
-        {integrations.adsensePublisherId && <meta name="google-adsense-account" content={integrations.adsensePublisherId} />}
         {integrations.adsensePublisherId && (
-          <script
-            async
+          <Script
+            id="adsbygoogle-loader"
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${integrations.adsensePublisherId}`}
+            strategy="beforeInteractive"
             crossOrigin="anonymous"
           />
         )}
-      </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
         {integrations.gtmContainerId && (
           <noscript>
             <iframe

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/app";
 import { withTimeout } from "@/lib/firebase/withTimeout";
@@ -36,7 +37,8 @@ export const DEFAULT_INTEGRATIONS_SETTINGS: IntegrationsSettings = {
 
 const INTEGRATIONS_REF = doc(db, "settings", "integrations");
 
-export async function getIntegrationsSettings(): Promise<IntegrationsSettings> {
+// cache() dedupes this across the root layout and its generateMetadata, which both call it per-request.
+export const getIntegrationsSettings = cache(async function getIntegrationsSettings(): Promise<IntegrationsSettings> {
   try {
     const snap = await withTimeout(getDoc(INTEGRATIONS_REF), 4000);
     if (!snap.exists()) return DEFAULT_INTEGRATIONS_SETTINGS;
@@ -44,7 +46,7 @@ export async function getIntegrationsSettings(): Promise<IntegrationsSettings> {
   } catch {
     return DEFAULT_INTEGRATIONS_SETTINGS;
   }
-}
+});
 
 export async function saveIntegrationsSettings(settings: IntegrationsSettings): Promise<void> {
   await withTimeout(setDoc(INTEGRATIONS_REF, settings, { merge: true }));
