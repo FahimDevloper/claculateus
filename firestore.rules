@@ -1,0 +1,133 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Keep this list in sync with ADMIN_EMAILS in src/lib/admin/config.ts.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email in ['mdfahimhasan894@gmail.com'];
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Each signed-in user can only read and write their own synced data
+    // (favorites, calculation history, recently viewed calculators).
+    // No one else — including other authenticated users — can access it.
+    // Array sizes are capped as defense-in-depth against a client bypassing
+    // the app's own limits (200/12/50) and writing directly via the SDK.
+    match /users/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['favorites', 'recentCalculators', 'calcHistory', 'updatedAt'])
+        && (!('favorites' in request.resource.data) || (request.resource.data.favorites is list && request.resource.data.favorites.size() <= 250))
+        && (!('recentCalculators' in request.resource.data) || (request.resource.data.recentCalculators is list && request.resource.data.recentCalculators.size() <= 20))
+        && (!('calcHistory' in request.resource.data) || (request.resource.data.calcHistory is list && request.resource.data.calcHistory.size() <= 60));
+    }
+
+    // Blog posts: published posts are public; drafts/scheduled are admin-only.
+    // Only the admin account can create, edit, or delete posts.
+    match /posts/{postId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin();
+
+      // Comments: anyone can read; any signed-in user can post a comment as
+      // themselves; only the comment's author or the admin can delete it.
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if isSignedIn()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() < 2000;
+        allow delete: if isSignedIn()
+          && (resource.data.authorUid == request.auth.uid || isAdmin());
+        allow update: if false;
+      }
+
+      // Revision history snapshots, checkpointed on save. Admin-only — never
+      // shown to visitors, just used to restore an earlier draft.
+      match /revisions/{revisionId} {
+        allow read, write: if isAdmin();
+      }
+    }
+
+    // Newsletter signups: anyone can subscribe (write-only, no email enumeration).
+    // Only the admin can read the list back out.
+    match /newsletter_subscribers/{docId} {
+      allow create: if request.resource.data.keys().hasOnly(['email', 'subscribedAt'])
+        && request.resource.data.email is string
+        && request.resource.data.email.size() < 200
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Site-wide settings (tagline, logo, hero copy, 404 copy, maintenance mode, etc.)
+    // Publicly readable so every visitor's page render can reflect them; only the
+    // admin can change them.
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // URL redirects, enforced in middleware for every visitor. Publicly readable
+    // (no sensitive data — just from/to paths); only the admin can manage them.
+    match /redirects/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Admin media library (external image URLs + alt text). Admin-only — not
+    // rendered directly to public visitors, just used while authoring content.
+    match /media/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Per-calculator SEO title/description overrides and homepage "featured" flag.
+    // Publicly readable so generateMetadata and the homepage can apply them for
+    // every visitor; only the admin can change them.
+    match /calculator_overrides/{slug} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Lightweight internal usage log (calculator views + on-site searches) that
+    // powers the admin analytics dashboard. Write-only for visitors with a
+    // strict shape (no PII); only the admin can read it back out. String
+    // fields are length-capped since this is the one collection anonymous
+    // visitors can write to freely.
+    match /analytics_events/{docId} {
+      allow create: if request.resource.data.keys().hasOnly(['type', 'slug', 'title', 'query', 'createdAt'])
+        && request.resource.data.type in ['calculator_view', 'search']
+        && request.resource.data.createdAt == request.time
+        && (!('slug' in request.resource.data) || (request.resource.data.slug is string && request.resource.data.slug.size() < 200))
+        && (!('title' in request.resource.data) || (request.resource.data.title is string && request.resource.data.title.size() < 200))
+        && (!('query' in request.resource.data) || (request.resource.data.query is string && request.resource.data.query.size() < 200));
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Reserved for a future async "AI content generation" job queue. No such
+    // feature exists in the app yet — this rule only pre-establishes the
+    // security boundary (admin-only) so the collection is safe to start
+    // writing to the moment that feature is built, without a separate rules
+    // deployment. Everyone else is already blocked by the catch-all below
+    // even without this explicit rule.
+    match /ai_content_jobs/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // AI provider API keys (OpenAI/Anthropic/Google), entered by the admin in
+    // /admin/ai. Admin-only in both directions — these are secrets, never
+    // rendered to visitors, and must never be readable by anyone else.
+    match /ai_settings/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Deny everything else by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
