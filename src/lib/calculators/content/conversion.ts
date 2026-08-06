@@ -69,6 +69,22 @@ export const conversionContent: Record<string, SeoContent> = {
     howItWorks:
       "Unlike length or weight, temperature scales have different zero points, so conversions require both a multiplication and an addition or subtraction step. The calculator converts your input to Celsius internally first, then applies the correct formula to reach your target scale.",
     formula: "°F = (°C × 9/5) + 32\n°C = (°F − 32) × 5/9\nK = °C + 273.15",
+    methodology:
+      "Celsius and Fahrenheit don't just use different-sized degrees, they also start counting from different points: Celsius sets 0° at water's freezing point, while Fahrenheit sets 32° there. The 9/5 (or 1.8) multiplier accounts for the different degree sizes — a Fahrenheit degree is smaller, so covering the same real temperature change takes more of them (180 Fahrenheit degrees span the same range as 100 Celsius degrees between freezing and boiling). The +32 then shifts the result to line up with Fahrenheit's different starting point.\n\nKelvin avoids this offset problem entirely by starting at absolute zero — the coldest physically possible temperature, where 0 K equals −273.15°C. Because Kelvin uses the same degree size as Celsius, converting between them is pure addition or subtraction, with no multiplication needed.",
+    stepByStep: [
+      "To convert Celsius to Fahrenheit: multiply the Celsius value by 9, divide by 5, then add 32.",
+      "To convert Fahrenheit to Celsius: subtract 32 first, then multiply by 5, then divide by 9.",
+      "To convert Celsius to Kelvin: simply add 273.15 (no multiplication needed).",
+      "To convert Kelvin to Celsius: subtract 273.15.",
+      "To convert Fahrenheit to Kelvin: convert to Celsius first, then add 273.15.",
+    ],
+    edgeCases: [
+      "Kelvin has no negative values — 0 K is absolute zero, the theoretical lower limit of temperature, so a 'negative Kelvin' reading always indicates an input error.",
+      "−40° is the one temperature where Celsius and Fahrenheit read the same number, which makes it a handy mental checkpoint for verifying a manual conversion.",
+      "Unlike length or weight conversions, you cannot simply scale a temperature difference the same way as an absolute temperature — a '10-degree Celsius increase' equals an 18-degree Fahrenheit increase, not a 50-degree one, because the offset math only applies to absolute readings, not to differences.",
+      "Some older international recipes and scientific texts use Réaumur degrees, a largely obsolete scale this calculator doesn't cover.",
+      "Weather reports in the US use Fahrenheit while nearly every other country uses Celsius, which is the most common source of temperature conversion mistakes for travelers.",
+    ],
     examples: [
       { title: "Boiling point", body: "100°C, the boiling point of water at sea level, converts to exactly 212°F." },
       { title: "Body temperature", body: "A normal human body temperature of 37°C converts to 98.6°F." },

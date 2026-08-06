@@ -6,6 +6,7 @@ export interface CalculatorOverride {
   featured?: boolean;
   seoTitle?: string;
   seoDescription?: string;
+  focusKeyword?: string;
 }
 
 const COL = collection(db, "calculator_overrides");

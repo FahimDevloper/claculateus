@@ -190,6 +190,24 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "Self-employment tax replaces the employee/employer split of FICA — as a 1099 worker, you effectively pay both halves, totaling 15.3% (12.4% Social Security + 2.9% Medicare) on 92.35% of your net earnings (a small adjustment the IRS allows to approximate the 'employer half' not being separately taxed). You also get to deduct half of your SE tax from your taxable income before calculating federal income tax on what remains.",
     formula: "SE tax = net income × 92.35% × 15.3%\nTaxable income = net income − (SE tax ÷ 2) − standard deduction\nTotal tax = SE tax + federal income tax on taxable income",
+    methodology:
+      "The 92.35% factor exists because W-2 employees only pay FICA tax on their gross wages, while the 'employer half' (7.65%) is paid separately by the employer and never appears in the employee's taxable pay. Since a 1099 worker has no employer to split with, the IRS lets you shrink the taxable base to 92.35% of net earnings (100% − 7.65%) so self-employed and W-2 workers land at roughly the same effective FICA burden.\n\nThe 15.3% rate itself splits into 12.4% for Social Security (capped at the annual Social Security wage base — earnings above that cap owe no additional Social Security portion, only the 2.9% Medicare portion, which has no cap) and 2.9% for Medicare. On top of SE tax, you calculate regular federal income tax using the standard progressive tax brackets, but only after subtracting half of your SE tax as an above-the-line deduction — a rule meant to mirror how W-2 employees never pay income tax on their employer's FICA contribution either.",
+    stepByStep: [
+      "Start with net self-employment income (revenue minus deductible business expenses).",
+      "Multiply net income by 92.35% to get the SE-taxable base.",
+      "Multiply that base by 15.3% to get your total self-employment tax.",
+      "Divide your SE tax by 2 — this half is deductible from taxable income.",
+      "Subtract the SE tax deduction and the standard (or itemized) deduction from net income to get taxable income.",
+      "Apply the federal income tax brackets to that taxable income.",
+      "Add federal income tax to SE tax for your total estimated federal tax bill.",
+    ],
+    edgeCases: [
+      "Net self-employment income under $400 in a year is exempt from self-employment tax entirely, per IRS rules.",
+      "Once your combined W-2 and self-employment earnings exceed the annual Social Security wage base, only the 2.9% Medicare portion applies to the remaining self-employment income.",
+      "High earners (above roughly $200,000 single / $250,000 married) owe an additional 0.9% Medicare surtax that this simplified formula doesn't include — check with a tax professional near that threshold.",
+      "This estimate doesn't account for state income tax, which is calculated entirely separately and varies significantly by state.",
+      "A net loss (negative net income) owes no self-employment tax, but you'll need to track it for other tax purposes like loss carryforwards.",
+    ],
     examples: [
       { title: "Solo freelancer", body: "$80,000 net self-employment income (single) → about $11,304 in self-employment tax, plus roughly $8,700 in federal income tax on the reduced taxable income, for a total near $20,000." },
       { title: "Side income", body: "A smaller $20,000 in net freelance income still owes SE tax on the full amount — self-employment tax doesn't have a minimum threshold the way some deductions do." },

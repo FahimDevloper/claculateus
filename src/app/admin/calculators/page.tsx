@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { allCalculators } from "@/lib/calculators/registry";
 import { CalculatorOverride, getAllCalculatorOverrides, saveCalculatorOverride } from "@/lib/admin/calculatorOverrides";
+import { getSeoContent } from "@/lib/calculators/content";
+import SeoAnalysisPanel from "@/components/admin/SeoAnalysisPanel";
 
 export default function CalculatorManagerPage() {
   const [overrides, setOverrides] = useState<Record<string, CalculatorOverride> | null>(null);
@@ -33,9 +35,9 @@ export default function CalculatorManagerPage() {
     }
   }
 
-  async function saveSeo(slug: string, seoTitle: string, seoDescription: string) {
+  async function saveSeo(slug: string, seoTitle: string, seoDescription: string, focusKeyword: string) {
     if (!overrides) return;
-    const next = { ...overrides[slug], seoTitle, seoDescription };
+    const next = { ...overrides[slug], seoTitle, seoDescription, focusKeyword };
     setOverrides({ ...overrides, [slug]: next });
     setSavingSlug(slug);
     try {
@@ -102,12 +104,14 @@ export default function CalculatorManagerPage() {
                   </div>
                   {isEditing && (
                     <SeoEditForm
+                      slug={c.slug}
                       defaultTitle={c.title}
                       defaultDescription={c.description}
                       seoTitle={o?.seoTitle ?? ""}
                       seoDescription={o?.seoDescription ?? ""}
+                      focusKeyword={o?.focusKeyword ?? ""}
                       saving={savingSlug === c.slug}
-                      onSave={(title, desc) => saveSeo(c.slug, title, desc)}
+                      onSave={(title, desc, kw) => saveSeo(c.slug, title, desc, kw)}
                     />
                   )}
                 </div>
@@ -120,41 +124,76 @@ export default function CalculatorManagerPage() {
   );
 }
 
+function flattenSeoContentText(slug: string): string {
+  const c = getSeoContent(slug);
+  if (!c) return "";
+  return [
+    c.intro,
+    c.howItWorks,
+    c.methodology ?? "",
+    ...(c.stepByStep ?? []),
+    ...c.examples.map((e) => `${e.title} ${e.body}`),
+    ...c.advantages,
+    ...c.commonMistakes,
+    ...(c.edgeCases ?? []),
+    ...c.useCases,
+    c.conclusion,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 function SeoEditForm({
+  slug,
   defaultTitle,
   defaultDescription,
   seoTitle,
   seoDescription,
+  focusKeyword,
   saving,
   onSave,
 }: {
+  slug: string;
   defaultTitle: string;
   defaultDescription: string;
   seoTitle: string;
   seoDescription: string;
+  focusKeyword: string;
   saving: boolean;
-  onSave: (title: string, description: string) => void;
+  onSave: (title: string, description: string, focusKeyword: string) => void;
 }) {
   const [title, setTitle] = useState(seoTitle);
   const [description, setDescription] = useState(seoDescription);
+  const [keyword, setKeyword] = useState(focusKeyword);
+  const content = useMemo(() => flattenSeoContentText(slug), [slug]);
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-border bg-surface-2 p-4">
-      <label className="flex flex-col gap-1.5 text-xs text-muted">
-        SEO title override (default: &ldquo;{defaultTitle}&rdquo;)
-        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={defaultTitle} className="field-input" />
-      </label>
-      <label className="flex flex-col gap-1.5 text-xs text-muted">
-        SEO description override (default: &ldquo;{defaultDescription}&rdquo;)
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder={defaultDescription} className="field-input resize-none" />
-      </label>
-      <button
-        onClick={() => onSave(title.trim(), description.trim())}
-        disabled={saving}
-        className="btn-primary mt-1 w-fit rounded-lg px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
-      >
-        {saving ? "Saving…" : "Save override"}
-      </button>
+    <div className="grid gap-4 rounded-xl border border-border bg-surface-2 p-4 lg:grid-cols-2">
+      <div className="flex flex-col gap-2">
+        <label className="flex flex-col gap-1.5 text-xs text-muted">
+          SEO title override (default: &ldquo;{defaultTitle}&rdquo;)
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={defaultTitle} className="field-input" />
+        </label>
+        <label className="flex flex-col gap-1.5 text-xs text-muted">
+          SEO description override (default: &ldquo;{defaultDescription}&rdquo;)
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder={defaultDescription} className="field-input resize-none" />
+        </label>
+        <button
+          onClick={() => onSave(title.trim(), description.trim(), keyword.trim())}
+          disabled={saving}
+          className="btn-primary mt-1 w-fit rounded-lg px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
+        >
+          {saving ? "Saving…" : "Save override"}
+        </button>
+      </div>
+      <SeoAnalysisPanel
+        title={title || defaultTitle}
+        metaDescription={description || defaultDescription}
+        content={content}
+        url={`calculateus.com/calculators/${slug}`}
+        focusKeyword={keyword}
+        onFocusKeywordChange={setKeyword}
+      />
     </div>
   );
 }

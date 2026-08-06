@@ -7,6 +7,26 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator first works out your loan amount by subtracting your down payment from the home price. It then applies the standard fixed-rate amortization formula to that loan amount, your interest rate, and your loan term to find the monthly principal & interest payment. On top of that, it adds 1/12th of your estimated annual property tax and home insurance, plus PMI if your down payment is under 20%, plus any HOA dues you enter.",
     formula: "M = P × [r(1+r)^n] / [(1+r)^n − 1]\nwhere P = loan amount, r = monthly interest rate, n = number of payments",
+    methodology:
+      "The formula comes from the present value of an annuity: a fixed monthly payment M, discounted at the monthly rate r over n payments, must equal the loan amount P today. Rearranging that equation for M gives the standard formula above. The monthly rate r is your annual rate divided by 12 and converted to a decimal (a 6.5% annual rate is r = 0.065 ÷ 12 = 0.005417), and n is your loan term in years multiplied by 12 (30 years = 360 payments).\n\nProperty tax and homeowners insurance aren't part of this formula at all — lenders add them separately as 1/12th of the annual bill, collected monthly into an escrow account and paid on your behalf when the yearly bills come due. PMI (private mortgage insurance) is calculated as a percentage of your loan balance, typically 0.3%–1.5% annually depending on your credit score and loan-to-value ratio, also divided into a monthly amount.",
+    stepByStep: [
+      "Subtract your down payment from the home price to get the loan principal, P.",
+      "Divide your annual interest rate by 12 to get the monthly rate, r (as a decimal — 6.5% becomes 0.065 ÷ 12).",
+      "Multiply your loan term in years by 12 to get the total number of payments, n.",
+      "Compute (1+r)^n.",
+      "Plug P, r, and (1+r)^n into M = P × [r(1+r)^n] / [(1+r)^n − 1] to get principal & interest.",
+      "Add 1/12 of your estimated annual property tax.",
+      "Add 1/12 of your estimated annual homeowners insurance.",
+      "If your down payment is under 20%, add estimated monthly PMI (loan balance × annual PMI rate ÷ 12).",
+      "Add any monthly HOA dues to reach your total estimated payment.",
+    ],
+    edgeCases: [
+      "A 0% promotional interest rate makes the standard formula divide by zero — the payment simplifies to just P ÷ n in that case.",
+      "PMI typically cancels automatically at 78% loan-to-value based on the original amortization schedule (not 80%, and not your current market value), per the Homeowners Protection Act.",
+      "This formula only holds for fixed-rate loans — adjustable-rate mortgages (ARMs) recalculate the payment when the rate resets after the initial fixed period.",
+      "Extra principal payments reduce your balance and total interest, but won't lower your required monthly payment unless you specifically request re-amortization from your lender.",
+      "Lenders round to the cent using their own conventions, so a manual calculation can land a cent or two off from your actual statement.",
+    ],
     examples: [
       { title: "20% down payment", body: "$400,000 home, $80,000 down, 6.5% rate, 30-year term → about $2,022 in principal & interest, with PMI dropping to $0 since you're at 80% LTV." },
       { title: "10% down payment", body: "Same home with only $40,000 down means a larger loan and PMI added until you build 20% equity, raising the total monthly payment noticeably." },

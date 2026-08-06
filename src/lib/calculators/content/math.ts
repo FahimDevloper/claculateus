@@ -37,6 +37,22 @@ export const mathContent: Record<string, SeoContent> = {
     howItWorks:
       "Each of the three modes uses a different but related formula. 'X% of Y' multiplies Y by X divided by 100. 'X is what % of Y' divides X by Y and multiplies by 100. 'Percent change from X to Y' finds the difference between the two values relative to the starting value, which is especially useful for tracking increases or decreases over time.",
     formula: "X% of Y = (X ÷ 100) × Y\nX is what % of Y = (X ÷ Y) × 100\n% change = ((Y − X) ÷ X) × 100",
+    methodology:
+      "'Percent' literally means 'per hundred' (from the Latin per centum), so any percentage is really a fraction with 100 as its denominator. Dividing by 100 converts a percentage like 20% into the decimal 0.20, which is why 'X% of Y' is just Y multiplied by that decimal. The other two modes are algebraic rearrangements of the same relationship: if X = (P÷100) × Y, then solving for P gives P = (X÷Y) × 100, which is the 'what percent' formula.\n\nPercent change is a special case that always measures relative to the starting value, not the ending value — that asymmetry is exactly why a 25% increase from 80 to 100 doesn't reverse into a 25% decrease going back from 100 to 100: it's actually a 20% decrease ((80−100)÷100 × 100 = −20%), because the base being divided by has changed.",
+    stepByStep: [
+      "For 'X% of Y': divide X by 100, then multiply the result by Y.",
+      "For 'X is what % of Y': divide X by Y, then multiply the result by 100.",
+      "For percent change from X to Y: subtract X from Y to get the difference.",
+      "Divide that difference by X (the original, starting value — never the new one).",
+      "Multiply by 100 to express the result as a percentage; a negative result means a decrease.",
+    ],
+    edgeCases: [
+      "A percent change calculation is undefined when the starting value is zero, since it requires dividing by zero.",
+      "Percentage points and percent change are different things: going from 20% to 25% is a 5 percentage-point increase, but a 25% relative increase in the rate itself.",
+      "Percent increases and decreases aren't symmetric — increasing a number by 50% and then decreasing the result by 50% does not return you to the original value.",
+      "When a value can be negative (like temperature or profit/loss), percent change calculations can produce confusing or misleading results and are best interpreted carefully.",
+      "Repeated percentage changes (like compound interest or sequential discounts) don't simply add together — a 10% increase followed by another 10% increase is a 21% total increase, not 20%.",
+    ],
     examples: [
       { title: "Percentage of a value", body: "20% of 80 = 16 — useful for quickly finding a discount or tip amount." },
       { title: "Percent change", body: "A price moving from $80 to $100 is a +25% change, calculated as (100−80)/80 × 100." },

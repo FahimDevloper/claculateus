@@ -32,6 +32,29 @@ export default function SeoContent({ content, title }: { content: SeoContentType
           )}
         </section>
 
+        {content.methodology && (
+          <section className="flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-foreground">Formula &amp; Methodology</h2>
+            <Paragraphs text={content.methodology} />
+          </section>
+        )}
+
+        {content.stepByStep && content.stepByStep.length > 0 && (
+          <section className="flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-foreground">Step-by-Step: Calculating It By Hand</h2>
+            <ol className="flex flex-col gap-2">
+              {content.stepByStep.map((step, i) => (
+                <li key={i} className="flex gap-3 text-sm text-muted leading-relaxed">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                    {i + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
         {content.examples.length > 0 && (
           <section className="flex flex-col gap-4">
             <h2 className="text-xl font-bold text-foreground">Examples</h2>
@@ -70,6 +93,20 @@ export default function SeoContent({ content, title }: { content: SeoContentType
             </ul>
           </section>
         </div>
+
+        {content.edgeCases && content.edgeCases.length > 0 && (
+          <section className="flex flex-col gap-3">
+            <h3 className="text-lg font-bold text-foreground">Edge Cases to Watch For</h3>
+            <ul className="flex flex-col gap-2">
+              {content.edgeCases.map((e, i) => (
+                <li key={i} className="flex gap-2 text-sm text-muted">
+                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-warning" />
+                  {e}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="flex flex-col gap-3">
           <h3 className="text-lg font-bold text-foreground">Common Use Cases</h3>

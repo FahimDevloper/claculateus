@@ -94,6 +94,7 @@ export interface PostInput {
   authorBio?: string;
   seoTitle?: string;
   seoDescription?: string;
+  focusKeyword?: string;
   status: PostStatus;
   scheduledFor?: number | null;
 }

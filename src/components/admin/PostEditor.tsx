@@ -15,6 +15,7 @@ import ImagePicker from "./ImagePicker";
 import { SparklesIcon, ClockIcon } from "@/components/icons";
 import { getAiSettings } from "@/lib/admin/aiSettings";
 import { generateWithAi } from "@/lib/admin/aiGenerate";
+import SeoAnalysisPanel from "./SeoAnalysisPanel";
 
 const AI_SYSTEM_PROMPT =
   "You are a professional content writer for Calculateus.com, a calculator and personal-finance/health/math education website. Write a complete, accurate, genuinely helpful blog article in Markdown, aimed at a general reader. Respond in exactly this format with no extra commentary before or after it:\nTITLE: <article title>\nEXCERPT: <one-sentence summary, under 160 characters>\n---\n<full article body in Markdown, using ## for section headings, several hundred words>";
@@ -49,6 +50,7 @@ export default function PostEditor({ post }: { post?: BlogPost }) {
   const [authorBio, setAuthorBio] = useState(post?.authorBio ?? "");
   const [seoTitle, setSeoTitle] = useState(post?.seoTitle ?? "");
   const [seoDescription, setSeoDescription] = useState(post?.seoDescription ?? "");
+  const [focusKeyword, setFocusKeyword] = useState(post?.focusKeyword ?? "");
   const [status, setStatus] = useState<PostStatus>(post?.status ?? "draft");
   const [scheduledFor, setScheduledFor] = useState(toDatetimeLocal(post?.scheduledFor));
   const [tab, setTab] = useState<"write" | "preview">("write");
@@ -89,6 +91,7 @@ export default function PostEditor({ post }: { post?: BlogPost }) {
       authorBio: authorBio.trim(),
       seoTitle: seoTitle.trim(),
       seoDescription: seoDescription.trim(),
+      focusKeyword: focusKeyword.trim(),
       status,
       scheduledFor: status === "scheduled" ? new Date(scheduledFor).getTime() : null,
     };
@@ -147,7 +150,7 @@ export default function PostEditor({ post }: { post?: BlogPost }) {
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, excerpt, content, featuredImageUrl, category, tags, authorName, authorBio, seoTitle, seoDescription, status, scheduledFor]);
+  }, [title, excerpt, content, featuredImageUrl, category, tags, authorName, authorBio, seoTitle, seoDescription, focusKeyword, status, scheduledFor]);
 
   function restoreRevision(rev: PostRevision) {
     setTitle(rev.title);
@@ -371,6 +374,15 @@ export default function PostEditor({ post }: { post?: BlogPost }) {
           <input value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} className="field-input" placeholder={title || "SEO title (optional)"} />
           <textarea value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} rows={2} className="field-input resize-none" placeholder={excerpt || "SEO description (optional)"} />
         </div>
+
+        <SeoAnalysisPanel
+          title={seoTitle || title}
+          metaDescription={seoDescription || excerpt}
+          content={content}
+          url={`calculateus.com/blog/${slugPreview || "post-slug"}`}
+          focusKeyword={focusKeyword}
+          onFocusKeywordChange={setFocusKeyword}
+        />
       </div>
       {featuredPickerOpen && (
         <ImagePicker

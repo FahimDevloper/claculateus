@@ -100,6 +100,22 @@ export const everydayContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your bill amount by your chosen tip percentage to find the tip, adds that to the bill for your total, then divides both by the number of people splitting the check to show what each person owes.",
     formula: "Tip = Bill × (Tip % ÷ 100)\nTotal = Bill + Tip\nPer person = Total ÷ number of people",
+    methodology:
+      "Tipping norms vary by country and even by service type, but the underlying math is always a simple percentage: convert the tip rate to a decimal (18% becomes 0.18) and multiply by the bill. In the US, 15–20% is standard for full-service restaurants, 10% is common for smaller checks or casual service, and 20%+ is typical for exceptional service; many other countries either don't expect tipping at all or build a service charge directly into the bill.\n\nThe one real design decision is which amount to tip on: the pre-tax subtotal or the post-tax total. Etiquette guides generally favor tipping on the pre-tax subtotal, since sales tax isn't part of what the server or driver actually provided — but plenty of people simply tip on the total for convenience, and either is defensible.",
+    stepByStep: [
+      "Decide whether you're tipping on the pre-tax subtotal or the post-tax total (pick one and enter that amount as your bill).",
+      "Convert your chosen tip percentage to a decimal by dividing by 100 (18% becomes 0.18).",
+      "Multiply the bill amount by that decimal to get the tip amount.",
+      "Add the tip to the bill to get your total.",
+      "Divide the total by the number of people splitting it to get each person's share.",
+    ],
+    edgeCases: [
+      "Some restaurants automatically add an 18–20% 'service charge' or 'gratuity' for large groups — check your receipt before adding a second tip on top.",
+      "Splitting a bill evenly can be unfair when orders were very uneven in cost; some groups prefer to tip and split based on what each person actually ordered.",
+      "Delivery apps often show a 'tip' that's partly or fully used to meet a driver's guaranteed minimum pay rather than being fully additional — the calculator here only handles the straightforward bill-and-tip math, not platform-specific pay structures.",
+      "International tipping customs differ enormously — in Japan tipping can be considered rude, while in the US it's expected as a meaningful part of service workers' income.",
+      "A zero or negative bill amount will make percentage-based tip math meaningless — the calculator assumes a normal positive bill.",
+    ],
     examples: [
       { title: "Solo diner", body: "An $85 bill with an 18% tip comes to $15.30 in tip, for a total of $100.30." },
       { title: "Splitting with friends", body: "That same $100.30 total split four ways comes to $25.08 per person." },

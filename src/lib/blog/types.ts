@@ -15,6 +15,7 @@ export interface BlogPost {
   publishedAt?: number | null;
   seoTitle?: string;
   seoDescription?: string;
+  focusKeyword?: string;
   readingTimeMinutes: number;
   createdAt: number;
   updatedAt: number;

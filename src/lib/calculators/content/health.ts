@@ -7,6 +7,22 @@ export const healthContent: Record<string, SeoContent> = {
     howItWorks:
       "BMI is calculated by dividing your weight in kilograms by the square of your height in meters. It's a screening measure, not a diagnosis — it doesn't distinguish between muscle mass and fat mass, which is why an athlete and a sedentary person of the same height and weight can have identical BMI but very different body compositions.",
     formula: "BMI = weight (kg) ÷ height (m)²",
+    methodology:
+      "Belgian mathematician Adolphe Quetelet devised this formula in the 1830s while studying population averages, not individual health — a detail often left out of modern discussions of BMI. Dividing by height squared (rather than height alone) was an empirical choice: across a population, body weight tends to scale roughly with the square of height, which made this ratio useful for comparing groups. It was never designed to assess a single person's individual body composition.\n\nFor imperial units, the formula becomes BMI = 703 × weight (lb) ÷ height (in)². The constant 703 is simply the unit-conversion factor that makes the imperial formula produce the same result as the metric one (it converts pounds to kilograms and inches to meters within a single multiplication).",
+    stepByStep: [
+      "Convert your height to meters (divide inches by 39.37, or centimeters by 100).",
+      "Square your height in meters (multiply it by itself).",
+      "Convert your weight to kilograms if needed (divide pounds by 2.205).",
+      "Divide your weight in kilograms by your squared height in meters.",
+      "Compare the result to the standard categories: under 18.5 is underweight, 18.5–24.9 is normal weight, 25–29.9 is overweight, and 30+ is obese.",
+    ],
+    edgeCases: [
+      "Athletes and heavily muscled individuals often score 'overweight' or 'obese' by BMI despite low body fat, since the formula can't distinguish muscle from fat.",
+      "Older adults tend to carry more fat at the same BMI as younger adults due to natural muscle loss with age, so the same number can mean different things across age groups.",
+      "BMI categories were developed primarily from studies of adult populations and don't apply the same way to children or teenagers, who use age- and sex-specific percentile charts instead.",
+      "Different ethnic groups have been shown to carry different health risks at the same BMI — some public health bodies use adjusted thresholds for South and East Asian populations, for example.",
+      "Pregnancy substantially changes weight in ways unrelated to fat gain, making standard BMI categories inapplicable during that time.",
+    ],
     examples: [
       { title: "Example calculation", body: "A person who is 5'8\" (1.73m) and weighs 160 lb (72.6 kg) has a BMI of about 24.3 — within the 'normal weight' range of 18.5–24.9." },
       { title: "Metric example", body: "A person who is 175 cm and 80 kg has a BMI of about 26.1, which falls in the 'overweight' range of 25–29.9." },
