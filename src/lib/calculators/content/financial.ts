@@ -58,6 +58,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator uses the standard amortizing-loan formula, which spreads the loan amount across equal monthly payments over the term you choose. Each payment includes both interest (calculated on the remaining balance) and principal, with the interest portion shrinking and the principal portion growing every month until the loan is paid off.",
     formula: "M = P × [r(1+r)^n] / [(1+r)^n − 1]\nwhere P = loan amount, r = monthly interest rate, n = number of payments",
+    methodology:
+      "This is the same present-value-of-an-annuity formula behind every fixed-rate installment loan, whether it's a mortgage, auto loan, or personal loan — the specific type of collateral or use of funds doesn't change the underlying math, only the rate a lender is willing to offer. The monthly rate r is the annual rate divided by 12, and n is the term in years multiplied by 12; plugging those into the formula finds the one fixed payment that exactly pays off P over n payments given rate r.",
+    stepByStep: [
+      "Divide the annual interest rate by 12 to get the monthly rate, r.",
+      "Multiply the loan term in years by 12 to get the total number of payments, n.",
+      "Compute (1+r)^n.",
+      "Plug the loan amount, r, and (1+r)^n into the amortization formula to find the monthly payment.",
+    ],
+    edgeCases: [
+      "A 0% promotional rate makes the formula divide by zero — payment simplifies to loan amount ÷ number of payments.",
+      "Origination fees reduce how much cash you actually receive without changing the payment calculation itself, since payments are based on the stated loan amount.",
+      "Prepayment penalties on some loans mean paying it off early doesn't always save as much as the interest-savings math alone would suggest.",
+      "A variable-rate loan only follows this fixed formula until the rate resets, at which point payment is recalculated on the remaining balance.",
+    ],
     examples: [
       { title: "Short-term loan", body: "$20,000 at 8% over 5 years comes out to roughly $406/month, with about $4,340 in total interest." },
       { title: "Longer term, lower payment", body: "The same $20,000 stretched to 7 years lowers the monthly payment but increases total interest paid — a trade-off worth checking before you sign." },
@@ -89,6 +103,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator starts with the vehicle price, adds sales tax, then subtracts your down payment and trade-in value to find your true loan amount. That amount is run through the standard amortization formula using your interest rate and loan term (in months) to produce your monthly payment, total interest, and total cost.",
     formula: "Loan amount = (Price × (1 + tax rate)) − down payment − trade-in\nM = P × [r(1+r)^n] / [(1+r)^n − 1]",
+    methodology:
+      "Most states tax the full vehicle price before subtracting a trade-in (a handful subtract trade-in value first, lowering the taxable amount), which is why this calculator applies tax to the price before down payment and trade-in are removed — matching how most dealer finance offices actually structure the numbers. Once that true financed amount is found, it's run through the standard amortization formula exactly like any other installment loan.",
+    stepByStep: [
+      "Multiply the vehicle price by (1 + your state's sales tax rate) to find the tax-inclusive price.",
+      "Subtract your down payment and trade-in value to find the actual loan amount.",
+      "Convert the annual interest rate to a monthly rate and the loan term to months.",
+      "Apply the standard amortization formula to find the monthly payment.",
+    ],
+    edgeCases: [
+      "A handful of states calculate sales tax on the price after subtracting trade-in value, which lowers the taxable amount and the total financed compared to the more common method.",
+      "Negative equity on a trade-in (owing more than it's worth) increases the loan amount rather than reducing it.",
+      "Dealer fees (documentation, title, registration) are often rolled into the financed amount but aren't part of this simplified price-and-tax calculation.",
+      "Manufacturer incentives or rebates typically reduce the price before tax is calculated, similar to a down payment.",
+    ],
     examples: [
       { title: "With a trade-in", body: "$35,000 car, $5,000 down, $6,000 trade-in, 7% tax, 7.5% rate over 60 months → a loan amount around $26,450 and a monthly payment near $530." },
       { title: "No trade-in", body: "The same car with no trade-in raises the loan amount by $6,000, increasing the monthly payment by roughly $120." },
@@ -120,6 +148,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator applies monthly compounding to your initial balance, then adds your monthly contribution at the end of each period before compounding again. Over many years, this snowball effect means a large share of your final balance comes from growth on growth, not just your own contributions.",
     formula: "FV = P(1 + r)^n + PMT × [((1 + r)^n − 1) / r]\nwhere P = principal, PMT = monthly contribution, r = monthly rate, n = number of months",
+    methodology:
+      "This formula combines two growth streams into one total: the first term, P(1+r)^n, is your starting balance compounding on its own; the second term is an annuity formula for a stream of equal monthly contributions, each compounding for a different number of remaining periods depending on when it was deposited. Adding them together captures both 'growth on what you already had' and 'growth on everything you add along the way' in a single future value.",
+    stepByStep: [
+      "Convert your annual rate of return to a monthly rate by dividing by 12.",
+      "Convert your time horizon in years to total months.",
+      "Compound your starting principal using P(1+r)^n.",
+      "Compound your monthly contributions using the annuity formula PMT × [((1+r)^n − 1) / r], then add the two results together.",
+    ],
+    edgeCases: [
+      "This assumes a constant rate of return every period, which real markets never actually deliver — it's a projection, not a guarantee.",
+      "Contributions made at the start versus the end of each month produce slightly different results (an 'annuity due' versus an 'ordinary annuity'); this calculator assumes end-of-period contributions, the more common convention.",
+      "Taxes on investment gains in a taxable account reduce real-world growth below what this pre-tax projection shows.",
+      "A 0% rate of return makes the compounding terms simplify to straightforward addition — principal plus total contributions, with no growth.",
+    ],
     examples: [
       { title: "Starting early", body: "$10,000 invested at 7% for 20 years with $200/month added grows to roughly $130,000 — more than half of it from compounding, not contributions." },
       { title: "Starting later", body: "The same monthly contribution starting 10 years later, over just 10 years, reaches a noticeably smaller total — showing why time matters more than the amount you start with." },
@@ -151,6 +193,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "Using your current age and target retirement age, the calculator determines how many years your money has to grow. It then compounds your current savings and monthly contributions at your expected annual return over that time. Finally, it applies your chosen withdrawal rate to the projected balance to estimate a sustainable annual income in retirement.",
     formula: "Nest egg = compound growth of current savings + monthly contributions over time\nAnnual income ≈ Nest egg × withdrawal rate",
+    methodology:
+      "The projection phase uses the same compound-growth-plus-contributions math as any long-term investment projection. The withdrawal phase applies a 'safe withdrawal rate' — commonly 4%, based on historical research into how much a diversified portfolio can support annually without running out of money over a typical multi-decade retirement — as a simple multiplier against the final balance, rather than modeling actual year-by-year market returns during retirement.",
+    stepByStep: [
+      "Find the number of years between your current age and target retirement age.",
+      "Compound your current savings and monthly contributions forward using your expected rate of return over that many years.",
+      "Multiply the resulting nest egg by your chosen withdrawal rate to estimate sustainable annual income.",
+      "Divide by 12 if you want a monthly income figure instead.",
+    ],
+    edgeCases: [
+      "The 4% rule was derived from historical US market data over rolling 30-year periods — a longer retirement (say, retiring at 45) generally warrants a lower, more conservative withdrawal rate.",
+      "This projection assumes a constant annual return, while real portfolios experience volatility, and poor returns early in retirement can be more damaging than the same poor returns later (sequence-of-returns risk).",
+      "Social Security and any pension income aren't included here and should be added separately to get a complete retirement income picture.",
+      "Required minimum distributions on traditional retirement accounts can force withdrawals at a specific age regardless of what this calculator's withdrawal rate suggests.",
+    ],
     examples: [
       { title: "30 years to grow", body: "Starting at age 30 with $20,000 saved and $500/month at a 7% return, by age 65 the projected balance is well over $700,000." },
       { title: "Starting later", body: "The same monthly contribution starting at age 45 instead of 30 results in a significantly smaller balance at 65 — a clear illustration of why time matters more than almost any other factor." },
@@ -182,6 +238,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator compounds your initial investment monthly at your chosen rate of return, adding your monthly contribution at the end of each period. Over your selected time horizon, it totals up your contributions separately from the growth so you can see exactly how much of the final balance came from your own money versus investment returns.",
     formula: "FV = P(1 + r)^n + PMT × [((1 + r)^n − 1) / r]",
+    methodology:
+      "This is the identical future-value-with-contributions formula used across all of this site's growth projections — a lump sum compounding on its own, plus a stream of contributions each compounding for the remaining time after it's deposited. Separating 'your contributions' from 'growth' in the output matters because it's the clearest way to see how much of a long-term projection is really coming from the market versus from your own savings discipline.",
+    stepByStep: [
+      "Convert your annual expected return to a monthly rate.",
+      "Convert your investment horizon to total months.",
+      "Compound the initial lump sum using P(1+r)^n.",
+      "Add the compounded value of monthly contributions using the annuity formula, then total the two.",
+    ],
+    edgeCases: [
+      "A higher assumed rate of return dramatically changes long-horizon projections — small differences in the assumed rate compound into large differences in the final figure over 20-30 years.",
+      "This models a constant contribution amount; a contribution that grows with income (common in practice) would produce a higher actual balance than this static projection.",
+      "Investment fees (expense ratios, advisory fees) reduce your effective rate of return below the market's headline return.",
+      "This is a nominal (non-inflation-adjusted) projection — the real purchasing power of the final figure will be lower after accounting for inflation.",
+    ],
     examples: [
       { title: "Lump sum plus contributions", body: "$5,000 invested today plus $250/month at 8% for 15 years grows to roughly $92,000, with about $47,000 of that from growth alone." },
       { title: "Lump sum only", body: "The same $5,000 with no further contributions, at the same rate and time, grows to a much smaller figure — showing how much regular contributions matter." },
@@ -213,6 +283,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies the pre-tax price by your entered sales tax rate to find the tax amount, then adds that to the original price for your total. It's a straightforward percentage calculation, but having it instant and accurate saves the mental math — especially with non-round tax rates like 7.25% or 8.875%.",
     formula: "Tax = Price × (Rate ÷ 100)\nTotal = Price + Tax",
+    methodology:
+      "A combined sales tax rate is itself usually a sum of several layers — state, county, city, and sometimes special district rates all stack together into the single percentage a receipt shows. That's why rates like 8.875% (a real combined New York City rate) look so specific: they're the exact sum of overlapping jurisdictions, not a rate anyone set as one round number.",
+    stepByStep: [
+      "Convert the tax rate percentage to a decimal by dividing by 100.",
+      "Multiply the pre-tax price by that decimal to find the tax amount.",
+      "Add the tax amount to the pre-tax price to get the total.",
+    ],
+    edgeCases: [
+      "Many states exempt or reduce tax on specific categories like groceries, prescription drugs, or clothing below a certain price.",
+      "Online purchases are generally taxed based on the buyer's shipping address (destination-based sourcing) in most states, not the seller's location.",
+      "A discount or coupon applied before tax reduces the taxable amount, while one applied after tax does not — the order matters for the final total.",
+      "Working backward from a tax-inclusive total to find the pre-tax price requires dividing by (1 + rate), not simply subtracting the tax percentage.",
+    ],
     examples: [
       { title: "Standard rate", body: "A $100 purchase at a 7.25% tax rate adds $7.25, for a total of $107.25." },
       { title: "Higher local rate", body: "The same $100 purchase in an area with an 8.875% combined state and local rate comes to $108.88 — a noticeable difference for larger purchases." },
@@ -243,6 +326,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Even a modest extra payment toward your mortgage principal each month can shave years off your loan and save tens of thousands of dollars in interest — because every extra dollar goes straight to principal instead of being split with interest. Our Mortgage Payoff Calculator shows exactly how much time and money an extra monthly payment saves you.",
     howItWorks:
       "The calculator runs your mortgage's amortization schedule twice: once at your normal payment, and once with your extra amount added every month. Because a lower principal balance means less interest accrues each month, extra payments compound their benefit over the life of the loan — the earlier you start, the more you save.",
+    methodology:
+      "Every dollar paid extra toward principal stops accruing interest for every remaining month of the loan, which is why extra payments save more than their face value in interest over time — the savings compound the same way growth does in an investment, just in reverse. An extra payment made in year 2 of a 30-year mortgage prevents 28 years of interest on that dollar; the identical extra payment made in year 28 only prevents 2 years of interest, which is why paying extra earlier in a loan has a dramatically larger impact than the same amount paid later.",
+    stepByStep: [
+      "Run the loan's amortization schedule at the normal payment to find the baseline payoff date and total interest.",
+      "Re-run the same schedule adding the extra amount to principal every month.",
+      "Track how many months earlier the balance reaches zero under the extra-payment scenario.",
+      "Compare total interest paid between the two schedules to find the dollar savings.",
+    ],
+    edgeCases: [
+      "Extra payments only produce this benefit if the lender applies them directly to principal — some servicers default to holding extra amounts toward the next scheduled payment unless you specify otherwise.",
+      "Loans with prepayment penalties (uncommon on conventional mortgages, more common on some other loan types) can offset part of the interest savings.",
+      "If you're also carrying higher-interest debt elsewhere, paying that down first usually produces a better return than extra mortgage payments.",
+      "A mortgage with a very low fixed rate may make investing extra cash instead of prepaying the mathematically better choice, depending on expected investment returns.",
+    ],
     examples: [
       { title: "Modest extra payment", body: "A $300,000 balance at 6.5% with 25 years left, paying an extra $200/month, can cut several years off the loan and save tens of thousands in interest." },
       { title: "Bigger extra payment", body: "Doubling that extra payment to $400/month roughly doubles the time and interest saved — the relationship is close to linear for typical rates and balances." },
@@ -273,6 +370,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Refinancing can lower your monthly payment or shorten your loan term, but it also comes with closing costs that need to be recouped before the new loan actually saves you money. Our Refinance Calculator compares your current mortgage to a new one and shows the exact break-even point.",
     howItWorks:
       "The calculator computes your current monthly principal & interest payment based on your remaining balance, rate, and years left, then computes what the payment would be under the new rate and term. It divides your closing costs by the monthly savings to find how many months it takes before the refinance pays for itself.",
+    methodology:
+      "Break-even math here is straightforward division — closing costs divided by monthly savings gives the number of months before the upfront cost is recovered — but the monthly savings figure itself depends on more than just the rate difference. Resetting to a new term (even at a lower rate) changes how much of each payment goes to interest versus principal, so a true apples-to-apples comparison should account for both the rate change and any change in remaining term, not just eyeball the two monthly payment figures.",
+    stepByStep: [
+      "Calculate your current monthly principal & interest payment from your remaining balance, current rate, and years left.",
+      "Calculate the new monthly payment using the new loan's rate and term.",
+      "Subtract the new payment from the current payment to find monthly savings.",
+      "Divide total closing costs by monthly savings to find the break-even point in months.",
+    ],
+    edgeCases: [
+      "Resetting to a new 30-year term extends your total payoff timeline even if the rate is lower, which can increase lifetime interest paid despite a lower monthly payment.",
+      "A cash-out refinance increases the loan balance itself, which changes this comparison beyond a simple rate-and-term swap.",
+      "Rolling closing costs into the new loan balance (rather than paying them upfront) changes both the break-even calculation and the total amount financed.",
+      "Refinancing resets the amortization schedule, meaning early payments on the new loan are interest-heavy again, even if you were already well into your original loan's principal-heavy years.",
+    ],
     examples: [
       { title: "Clear savings", body: "Refinancing a $300,000 balance from 7.2% to 6.2% with $4,000 in closing costs might save a few hundred dollars a month, breaking even in well under two years." },
       { title: "Marginal savings", body: "A smaller rate drop with the same closing costs stretches the break-even point out much further — worth checking against how long you actually plan to stay in the home." },
@@ -303,6 +414,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Renting versus buying isn't just an emotional decision — it's a financial one with a real answer that depends on how long you'll stay, local rents, and home appreciation. Our Rent vs Buy Calculator runs the numbers on both sides so you can see which one actually costs less over your specific timeline.",
     howItWorks:
       "The calculator estimates your total cost to own (mortgage principal & interest, plus an estimate for property tax and insurance) over your chosen number of years, then subtracts the home's projected appreciation to find your net cost to buy. That's compared directly against your total rent paid over the same period.",
+    methodology:
+      "The comparison isn't simply 'mortgage payment versus rent payment' — buying involves upfront costs (down payment, closing costs) that renting doesn't, but it also builds equity and benefits from appreciation, neither of which renting provides. Netting the ongoing ownership costs against projected appreciation before comparing to cumulative rent is what makes this a fair, apples-to-apples total-cost comparison rather than just a monthly cash-flow comparison.",
+    stepByStep: [
+      "Estimate total ownership cost over the time horizon: mortgage principal & interest, property tax, and insurance, summed across all months.",
+      "Estimate home appreciation over the same period using an expected annual appreciation rate.",
+      "Subtract appreciation from total ownership cost to find the net cost of buying.",
+      "Compare that net cost against total rent paid over the identical time horizon.",
+    ],
+    edgeCases: [
+      "Home maintenance costs (typically 1-2% of home value annually) and HOA dues, both real ownership costs, aren't part of every simplified version of this comparison.",
+      "The opportunity cost of the down payment — what it could have earned if invested instead — favors renting more than a simple appreciation comparison suggests.",
+      "A very short time horizon (2-3 years) rarely favors buying, since closing costs alone can take years of appreciation to offset.",
+      "Rent isn't fixed — this comparison should account for expected annual rent increases over the same period, not just today's rent held flat.",
+    ],
     examples: [
       { title: "Buying wins", body: "Staying 7+ years in an appreciating market often tips the scale toward buying, since equity growth and appreciation offset the upfront and ongoing costs of ownership." },
       { title: "Renting wins", body: "A shorter stay of 2-3 years rarely gives buying enough time to overcome closing costs and the illiquidity of home equity, making renting the cheaper option." },
@@ -333,6 +458,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Lenders look at your income, existing debts, and a target debt-to-income ratio to decide how much house you can actually qualify for — not just what you'd like to spend. Our House Affordability Calculator uses the same core logic to give you a realistic price range before you start shopping.",
     howItWorks:
       "The calculator applies your target debt-to-income (DTI) ratio to your monthly income to find the maximum you can spend on total debt payments, subtracts your existing monthly debts, and works backward through the loan payment formula to find the largest loan (and therefore home price) that fits within what's left.",
+    methodology:
+      "Lenders qualify borrowers using a 'back-end DTI' — total monthly debt, including the new mortgage payment, divided by gross monthly income — typically capped around 36-43% depending on the loan program. This calculator reverses that process: instead of checking whether a known payment fits your DTI, it starts from your DTI ceiling and existing debts, finds how much payment room is left, and works backward through the loan payment formula to find the maximum loan (and therefore price) that payment supports.",
+    stepByStep: [
+      "Multiply monthly gross income by your target DTI percentage to find the maximum total monthly debt allowed.",
+      "Subtract existing monthly debt payments (car loans, student loans, credit cards) to find how much is left for a mortgage payment.",
+      "Work backward through the loan payment formula using that payment ceiling, your interest rate, and loan term to find the maximum loan amount.",
+      "Add your down payment to the maximum loan amount to find your affordable home price.",
+    ],
+    edgeCases: [
+      "This estimate doesn't include property tax, insurance, PMI, or HOA dues in the payment ceiling — a full affordability check should reserve room for those alongside principal and interest.",
+      "Different loan programs (conventional, FHA, VA) allow different maximum DTI ratios, so the 'right' target percentage depends on which loan type you're pursuing.",
+      "Lenders average certain income types (bonus, commission, self-employment) over multiple years rather than using the most recent figure, which can affect the qualifying income used in a real application.",
+      "Being technically qualified at a given DTI doesn't mean that payment is comfortable — many financial planners recommend staying meaningfully below the maximum a lender would allow.",
+    ],
     examples: [
       { title: "Low existing debt", body: "$100,000 income, only $400 in other monthly debts, and a 36% target DTI leaves plenty of room for a mortgage payment, supporting a higher home price." },
       { title: "Higher existing debt", body: "The same income with $1,200 in other monthly debts (car loan, student loans) reduces how much is left for a mortgage, lowering the affordable home price noticeably." },
@@ -363,6 +502,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Before you can get a mortgage, you need a down payment — and figuring out how much to save and how long it'll take is often the first real step toward buying a home. Our Down Payment Calculator turns your home price target and savings rate into a concrete timeline.",
     howItWorks:
       "The calculator multiplies your target home price by your chosen down payment percentage to find the total needed, subtracts what you've already saved, and divides the remaining amount by your monthly savings rate to estimate how many months until you reach your goal.",
+    methodology:
+      "This is a straightforward savings-goal projection, but the down payment percentage you target has an outsized effect on both the goal amount and the resulting mortgage — a lower down payment reaches the goal faster but typically means PMI and a larger loan amount, while a higher down payment takes longer to save but avoids PMI and lowers the monthly mortgage payment going forward. The calculation itself doesn't account for that trade-off; it simply projects the timeline for whatever target percentage you choose.",
+    stepByStep: [
+      "Multiply your target home price by your down payment percentage to find the total dollar goal.",
+      "Subtract what you've already saved toward that goal.",
+      "Divide the remaining amount by your monthly savings contribution to find the number of months needed.",
+      "Adjust the down payment percentage or monthly savings rate to see how each changes the timeline.",
+    ],
+    edgeCases: [
+      "This doesn't account for home prices potentially rising while you save, which would raise the actual dollar target partway through your timeline.",
+      "Closing costs (typically 2-5% of the purchase price) are a separate expense from the down payment and should be budgeted for on top of this goal.",
+      "Down payment savings sitting in an interest-bearing account would reach the goal slightly faster than this simple linear projection accounts for.",
+      "Many loan programs allow down payments well below 20% (sometimes as low as 3%), so a 20% target is a choice, not a universal requirement.",
+    ],
     examples: [
       { title: "20% down payment", body: "A $400,000 home with a 20% down payment goal needs $80,000 — with $10,000 saved and $1,200/month set aside, that's about 58 more months." },
       { title: "Lower down payment", body: "The same home with a 10% down payment goal ($40,000) roughly halves the time needed to reach the goal, though a smaller down payment usually means PMI on the eventual mortgage." },
@@ -393,6 +546,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Any fixed-rate loan — personal, auto, or otherwise — can be paid off faster with extra payments, and the savings are often bigger than people expect. Our Loan Payoff Calculator shows exactly how much time and interest an extra payment amount saves on your specific loan.",
     howItWorks:
       "The calculator uses your current balance, rate, and payment to solve for how many months remain at your current payment amount, then solves again with your extra payment added, using logarithmic amortization math. The difference between the two payoff times is your time saved.",
+    methodology:
+      "Because the standard amortization formula solves for payment given a fixed number of periods, finding the reverse — the number of periods given a fixed payment — requires rearranging it into a logarithmic form: n = -log(1 - (r×balance)/payment) / log(1+r). This is why solving for time remaining isn't simple division of balance by payment — interest keeps accruing on the shrinking balance throughout, and the logarithm is what accounts for that compounding effect precisely.",
+    stepByStep: [
+      "Convert your annual interest rate to a monthly rate.",
+      "Apply the logarithmic payoff formula to your current balance, rate, and monthly payment to find months remaining at that payment.",
+      "Re-run the same formula with your extra amount added to the monthly payment.",
+      "Subtract the second result from the first to find the number of months saved.",
+    ],
+    edgeCases: [
+      "If your payment doesn't exceed the monthly interest accruing on the balance, the logarithmic formula has no valid solution — the loan would never pay off at that payment level, no matter how long you waited.",
+      "This assumes a fixed interest rate for the remaining term; a variable-rate loan's actual payoff timeline would shift if the rate changes.",
+      "Extra payments only accelerate payoff if applied to principal immediately — check that your lender doesn't hold extra amounts toward a future scheduled payment instead.",
+      "Any fees for early payoff (rare on personal loans but worth checking) would offset part of the calculated interest savings.",
+    ],
     examples: [
       { title: "Credit card or personal loan", body: "A $15,000 balance at 9% with a $400 monthly payment pays off meaningfully faster with just $100 extra added each month." },
       { title: "When extra payments don't help", body: "If your current payment barely covers the interest accruing each month, the calculator flags that the loan would never pay off at that payment — a sign the payment needs to increase." },
@@ -423,6 +590,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Every fixed-rate loan payment is split between interest and principal, and that split shifts dramatically over the life of the loan — early payments are mostly interest, later payments are mostly principal. Our Amortization Schedule Calculator generates the full year-by-year breakdown so you can see exactly where your money goes.",
     howItWorks:
       "The calculator runs the standard amortization formula month by month for the full loan term, tracking the interest and principal portion of every payment and the remaining balance after each one. It then summarizes the results into a yearly table and chart so the full-term picture is easy to read at a glance.",
+    methodology:
+      "Interest for any given month is calculated on the remaining balance at that point (balance × monthly rate), and whatever's left of the fixed payment after covering that interest becomes principal. Because the balance shrinks a little more each month, the interest portion shrinks too, which means the principal portion grows — the front-loaded interest structure isn't a special rule lenders apply, it's simply the mathematical consequence of charging interest on a shrinking balance every period.",
+    stepByStep: [
+      "For each month, multiply the current remaining balance by the monthly interest rate to find that month's interest charge.",
+      "Subtract the interest charge from the fixed monthly payment to find that month's principal reduction.",
+      "Subtract the principal reduction from the balance to find the new remaining balance.",
+      "Repeat for every month of the loan term, then summarize into yearly totals for the schedule.",
+    ],
+    edgeCases: [
+      "Any extra payment beyond the required amount goes entirely to principal, accelerating the schedule and reducing all future interest — this is why extra payments early in the loan have outsized impact.",
+      "A loan with a very short term (like a 5-year auto loan) has a much less dramatic interest-to-principal shift than a 30-year mortgage, simply because there's less time for the balance to compound.",
+      "Refinancing resets the amortization schedule entirely, meaning the new loan starts back at the interest-heavy beginning regardless of how far along the original loan was.",
+      "Rounding on the final payment (to bring the balance to exactly zero) is standard practice and can make the last payment slightly different from all prior ones.",
+    ],
     examples: [
       { title: "Early years", body: "On a $250,000, 30-year loan at 6.5%, the first year's payments are roughly two-thirds interest and one-third principal." },
       { title: "Later years", body: "By year 25 of the same loan, that ratio flips dramatically — most of each payment goes to principal, which is why home equity builds slowly at first and quickly later." },
@@ -454,6 +635,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator finds your depreciation fee by dividing the difference between the negotiated price and the residual value (what the car is expected to be worth at lease-end) by the number of months. It separately calculates the rent charge (the lease's finance fee) from the money factor, then adds both together for your total monthly payment.",
     formula: "Depreciation fee = (net price − residual value) ÷ term\nRent charge = (net price + residual value) × money factor\nMonthly payment = depreciation fee + rent charge",
+    methodology:
+      "The 'money factor' is simply an interest rate expressed in an unfamiliar decimal form specifically for leasing — multiplying it by 2,400 converts it into an approximate equivalent APR, which is why a money factor of 0.002 (2,400 × 0.002 = 4.8%) roughly matches what you'd see as an interest rate on a comparable loan. The rent charge itself is calculated on the sum of the net price and residual value (not just the declining balance, as a loan would), which is a structural quirk of lease math worth knowing when comparing the true cost against financing.",
+    stepByStep: [
+      "Find the depreciation fee by subtracting the residual value from the negotiated net price, then dividing by the lease term in months.",
+      "Find the rent charge by adding the net price and residual value together, then multiplying by the money factor.",
+      "Add the depreciation fee and rent charge together for the base monthly payment.",
+      "Multiply the money factor by 2,400 if you want to compare it to a familiar APR figure.",
+    ],
+    edgeCases: [
+      "The residual value is set by the leasing company at lease signing and doesn't change even if the car's actual market value at lease-end differs significantly.",
+      "Sales tax on a lease is typically applied to each monthly payment rather than the full vehicle price upfront, unlike financing a purchase in most states.",
+      "Exceeding the mileage allowance triggers a per-mile fee at lease-end that isn't part of the monthly payment calculation at all.",
+      "A capitalized cost reduction (down payment on a lease) lowers the net price used in both the depreciation and rent charge calculations, reducing the monthly payment.",
+    ],
     examples: [
       { title: "Standard lease", body: "A $32,000 vehicle with a 55% residual value, a 0.002 money factor, and a $2,000 down payment over 36 months comes to a specific monthly figure split between depreciation and finance charge." },
       { title: "Money factor as APR", body: "Multiplying the money factor by 2400 gives an approximate equivalent APR — a 0.002 money factor is roughly a 4.8% interest rate, useful for comparing against loan financing." },
@@ -485,6 +680,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator applies the standard amortizing loan payment formula directly to your loan amount, interest rate, and term in months, solving for the fixed monthly payment that fully pays off the loan (principal and interest) by the end of the term.",
     formula: "M = P × [r(1+r)^n] / [(1+r)^n − 1]\nwhere P = loan amount, r = monthly interest rate, n = number of payments",
+    methodology:
+      "This is the pure present-value-of-an-annuity formula underlying every fixed-rate loan payment calculation on this site, stripped down to just its three core inputs — no taxes, insurance, or fees layered on top. It answers a single question precisely: what fixed monthly payment, applied for n months at rate r, exactly retires a loan of amount P by the final payment.",
+    stepByStep: [
+      "Divide the annual interest rate by 12 to find the monthly rate, r.",
+      "Multiply the loan term in years by 12 to find the total number of payments, n.",
+      "Compute (1+r)^n.",
+      "Plug the loan amount, r, and (1+r)^n into the formula to solve for the monthly payment.",
+    ],
+    edgeCases: [
+      "A 0% interest rate makes the formula divide by zero — payment simplifies to loan amount divided by number of payments.",
+      "This calculates principal and interest only; a mortgage payment specifically also typically includes taxes and insurance, which this general-purpose calculator doesn't add.",
+      "Fees or points rolled into the loan amount increase P and therefore the payment, even though they aren't part of the 'purchase price' the loan is nominally for.",
+      "Switching between an annual rate and a rate already expressed monthly is a common input error that significantly changes the result.",
+    ],
     examples: [
       { title: "Short-term loan", body: "$10,000 at 6% over 36 months comes to a monthly payment around $304, totaling roughly $10,955 over the full term." },
       { title: "Longer term", body: "The same $10,000 stretched to 60 months lowers the monthly payment but increases total interest paid over the life of the loan." },
@@ -515,6 +724,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Sometimes you know the loan amount, the payment, and the term — but not the interest rate itself, whether from an old loan document or a lender who only quoted the payment. Our Interest Rate Calculator works backward to find the rate that produces a given payment.",
     howItWorks:
       "Since there's no simple algebraic formula to solve directly for the rate, the calculator uses a binary search: it repeatedly tests rates, checks whether the resulting payment is higher or lower than your target, and narrows the range until it converges on the rate that produces your exact payment.",
+    methodology:
+      "The standard loan payment formula can be solved directly for payment given a known rate, but rearranging it algebraically to solve for rate given a known payment has no closed-form solution — the rate appears in multiple places in the equation in a way that can't be isolated. Binary search sidesteps that problem entirely: it guesses a rate, computes what payment that rate would produce, and adjusts the guess up or down based on whether the result was too high or too low, repeating until the guessed payment matches your actual payment closely enough.",
+    stepByStep: [
+      "Start with a reasonable range of possible interest rates (for example, 0% to 30%).",
+      "Test the midpoint rate by computing the payment it would produce for your loan amount and term.",
+      "If that payment is higher than your actual payment, the true rate is lower — narrow the range downward; if lower, narrow it upward.",
+      "Repeat the narrowing process until the computed payment matches your actual payment to the desired precision.",
+    ],
+    edgeCases: [
+      "This solves for the pure interest rate on principal and interest only — if your payment includes escrowed taxes or insurance, the implied rate will be overstated unless you subtract those first.",
+      "Small errors in the payment or term amount produce meaningfully different implied rates, since the search is sensitive to precise inputs.",
+      "The result is the note rate, not the APR, which includes fees and would run slightly higher for the same loan.",
+      "Loans with irregular or graduated payment schedules don't fit this fixed-payment model and would need a different calculation entirely.",
+    ],
     examples: [
       { title: "Finding an old loan's rate", body: "A $20,000 loan with a $420 monthly payment over 60 months implies an interest rate you can back into, even without the original paperwork." },
       { title: "Verifying a quote", body: "If a lender quotes a payment for a given amount and term, this calculator lets you check what implied rate that payment actually represents." },
@@ -546,6 +769,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your principal by the annual interest rate and by the number of years to find total interest — no compounding periods, no reinvestment of interest, just a flat linear calculation across the loan or investment term.",
     formula: "Interest = Principal × Rate × Time\nTotal = Principal + Interest",
+    methodology:
+      "Simple interest grows in a straight line rather than a curve because each year's interest is calculated only on the original principal — year two doesn't earn anything extra on year one's interest, unlike compound interest, where every period's interest becomes part of the base for the next period. This is why the formula is pure multiplication with no exponent: the growth rate per year never changes, so the total is just principal times rate times the number of years.",
+    stepByStep: [
+      "Convert the time period to years if given in months or another unit.",
+      "Multiply the principal by the annual interest rate (as a decimal).",
+      "Multiply that result by the number of years to find total interest.",
+      "Add the interest to the original principal for the final total.",
+    ],
+    edgeCases: [
+      "Most modern savings accounts, credit cards, and mortgages actually use compound interest, not simple interest, despite the name sometimes being used loosely in casual conversation.",
+      "Some short-term loans and certain bonds genuinely use simple interest, so it's worth confirming which structure applies before assuming.",
+      "A rate expressed as a monthly figure needs converting to an annual equivalent (or the time period converted to months) before applying this formula consistently.",
+      "Simple interest calculated over a fractional year (like 18 months) should use time = 1.5, not a rounded whole number.",
+    ],
     examples: [
       { title: "Short-term loan", body: "$10,000 at 5% simple interest for 3 years earns exactly $1,500 in interest, regardless of how it's paid or compounded." },
       { title: "Comparing to compound interest", body: "The same $10,000 at 5% compounded annually for 3 years would earn slightly more than $1,500, since compound interest earns 'interest on interest' — simple interest never does." },
@@ -577,6 +814,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator applies the standard compound interest formula using your chosen compounding frequency, growing your principal over the number of periods implied by your time horizon. More frequent compounding (daily versus annual, for example) produces a slightly higher final balance for the same stated annual rate.",
     formula: "A = P × (1 + r/n)^(n×t)\nwhere P = principal, r = annual rate, n = compounding periods per year, t = years",
+    methodology:
+      "Compounding frequency determines how often interest gets added to the balance and starts earning its own interest — n is the number of times per year that happens. Dividing the annual rate by n finds the rate applied at each compounding event, and raising (1 + r/n) to the power of total compounding events (n×t) captures the effect of interest earning interest at every one of those events, however frequent they are.",
+    stepByStep: [
+      "Divide the annual interest rate by the number of compounding periods per year to find the periodic rate.",
+      "Multiply the number of compounding periods per year by the number of years to find total compounding events.",
+      "Raise (1 + periodic rate) to the power of total compounding events.",
+      "Multiply that result by the principal to find the final balance.",
+    ],
+    edgeCases: [
+      "Continuous compounding (the theoretical limit as n approaches infinity) uses a different formula involving e, the mathematical constant, and produces only a marginally higher result than daily compounding in practice.",
+      "The difference between annual and daily compounding at typical savings rates is usually small — often just a few dollars per thousand over a year — despite how significant it can sound conceptually.",
+      "The 'annual percentage yield' (APY) advertised by banks already accounts for compounding frequency, while the 'annual percentage rate' or nominal rate does not — comparing the wrong one across two accounts can be misleading.",
+      "This models a single lump sum only; regular contributions require a different formula (see the Compound Interest Calculator) that adds a contribution stream on top of this base growth.",
+    ],
     examples: [
       { title: "Monthly compounding", body: "$5,000 at 6% compounded monthly for 5 years grows to roughly $6,749." },
       { title: "Daily compounding", body: "The same $5,000 at 6% compounded daily for 5 years grows very slightly higher than monthly compounding — the difference is small but real." },
@@ -607,6 +858,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Setting a savings goal is easy; knowing whether your monthly deposit actually gets you there on time is the harder part. Our Savings Calculator projects your account balance forward based on an initial deposit, regular monthly contributions, and an interest rate.",
     howItWorks:
       "The calculator grows your initial deposit and adds your monthly contribution each period, compounding interest on the running balance throughout. The result shows your ending balance, split between what you actually deposited and what you earned in interest.",
+    methodology:
+      "This uses the same lump-sum-plus-contributions compound growth math as the site's investment and retirement projections, just applied at typical savings-account rates rather than typical market-investment rates. Splitting the final balance into 'total deposited' versus 'interest earned' is what makes the projection actionable — it shows exactly how much of a savings goal is realistic to reach through deposits alone versus how much interest is expected to contribute.",
+    stepByStep: [
+      "Convert the annual interest rate to a monthly rate by dividing by 12.",
+      "Compound the initial deposit forward using the monthly rate over the total number of months.",
+      "Add the compounded value of monthly contributions using the annuity growth formula.",
+      "Subtract total deposits (initial plus all contributions) from the final balance to isolate interest earned.",
+    ],
+    edgeCases: [
+      "Standard savings account rates are variable and can change at any time, unlike the fixed rate this projection assumes for the full period.",
+      "Interest earned in a standard (non-tax-advantaged) savings account is taxable income in the year it's earned, which this pre-tax projection doesn't subtract.",
+      "A goal with a hard deadline (a wedding, a trip) benefits from working backward — using this same math to solve for the monthly contribution needed rather than projecting forward from a guessed amount.",
+      "High-yield savings account rates can differ from standard savings accounts by a significant multiple, making the rate you enter the single biggest driver of the projection's outcome.",
+    ],
     examples: [
       { title: "Steady saver", body: "$1,000 initial deposit plus $300/month at 4% for 10 years grows to a healthy balance, with a meaningful share coming from interest, not just deposits." },
       { title: "Starting later", body: "The same monthly contribution starting with no initial deposit and a shorter timeframe reaches a noticeably smaller total — showing why starting early matters as much as the amount saved." },
@@ -637,6 +902,20 @@ export const financialContent: Record<string, SeoContent> = {
       "A certificate of deposit trades flexibility for a guaranteed, fixed rate of return — you lock your money away for a set term in exchange for a higher, predictable rate than a typical savings account. Our CD Calculator shows exactly what your deposit will be worth at maturity.",
     howItWorks:
       "The calculator applies compound interest to your deposit at your CD's APY, using your chosen compounding frequency over the term length you enter (converted from months to years internally). The result is the exact maturity value and the interest earned above your original deposit.",
+    methodology:
+      "A CD's rate is locked at opening, which is what makes this a pure, single-scenario compound interest calculation rather than a projection with uncertainty — the math is the same lump-sum compounding formula used elsewhere, but because the rate can't change during the term, the result here is an exact figure rather than an estimate, assuming the deposit stays untouched to maturity.",
+    stepByStep: [
+      "Convert the CD's term from months to years if needed.",
+      "Divide the APY by the number of compounding periods per year to find the periodic rate.",
+      "Raise (1 + periodic rate) to the power of total compounding periods over the term.",
+      "Multiply by the deposit amount to find the maturity value, then subtract the deposit to isolate interest earned.",
+    ],
+    edgeCases: [
+      "Early withdrawal penalties (commonly a few months' worth of interest) apply if funds are accessed before maturity, which this maturity-value calculation doesn't factor in.",
+      "APY already accounts for compounding frequency, while a stated 'interest rate' on some CDs might not — check which figure is being quoted before comparing offers.",
+      "CD interest is taxable income in the year it's earned or credited, even though it isn't accessible until maturity for longer-term CDs.",
+      "A callable CD can be redeemed by the issuing bank before maturity under certain conditions, which isn't reflected in this straightforward maturity projection.",
+    ],
     examples: [
       { title: "1-year CD", body: "$10,000 at a 4.5% APY over 12 months with monthly compounding matures to roughly $10,459 — a fixed, predictable outcome regardless of what happens to market rates during the term." },
       { title: "Longer term", body: "The same deposit in a 5-year CD at a similar rate compounds for much longer, though funds are locked up far longer and early withdrawal typically means a penalty." },
@@ -667,6 +946,20 @@ export const financialContent: Record<string, SeoContent> = {
       "A 401(k) is one of the most powerful retirement tools available to most workers, especially when an employer match is involved — that match is essentially free money on top of your own contributions. Our 401(k) Calculator projects your balance at retirement, accounting for both your contribution and your employer's match.",
     howItWorks:
       "The calculator finds your monthly contribution from your salary and contribution percentage, then calculates your employer's match (capped at your contribution rate, since employers only match up to a certain percentage). Both amounts are combined and grown using compound interest over your years until retirement.",
+    methodology:
+      "Employer matches are almost always capped — commonly stated as something like '100% match up to 4% of salary' — meaning the match grows alongside your own contribution rate only up to that ceiling, then stops increasing even if you contribute more. This calculator applies that capping logic before combining your contribution and the match into one combined monthly amount, which then compounds using the same growth math as any other long-term projection.",
+    stepByStep: [
+      "Multiply your salary by your contribution percentage to find your monthly contribution.",
+      "Calculate your employer's match by applying the match percentage to your salary, capped at whatever ceiling your employer's match policy specifies.",
+      "Add your contribution and the employer match together for the total monthly amount going into the account.",
+      "Compound the current balance and combined monthly contributions forward over your years until retirement.",
+    ],
+    edgeCases: [
+      "Contributing below your employer's match threshold means forfeiting free matching money permanently — that gap is never made up automatically.",
+      "Annual IRS contribution limits apply to 401(k)s and aren't enforced by this simplified projection, which assumes your contribution percentage is always achievable.",
+      "Employer matching contributions are often subject to a vesting schedule, meaning you may not keep the full matched amount if you leave the employer before vesting.",
+      "Some employers use non-elective contributions or profit-sharing structures instead of a simple percentage match, which wouldn't be captured by this calculator's match model.",
+    ],
     examples: [
       { title: "With a full match", body: "An $80,000 salary contributing 8%, with a 4% employer match, and $15,000 already saved can grow to a substantial nest egg over 30 years — with a meaningful chunk coming from the employer match alone." },
       { title: "Contributing below the match", body: "Contributing only 3% when the employer matches up to 4% leaves free matching money on the table — increasing your contribution to at least the match threshold is almost always worth it." },
@@ -698,6 +991,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your final average salary by your years of service and by your plan's benefit multiplier (a percentage set by your specific pension plan, commonly around 1.5-2%) to estimate your annual pension benefit, then divides by 12 for a monthly figure.",
     formula: "Annual pension = final average salary × years of service × benefit multiplier",
+    methodology:
+      "Unlike a 401(k), where your eventual benefit depends on investment performance, a defined-benefit pension's payout is a formula fixed by the plan itself — the employer bears the investment risk, not you. The benefit multiplier is the plan's way of expressing 'how much pension you earn per year of service,' so a plan with a 2% multiplier is meaningfully more generous than one with a 1.5% multiplier for the exact same salary and career length.",
+    stepByStep: [
+      "Find your plan's definition of 'final average salary' (often the average of your highest 3-5 years, not your final year alone).",
+      "Note your total years of credited service under the plan.",
+      "Multiply final average salary by years of service by the plan's benefit multiplier to find the annual pension.",
+      "Divide by 12 for an estimated monthly benefit.",
+    ],
+    edgeCases: [
+      "Retiring before a plan's normal retirement age often triggers an early-retirement reduction factor that isn't part of this base formula.",
+      "Some plans use a different formula entirely for early years of service versus later years, or cap the benefit multiplier's effect after a certain number of years.",
+      "Survivor benefit elections (providing continued income to a spouse after death) typically reduce the monthly benefit compared to a single-life-only payout.",
+      "Public-sector pensions sometimes coordinate with Social Security in ways that reduce one or the other, an interaction this standalone estimate doesn't model.",
+    ],
     examples: [
       { title: "Long career", body: "A $75,000 final average salary, 25 years of service, and a 1.8% multiplier produces an annual pension of $33,750, or about $2,813/month." },
       { title: "Impact of the multiplier", body: "A slightly higher 2.0% multiplier on the same salary and service years raises the annual pension to $37,500 — small multiplier differences compound significantly over a long career." },
@@ -728,6 +1035,20 @@ export const financialContent: Record<string, SeoContent> = {
       "When you claim Social Security dramatically affects your monthly benefit — claiming at 62 versus waiting until 70 can mean a difference of more than 75% in your monthly check. Our Social Security Estimator uses the same bend-point formula the SSA uses to give you a rough benefit estimate at different claiming ages.",
     howItWorks:
       "The calculator applies the SSA's published bend-point formula to your average indexed monthly earnings, which weights lower earnings more heavily than higher earnings (90% of the first bend point, 32% of earnings between the two bend points, and 15% above that) to find your Primary Insurance Amount, then adjusts it up or down based on your chosen claiming age relative to full retirement age.",
+    methodology:
+      "The declining percentages at each bend point (90%, then 32%, then 15%) intentionally make Social Security progressive — it replaces a larger share of income for lower earners than for higher earners, since the program is partly designed as a safety net, not purely an earnings-proportional annuity. The claiming-age adjustment then applies on top of that base Primary Insurance Amount: claiming before full retirement age reduces it by a fraction of a percent for each early month, while delaying past full retirement age up to 70 increases it by roughly 2/3 of a percent for each month of delay.",
+    stepByStep: [
+      "Find your average indexed monthly earnings (an inflation-adjusted average of your career earnings, capped at each year's taxable maximum).",
+      "Apply 90% to the portion of earnings up to the first bend point.",
+      "Apply 32% to the portion between the first and second bend points, and 15% to any portion above the second bend point.",
+      "Sum those three portions for your Primary Insurance Amount, then adjust up or down based on how your claiming age compares to full retirement age.",
+    ],
+    edgeCases: [
+      "This uses a simplified average rather than your actual highest 35 years of indexed earnings, which the SSA uses officially — your real benefit could differ from this estimate.",
+      "Claiming before full retirement age while still working can trigger a temporary earnings test that further reduces benefits until full retirement age is reached.",
+      "Spousal and survivor benefits follow entirely separate rules from an individual's own earned benefit and aren't captured in this individual-earner estimate.",
+      "The bend-point dollar thresholds themselves are adjusted annually for wage growth, so an estimate using outdated bend points would be somewhat inaccurate.",
+    ],
     examples: [
       { title: "Full retirement age", body: "$6,000 in average monthly earnings claimed at 67 (full retirement age) produces the full Primary Insurance Amount with no reduction or bonus applied." },
       { title: "Delayed claiming", body: "The same earnings record claimed at 70 instead increases the monthly benefit by roughly 24%, rewarding the decision to wait." },
@@ -758,6 +1079,20 @@ export const financialContent: Record<string, SeoContent> = {
       "A fixed annuity grows your money at a guaranteed rate over an accumulation period, similar to a CD but often over a longer horizon and sometimes with regular ongoing contributions. Our Annuity Calculator projects that growth from an initial deposit plus monthly contributions.",
     howItWorks:
       "The calculator compounds your initial deposit and adds your monthly contribution each period at your annuity's fixed annual rate, tracking the running balance over your chosen accumulation period to find the future value at the end of the term.",
+    methodology:
+      "A fixed annuity's accumulation phase behaves mathematically just like a CD or savings account earning compound interest — an insurance company guarantees the rate rather than a bank, but the growth math itself is identical lump-sum-plus-contributions compounding. What makes an annuity structurally different shows up later, in the payout phase and in the fees and surrender terms built into the actual contract, none of which factor into this pure accumulation-phase growth projection.",
+    stepByStep: [
+      "Convert the annuity's annual guaranteed rate to a monthly rate.",
+      "Compound the initial deposit forward using that monthly rate over the accumulation period.",
+      "Add the compounded value of monthly contributions using the annuity growth formula.",
+      "Sum both components for the projected balance at the end of the accumulation period.",
+    ],
+    edgeCases: [
+      "Real annuity contracts often include annual fees (mortality and expense charges, administrative fees) that reduce the effective growth rate below the stated guaranteed rate.",
+      "Surrender charges apply if funds are withdrawn during an early surrender period, typically the first 5-10 years of the contract.",
+      "Withdrawals before age 59½ can trigger a 10% IRS early withdrawal penalty on the earnings portion, similar to other tax-deferred retirement vehicles.",
+      "A variable annuity's returns fluctuate with underlying investments rather than following this fixed, guaranteed-rate projection.",
+    ],
     examples: [
       { title: "Long accumulation period", body: "A $5,000 initial deposit plus $300/month at 5% over 15 years grows to a balance well above total contributions, with a meaningful share coming from interest." },
       { title: "Shorter horizon", body: "The same contribution pattern over just 5 years accumulates far less, since compound growth needs time to build meaningfully." },
@@ -788,6 +1123,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Once an annuity moves from its accumulation phase to its payout phase, the question changes from 'how much will this grow to' to 'how much can I withdraw each month.' Our Annuity Payout Calculator answers that using your balance, rate, and desired payout period.",
     howItWorks:
       "The calculator treats your annuity balance like a loan being paid down — it applies the standard payment formula to spread your balance, plus ongoing interest, evenly across your chosen payout period, giving you a level monthly withdrawal amount that fully depletes the balance by the end of the term.",
+    methodology:
+      "This is the same amortization formula used for loan payments, just run in reverse: instead of a lender giving you a lump sum and you paying it back with interest, you're the one holding the lump sum, and the annuity 'pays it back' to you with interest layered on top of your own principal. That's why a longer payout period produces a smaller monthly amount and a shorter one produces a larger amount — it's structurally identical to how a shorter loan term produces a bigger monthly payment.",
+    stepByStep: [
+      "Convert the annuity's annual rate to a monthly rate.",
+      "Convert your chosen payout period in years to total months.",
+      "Apply the standard amortization formula to your balance, monthly rate, and number of payout months to find the level monthly withdrawal.",
+      "Multiply the monthly payout by the total number of months to see total income received over the payout period.",
+    ],
+    edgeCases: [
+      "A period-certain payout (like this one) stops entirely once the term ends, regardless of whether you're still alive — a lifetime payout option instead guarantees income for life but at a lower monthly amount for the same balance.",
+      "This fixed, level payout doesn't adjust for inflation, so its real purchasing power declines over a long payout period.",
+      "Some annuity contracts offer a period-certain-with-life-guarantee hybrid, which blends these two payout structures in ways this simple calculation doesn't model.",
+      "Withdrawals are typically taxed as ordinary income to the extent they represent earnings rather than a return of your original after-tax contributions.",
+    ],
     examples: [
       { title: "20-year payout", body: "A $250,000 balance at 4% paid out over 20 years produces a level monthly payout in the low-to-mid $1,500s, with the balance fully depleted by the end of the period." },
       { title: "Shorter payout period", body: "The same balance paid out over just 10 years produces a significantly higher monthly amount, since it's spread across fewer years." },
@@ -818,6 +1167,20 @@ export const financialContent: Record<string, SeoContent> = {
       "A Roth IRA's biggest advantage is simple: every dollar it grows to is completely tax-free at withdrawal in retirement, since you contribute with after-tax money today. Our Roth IRA Calculator projects that tax-free growth from your current balance and contributions.",
     howItWorks:
       "The calculator compounds your current balance and adds your monthly contribution each period at your expected rate of return, growing the balance over your chosen number of years — the exact same math as any compound growth projection, but the resulting balance is entirely tax-free when withdrawn under Roth IRA rules.",
+    methodology:
+      "The growth math itself is identical to any other compound-interest-plus-contributions projection — what makes a Roth IRA different is entirely a tax rule, not a different formula. Because contributions are made with money that's already been taxed, the IRS never taxes the account again, meaning the full projected balance (contributions plus every dollar of growth) is what you actually get to keep and spend, unlike a pre-tax account where a portion of the balance effectively belongs to the IRS.",
+    stepByStep: [
+      "Convert your expected annual rate of return to a monthly rate.",
+      "Compound your current balance forward using that monthly rate over your investing horizon.",
+      "Add the compounded value of monthly contributions using the annuity growth formula.",
+      "The resulting total is your projected balance, fully available tax-free at qualified withdrawal.",
+    ],
+    edgeCases: [
+      "Roth IRA contributions are subject to annual IRS dollar limits and phase out entirely above certain income thresholds, neither of which this simplified projection enforces.",
+      "Contributed principal (not earnings) can generally be withdrawn at any time without tax or penalty, a flexibility unique to Roth accounts among retirement vehicles.",
+      "Qualified withdrawals require both reaching age 59½ and the account being open at least five years — withdrawing earnings before meeting both conditions can trigger taxes and penalties.",
+      "A backdoor Roth conversion strategy lets high earners who exceed the direct contribution limit still get money into a Roth, though that process has its own tax nuances this calculator doesn't model.",
+    ],
     examples: [
       { title: "Long time horizon", body: "$10,000 currently saved plus $500/month at a 7% expected return over 30 years grows to a substantial, entirely tax-free balance at retirement." },
       { title: "Value of tax-free growth", body: "Compare this to a Traditional IRA's after-tax value (see our Traditional IRA Calculator) — a Roth's full balance is available at withdrawal, with nothing owed to the IRS." },
@@ -848,6 +1211,20 @@ export const financialContent: Record<string, SeoContent> = {
       "A Traditional IRA grows tax-deferred, meaning you don't pay tax on contributions or growth until you withdraw the money in retirement — at which point it's taxed as ordinary income. Our Traditional IRA Calculator projects both the pre-tax balance and what it's actually worth after tax.",
     howItWorks:
       "The calculator compounds your current balance and monthly contributions the same way any growth projection does, then applies your estimated tax rate at withdrawal to show the after-tax value alongside the full pre-tax balance — since the pre-tax number alone overstates what you'll actually get to spend.",
+    methodology:
+      "A Traditional IRA defers tax rather than eliminating it — contributions typically reduce taxable income today, and growth compounds tax-deferred, but every withdrawal in retirement is taxed as ordinary income. That's why this projection deliberately shows two numbers instead of one: the pre-tax balance (what the account statement would show) and the after-tax balance (what you'd actually be able to spend once withdrawal tax is subtracted), since only the second number reflects real spending power.",
+    stepByStep: [
+      "Compound the current balance and monthly contributions forward using the expected rate of return, exactly as in any growth projection.",
+      "This produces the pre-tax balance at the end of the projection period.",
+      "Multiply the pre-tax balance by your assumed withdrawal tax rate to find the tax owed.",
+      "Subtract that tax from the pre-tax balance to find the realistic after-tax, spendable value.",
+    ],
+    edgeCases: [
+      "Required minimum distributions force withdrawals starting at a specific age, regardless of whether you actually need the income at that point.",
+      "The tax rate applied at withdrawal depends on your total income in that retirement year, which is genuinely uncertain decades in advance — this projection uses a single assumed rate as an approximation.",
+      "Contributions to a Traditional IRA may not be fully tax-deductible if you (or a spouse) are covered by a workplace retirement plan and income exceeds certain thresholds.",
+      "Withdrawing before age 59½ typically triggers both ordinary income tax and an additional 10% early withdrawal penalty, neither of which this standard retirement-age projection reflects.",
+    ],
     examples: [
       { title: "Pre-tax vs after-tax", body: "$10,000 plus $500/month at 7% for 30 years might grow to a large pre-tax balance, but at a 22% withdrawal tax rate, the after-tax spendable amount is meaningfully lower." },
       { title: "Impact of tax rate assumption", body: "The same balance withdrawn at a lower tax bracket in a low-income retirement year keeps significantly more of the balance intact compared to withdrawing at a higher rate." },
