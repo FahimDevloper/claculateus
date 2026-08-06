@@ -13,6 +13,13 @@ import PostCard from "@/components/blog/PostCard";
 
 export const revalidate = 60;
 
+const SITE_URL = "https://www.calculateus.com";
+
+function absoluteImageUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  return url.startsWith("/") ? `${SITE_URL}${url}` : url;
+}
+
 function formatDate(ts: number | null | undefined): string {
   if (!ts) return "";
   return new Date(ts).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
@@ -30,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       title: post.seoTitle || post.title,
       description: post.seoDescription || post.excerpt,
-      images: post.featuredImageUrl ? [post.featuredImageUrl] : undefined,
+      images: post.featuredImageUrl ? [absoluteImageUrl(post.featuredImageUrl)!] : undefined,
       publishedTime: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
     },
   };
@@ -50,7 +57,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
-    image: post.featuredImageUrl || undefined,
+    image: absoluteImageUrl(post.featuredImageUrl),
     datePublished: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
     dateModified: new Date(post.updatedAt).toISOString(),
     author: { "@type": "Person", name: post.authorName },
