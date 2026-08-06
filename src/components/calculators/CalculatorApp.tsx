@@ -244,10 +244,18 @@ export default function CalculatorApp({ initialMode, onEquals, compact, showMode
         <div className="flex items-center gap-2">
           {hasMemory && <span className="text-xs font-bold text-accent">M</span>}
           {mode === "scientific" && <span className="text-xs font-medium text-muted">{degrees ? "DEG" : "RAD"}</span>}
-          <button onClick={copyResult} aria-label="Copy result" className="text-muted transition hover:text-primary">
+          <button
+            onClick={copyResult}
+            aria-label="Copy result"
+            className="-m-1.5 rounded-lg p-1.5 text-muted transition hover:bg-surface-2 hover:text-primary"
+          >
             <CopyIcon width={15} height={15} />
           </button>
-          <button onClick={shareResult} aria-label="Share result" className="text-muted transition hover:text-primary">
+          <button
+            onClick={shareResult}
+            aria-label="Share result"
+            className="-m-1.5 rounded-lg p-1.5 text-muted transition hover:bg-surface-2 hover:text-primary"
+          >
             <ShareIcon width={15} height={15} />
           </button>
         </div>

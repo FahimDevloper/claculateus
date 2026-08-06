@@ -281,7 +281,7 @@ export default function CalculatorExplorer({ overrides, trendingCounts }: Props)
           <div className="scrollbar-thin flex items-center gap-1 overflow-x-auto">
             <button
               onClick={() => setLetter(null)}
-              className={`shrink-0 rounded-md px-1.5 py-0.5 text-[11px] font-bold ${letter === null ? "text-primary" : "text-muted hover:text-foreground"}`}
+              className={`flex min-h-6 shrink-0 items-center justify-center rounded-md px-1.5 text-[11px] font-bold ${letter === null ? "text-primary" : "text-muted hover:text-foreground"}`}
             >
               A–Z
             </button>
@@ -289,7 +289,7 @@ export default function CalculatorExplorer({ overrides, trendingCounts }: Props)
               <button
                 key={l}
                 onClick={() => setLetter(letter === l ? null : l)}
-                className={`shrink-0 rounded-md px-1.5 py-0.5 text-[11px] font-bold transition ${
+                className={`flex min-h-6 min-w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-bold transition ${
                   letter === l ? "bg-primary text-primary-foreground" : "text-muted hover:text-foreground"
                 }`}
               >
@@ -375,7 +375,9 @@ export default function CalculatorExplorer({ overrides, trendingCounts }: Props)
                           {views} view{views === 1 ? "" : "s"}
                         </span>
                       )}
-                      {NEW_SLUGS.has(c.slug) && <span className="font-bold text-success">NEW</span>}
+                      {NEW_SLUGS.has(c.slug) && (
+                        <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${badgeClasses("success")}`}>NEW</span>
+                      )}
                     </div>
                   </Link>
                 </motion.div>
