@@ -34,7 +34,7 @@ describe("calculator registry", () => {
     if (def.presets) {
       for (const preset of def.presets) {
         it(`${def.slug}: preset "${preset.label}" runs without throwing`, () => {
-          const values = { ...defaultValues(def.fields), ...preset.values };
+          const values = { ...defaultValues(def.fields), ...preset.values } as FieldValues;
           const result = def.compute(values);
           expect(result).toBeDefined();
           expect(Array.isArray(result.items)).toBe(true);
