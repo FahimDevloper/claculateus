@@ -1256,6 +1256,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator finds your total ROI as the percentage gain (or loss) from initial investment to final value, then separately calculates the annualized return (equivalent to CAGR) — the constant yearly growth rate that would produce the same total return over your holding period.",
     formula: "Total ROI = (Final − Initial) ÷ Initial × 100\nAnnualized return = ((Final ÷ Initial)^(1/years) − 1) × 100",
+    methodology:
+      "Total ROI answers 'how much did this grow in total,' while annualized return answers 'what constant yearly rate would produce that same total growth' — the second calculation is the same CAGR formula used elsewhere on this site, applied specifically to compare an investment's performance against other opportunities on a fair, per-year basis regardless of how long each was held.",
+    stepByStep: [
+      "Subtract the initial value from the final value, then divide by the initial value and multiply by 100 for total ROI.",
+      "Divide the final value by the initial value.",
+      "Raise that ratio to the power of 1 divided by the number of years held.",
+      "Subtract 1 and multiply by 100 to find the annualized return.",
+    ],
+    edgeCases: [
+      "A negative return (a loss) still uses the same formulas, producing a negative percentage in both total and annualized terms.",
+      "This doesn't account for taxes, transaction fees, or dividends received along the way unless they're already reflected in the final value entered.",
+      "Very short holding periods (a few months) can produce misleadingly extreme annualized returns when a modest short-term gain gets mathematically extrapolated to a full year.",
+      "Comparing ROI across investments with different risk profiles can be misleading without also considering volatility, not just the return figures alone.",
+    ],
     examples: [
       { title: "Multi-year investment", body: "$10,000 growing to $14,500 over 3 years is a 45% total ROI, but only about a 13.2% annualized return — the number that's actually comparable to other investments' yearly returns." },
       { title: "Why annualized matters", body: "A 45% total return over 3 years and a 45% total return over 10 years are very different outcomes — the annualized figure accounts for that difference automatically." },
@@ -1287,6 +1301,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator takes the ratio of ending value to beginning value, raises it to the power of one divided by the number of years, and subtracts one — mathematically finding the constant annual growth rate that would take the beginning value to the ending value over that exact time period.",
     formula: "CAGR = (Ending Value ÷ Beginning Value)^(1/years) − 1",
+    methodology:
+      "CAGR answers a specific question: what single, unchanging annual growth rate — applied every year with no fluctuation — would carry the beginning value to the ending value over the exact number of years given? It doesn't reflect the actual, likely bumpy path the value took to get there; it's a smoothed backward-looking summary, which is exactly what makes it useful for comparing two things that both had volatile years but different overall growth.",
+    stepByStep: [
+      "Divide the ending value by the beginning value.",
+      "Raise that ratio to the power of 1 divided by the number of years.",
+      "Subtract 1 from the result.",
+      "Multiply by 100 to express the answer as a percentage.",
+    ],
+    edgeCases: [
+      "CAGR says nothing about volatility along the way — two investments with identical CAGR can have had wildly different year-to-year experiences.",
+      "A single extreme outlier year (a crash or a spike) can distort CAGR calculated over a short period more than it would over a longer one.",
+      "CAGR requires both values to be positive and the ending value calculation breaks down (or becomes meaningless) if the beginning value is zero.",
+      "Averaging several individual years' percentage returns arithmetically gives a different, generally higher number than the true CAGR over the same period — the two aren't interchangeable.",
+    ],
     examples: [
       { title: "Investment growth", body: "$10,000 growing to $25,000 over 8 years works out to a CAGR of about 12.1% — the smooth annual rate that explains the total growth." },
       { title: "Business or revenue growth", body: "CAGR is equally useful outside investing — a company growing revenue from $2M to $5M over 5 years has a CAGR of roughly 20.1% per year." },
@@ -1318,6 +1346,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies each purchase's share count by its price to find the total cost of each lot, adds those costs together, and divides by the total number of shares across all purchases to find the true weighted average cost per share.",
     formula: "Average cost = (shares₁ × price₁ + shares₂ × price₂ + ...) ÷ total shares",
+    methodology:
+      "This is a weighted average, not a simple average — each purchase price is weighted by how many shares were bought at that price, so a larger purchase pulls the average toward its price more than a smaller one does. That's a meaningfully different result from just averaging the raw price numbers, which would treat a 10-share purchase and a 1,000-share purchase as equally important to the outcome.",
+    stepByStep: [
+      "For each purchase lot, multiply the number of shares by the price paid to find that lot's total cost.",
+      "Add up the total cost across all purchase lots.",
+      "Add up the total number of shares across all purchase lots.",
+      "Divide total cost by total shares to find the weighted average cost per share.",
+    ],
+    edgeCases: [
+      "Trading commissions or fees on each purchase should be added to that lot's cost for a fully accurate average, though many modern brokers charge no commission.",
+      "Shares sold (rather than bought) require a separate cost-basis method decision (FIFO, LIFO, or specific-lot identification) that affects tax reporting differently from this simple average.",
+      "Stock splits change the share count and price simultaneously, requiring your historical purchase data to be adjusted before recalculating an accurate average.",
+      "Dividends received in cash don't change your cost basis, but dividends automatically reinvested into new shares effectively add another purchase lot to the average.",
+    ],
     examples: [
       { title: "Two purchases", body: "100 shares at $50 plus 50 shares at $40 gives a total cost of $7,000 across 150 shares, for an average cost of about $46.67 per share." },
       { title: "Why it's not a simple average", body: "Simply averaging $50 and $40 would give $45 — but because more shares were bought at $50, the true weighted average ($46.67) is pulled higher toward that price." },
@@ -1349,6 +1391,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides 72 by your entered annual interest rate to estimate the number of years needed for an investment to double in value at that constant rate — a close approximation of the more complex logarithmic formula that would give the exact answer.",
     formula: "Years to double ≈ 72 ÷ interest rate",
+    methodology:
+      "The exact doubling time comes from solving (1+r)^n = 2 for n, which gives n = ln(2) / ln(1+r) — not a clean number to compute by hand. Because ln(2) ≈ 0.693, and ln(1+r) closely approximates r for the small interest rates typical of savings and investing, that exact formula simplifies to roughly 69.3 ÷ (r × 100). The Rule of 72 rounds that constant to 72 specifically because 72 divides evenly by more common rates (6, 8, 9, 12) than 69.3 does, trading a small amount of precision for much easier mental math.",
+    stepByStep: [
+      "Take the annual interest rate as a whole number (6% becomes 6, not 0.06).",
+      "Divide 72 by that number.",
+      "The result is the approximate number of years for the investment to double.",
+    ],
+    edgeCases: [
+      "The approximation is most accurate for rates roughly between 6% and 10%; it drifts further from the exact answer at very low or very high rates.",
+      "This assumes a constant annual compounding rate with no additional contributions — it only models a single lump sum growing on its own.",
+      "For rates above about 20%, the Rule of 69.3 or Rule of 70 (using those constants instead of 72) gives a closer approximation than the Rule of 72.",
+      "The same shortcut works in reverse for inflation — dividing 72 by an inflation rate estimates how many years until purchasing power is cut in half.",
+    ],
     examples: [
       { title: "Moderate return", body: "At a 6% annual return, money doubles in approximately 12 years (72 ÷ 6)." },
       { title: "Higher return", body: "At a 9% annual return, the same money doubles in only about 8 years — showing how sensitive doubling time is to the rate of return." },
@@ -1380,6 +1435,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides your future value by (1 + discount rate) raised to the power of the number of years, effectively reversing compound growth to find what amount today, growing at your discount rate, would equal that future sum.",
     formula: "PV = FV ÷ (1 + r)^n\nwhere FV = future value, r = discount rate, n = years",
+    methodology:
+      "Present value is the exact mathematical inverse of future value — instead of asking what a sum today grows to, it asks what sum today would grow into a known future amount at a given rate. The discount rate represents an opportunity cost: it's the return you could otherwise earn elsewhere, so a higher discount rate produces a lower present value, since money is assumed capable of growing faster and therefore a smaller amount today is 'equivalent' to the same future sum.",
+    stepByStep: [
+      "Raise (1 + discount rate) to the power of the number of years until the future payment.",
+      "Divide the future value by that result to find the present value.",
+      "A higher discount rate or a longer time horizon both produce a lower present value for the same future amount.",
+    ],
+    edgeCases: [
+      "Choosing the discount rate is a judgment call, not a fixed input — it should reflect what the money could realistically earn elsewhere, adjusted for the certainty or risk of actually receiving the future payment.",
+      "This calculates a single future payment; a series of future payments (an annuity) requires summing multiple present values, one for each payment, or using a dedicated annuity present value formula.",
+      "Present value calculations don't account for taxes owed when the future payment is eventually received.",
+      "A discount rate of 0% makes present value equal future value exactly, since there's no assumed opportunity cost to money over time.",
+    ],
     examples: [
       { title: "Standard discount rate", body: "$20,000 received in 10 years, discounted at 6%, has a present value of about $11,168 — meaning $11,168 invested today at 6% would grow into that same $20,000." },
       { title: "Higher discount rate", body: "The same $20,000 discounted at a higher 9% rate has a noticeably lower present value, since a higher discount rate assumes money could grow faster elsewhere." },
@@ -1411,6 +1479,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator applies standard annual compound interest to your present value, growing it by your entered rate for each of the years you specify, to find the exact future amount that sum will reach.",
     formula: "FV = PV × (1 + r)^n\nwhere PV = present value, r = annual interest rate, n = years",
+    methodology:
+      "This is compound growth in its purest form — a single sum, growing at a fixed annual rate, with the exponent n capturing the fact that each year's growth builds on the previous year's already-grown balance, not the original amount alone. It's the mathematical building block every other compound-growth calculator on this site extends by adding regular contributions on top of this same core relationship.",
+    stepByStep: [
+      "Raise (1 + annual interest rate) to the power of the number of years.",
+      "Multiply that result by the present value (the starting amount).",
+      "The result is the future value after that many years of compounding.",
+    ],
+    edgeCases: [
+      "This assumes one constant rate for the entire period — real investment returns vary year to year, even if they average out to something close to the assumed rate over time.",
+      "The nominal future value shown here doesn't account for inflation; the real, inflation-adjusted future value would be lower.",
+      "This models a single lump sum with no further contributions — for regular ongoing deposits, use a calculator that adds an annuity-style contribution term.",
+      "A negative rate (representing a loss or depreciation) works in the same formula and correctly produces a future value lower than the present value.",
+    ],
     examples: [
       { title: "Long-term growth", body: "$10,000 today at 6% annual growth becomes about $17,908 after 10 years — nearly 80% growth from compounding alone." },
       { title: "Effect of a longer timeframe", body: "The same $10,000 at the same 6% rate over 20 years instead of 10 grows to roughly $32,071 — more than triple, showing how much time amplifies compound growth." },
@@ -1442,6 +1523,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator sums your assets — cash and savings, investments, real estate value, and other assets — into a total, then sums your liabilities — mortgage balance and other debt — into a separate total. Net worth is simply the difference between the two.",
     formula: "Net worth = (cash + investments + real estate + other assets) − (mortgage + other debt)",
+    methodology:
+      "Net worth is a balance-sheet snapshot, not an income measure — it captures everything you currently own minus everything you currently owe at one point in time, the same basic accounting equation businesses use for their own balance sheets. Because it's a snapshot, it says nothing about cash flow or income directly; a high earner who spends everything can have a lower net worth than a modest earner who consistently saves, which is exactly why net worth is often considered the more meaningful long-term health indicator.",
+    stepByStep: [
+      "List all assets: cash and savings, investment account balances, real estate value, vehicles, and other significant owned property.",
+      "Sum all assets for a total.",
+      "List all liabilities: mortgage balance, auto loans, student loans, credit card balances, and other debt.",
+      "Sum all liabilities and subtract from total assets to find net worth.",
+    ],
+    edgeCases: [
+      "Illiquid assets (real estate, retirement accounts before withdrawal age) count toward net worth but aren't immediately accessible, so net worth alone doesn't capture short-term financial flexibility.",
+      "Estimating real estate value optimistically inflates net worth on paper without reflecting what the property would actually sell for.",
+      "Retirement accounts like a Traditional 401(k) carry embedded future tax liability that a simple balance-based net worth calculation doesn't subtract.",
+      "Net worth can be negative (common for new graduates with student debt and little savings) without necessarily indicating financial distress, especially early in a career.",
+    ],
     examples: [
       { title: "Positive net worth", body: "$15,000 cash, $40,000 investments, a $350,000 home, and $10,000 in other assets, against a $280,000 mortgage and $12,000 other debt, works out to a net worth of $123,000." },
       { title: "Tracking over time", body: "Recalculating this every few months as your investments grow and your mortgage balance shrinks shows your net worth trending upward — often the clearest sign of real financial progress." },
@@ -1473,6 +1568,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator takes your monthly take-home (after-tax) income and splits it into three buckets: 50% for needs like housing, groceries, and utilities; 30% for wants like dining out and entertainment; and 20% for savings and extra debt payments, following the standard 50/30/20 guideline.",
     formula: "Needs = income × 50%\nWants = income × 30%\nSavings & debt = income × 20%",
+    methodology:
+      "The 50/30/20 split, popularized by Senator Elizabeth Warren's personal finance writing, works because it categorizes spending by function rather than by specific line item — 'needs' are costs that continue even without income (housing, utilities, groceries, minimum debt payments, insurance), 'wants' are genuinely discretionary, and the remaining 20% is treated as non-negotiable progress toward savings or extra debt paydown, rather than whatever happens to be left over after everything else.",
+    stepByStep: [
+      "Start with monthly take-home (after-tax) pay, not gross salary.",
+      "Multiply by 50% to find the needs budget.",
+      "Multiply by 30% to find the wants budget.",
+      "Multiply by 20% to find the savings and extra debt payment budget.",
+    ],
+    edgeCases: [
+      "High cost-of-living areas often push 'needs' well above 50% of income, requiring the framework to be adjusted (commonly to something like 60/20/20) to stay realistic.",
+      "Minimum debt payments count as 'needs,' but extra, above-minimum debt payments belong in the 20% savings-and-debt category, not the needs category.",
+      "Irregular income (freelance, commission-based) makes a fixed percentage split harder to apply consistently month to month compared to steady salaried income.",
+      "The framework doesn't itself prescribe emergency fund size or specific savings goals — it just allocates a category, leaving the specific target to other planning tools.",
+    ],
     examples: [
       { title: "Typical income", body: "$5,000 in monthly take-home pay splits into $2,500 for needs, $1,500 for wants, and $1,000 for savings and debt paydown under the 50/30/20 framework." },
       { title: "Adjusting the framework", body: "Someone in a high cost-of-living area might need to shift toward 60/20/20 instead — the 50/30/20 rule is a starting guideline, not a strict rule everyone must follow exactly." },
@@ -1504,6 +1613,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your essential monthly expenses (the costs you'd still have even without income — housing, food, utilities, insurance, minimum debt payments) by your chosen number of months of coverage, then compares that target against what you've already saved to show what's still needed.",
     formula: "Target fund = essential monthly expenses × months of coverage",
+    methodology:
+      "The target is deliberately based on essential expenses, not total spending — the fund exists to cover survival costs during a genuine income disruption, not to maintain your full current lifestyle including discretionary spending. The months-of-coverage multiplier is where risk tolerance and job stability come in: more months of coverage means a larger, more conservative cushion, appropriate for less predictable income or a single-income household, while fewer months might suit very stable dual-income situations.",
+    stepByStep: [
+      "Total your essential monthly expenses — housing, utilities, groceries, insurance, and minimum debt payments, excluding discretionary spending.",
+      "Choose a target number of months of coverage based on your job stability and risk tolerance (commonly 3-6 months, sometimes more).",
+      "Multiply essential monthly expenses by the target months to find your total goal.",
+      "Subtract what you've already saved toward the fund to find how much more is needed.",
+    ],
+    edgeCases: [
+      "Dual-income households with stable jobs sometimes target the lower end (3 months), while single-income households, freelancers, or commission-based earners often target the higher end (6-12 months) or more.",
+      "The fund should be kept in an easily accessible account (like a high-yield savings account), not invested in the market, since it needs to be available immediately during an emergency.",
+      "A major life change — a new mortgage, a child, a job change — should trigger recalculating the essential expenses figure, since it likely shifted.",
+      "Using the fund for a genuine emergency and then not prioritizing rebuilding it defeats the purpose of having set the target in the first place.",
+    ],
     examples: [
       { title: "Standard 6-month target", body: "$3,000 in essential monthly expenses with a 6-month target means a $18,000 emergency fund goal — with $2,000 already saved, that's $16,000 still needed." },
       { title: "More conservative target", body: "Someone with less job security or variable income might target 9-12 months instead, substantially raising the goal for the same monthly expense level." },
@@ -1535,6 +1658,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides your total monthly debt payments (mortgage or rent, car loans, student loans, credit card minimums, and any other recurring debt) by your gross monthly income, then rates the result against the thresholds lenders commonly use: 36% or below is generally considered healthy, up to 43% is borderline, and above that is considered high.",
     formula: "DTI = total monthly debt payments ÷ gross monthly income × 100",
+    methodology:
+      "Lenders use DTI as a proxy for how much financial cushion a borrower has to absorb a new payment — it's calculated on gross (pre-tax) income specifically because that's the standardized figure available on tax returns and pay stubs, making it consistent to verify across every applicant regardless of their specific tax situation. The commonly cited thresholds (36% comfortable, 43% often the maximum for a qualified mortgage) come from historical default-rate research showing borrowers above those levels default more frequently.",
+    stepByStep: [
+      "List all recurring monthly debt payments: mortgage or rent, auto loans, student loans, credit card minimums, and any other debt.",
+      "Sum those payments for total monthly debt.",
+      "Divide total monthly debt by gross (pre-tax) monthly income.",
+      "Multiply by 100 to express the result as a percentage, then compare against common lending thresholds.",
+    ],
+    edgeCases: [
+      "Front-end DTI (housing costs only) and back-end DTI (all debt, including housing) are different figures — lenders typically care most about back-end DTI, which is what this calculator computes.",
+      "Utility bills, insurance, groceries, and other non-debt living expenses aren't included in DTI, even though they affect real affordability.",
+      "Different loan programs (conventional, FHA, VA) allow different maximum DTI thresholds, so 'too high' depends on which loan type is being pursued.",
+      "A DTI at or below the threshold doesn't guarantee approval — credit score, employment history, and cash reserves are evaluated alongside it.",
+    ],
     examples: [
       { title: "Healthy DTI", body: "$1,800 in monthly debt payments against $6,000 gross monthly income gives a DTI of 30% — comfortably within the healthy range most lenders look for." },
       { title: "High DTI", body: "The same $6,000 income with $2,800 in monthly debt payments pushes DTI to 46.7%, likely making it harder to qualify for additional credit." },
@@ -1565,6 +1702,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Knowing exactly how long a debt will take to pay off — and how much interest you'll pay along the way — turns an abstract balance into a concrete plan. Our Debt Payoff Calculator solves for payoff time and total interest from your balance, rate, and monthly payment.",
     howItWorks:
       "The calculator uses logarithmic amortization math to solve for how many months it takes to pay off your balance at your specified monthly payment and interest rate, then multiplies to find total interest paid. If your payment doesn't exceed the monthly interest charge, it flags that the debt can never be paid off at that payment level.",
+    methodology:
+      "Solving for time-to-payoff from a fixed payment requires the same logarithmic rearrangement of the amortization formula used elsewhere on this site: n = -log(1 - (r×balance)/payment) / log(1+r). The 'never pays off' warning comes directly from this formula's domain restriction — if the payment is less than or equal to the monthly interest charge (balance × monthly rate), the expression inside the logarithm becomes zero or negative, which has no valid real-number solution, mathematically confirming the balance would never shrink at that payment.",
+    stepByStep: [
+      "Convert the annual interest rate to a monthly rate.",
+      "Check that the monthly payment exceeds the monthly interest charge (balance × monthly rate) — if not, payoff is mathematically impossible at that payment.",
+      "Apply the logarithmic payoff formula to the balance, monthly rate, and payment to find the number of months to payoff.",
+      "Multiply the monthly payment by the number of months and subtract the original balance to find total interest paid.",
+    ],
+    edgeCases: [
+      "A payment barely above the monthly interest charge technically pays off the debt, but can take an extremely long time and rack up enormous total interest.",
+      "This assumes a fixed interest rate for the full payoff period; a variable-rate debt's real payoff timeline would shift if the rate changes.",
+      "Any additional charges added to the balance during the payoff period (new purchases on a credit card, for example) aren't reflected in this single-balance projection.",
+      "Rounding the final payment to bring the balance to exactly zero is standard and can make the actual final payment slightly different from the regular monthly amount.",
+    ],
     examples: [
       { title: "Standard payoff", body: "An $8,000 balance at 19.99% APR with a $300 monthly payment takes a bit over 3 years to pay off, with a meaningful chunk of the total going to interest." },
       { title: "Payment too low", body: "The same balance at a $130 monthly payment might not even cover the interest accruing each month, meaning the balance would never shrink — a clear signal the payment needs to increase." },
@@ -1595,6 +1746,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Combining several high-interest debts into one consolidation loan at a lower rate can simplify payments and reduce total interest — but only if the new rate is genuinely lower. Our Debt Consolidation Calculator compares your current average rate against a potential consolidation loan.",
     howItWorks:
       "The calculator computes what your monthly payment would look like at your current average interest rate over your chosen new loan term, then computes the payment at the new consolidation loan's rate over the same term, showing the monthly savings between the two.",
+    methodology:
+      "Consolidation only creates real value when the blended rate across your existing debts is genuinely higher than the new loan's rate — the calculation itself is just two standard amortization payments compared side by side, but the meaningful judgment is making sure the 'current rate' input reflects a true weighted average across all the debts being consolidated, not just the highest or lowest individual rate among them.",
+    stepByStep: [
+      "Find your weighted average current interest rate across all debts being consolidated (total interest-bearing balance weighted by each debt's rate).",
+      "Calculate the monthly payment at that current average rate over your chosen comparison term.",
+      "Calculate the monthly payment at the new consolidation loan's rate over the same term.",
+      "Subtract the new payment from the current payment to find monthly savings.",
+    ],
+    edgeCases: [
+      "Extending the loan term as part of consolidation can lower the monthly payment while still increasing total interest paid over the life of the loan — check total cost, not just the monthly figure.",
+      "Origination fees on the new consolidation loan reduce the real benefit and should be weighed against the projected interest savings.",
+      "Consolidating unsecured debt (credit cards) into a loan secured by an asset (like a HELOC) changes the risk profile even if the math shows a lower rate.",
+      "Paying off revolving credit accounts through consolidation but continuing to use them afterward can result in more total debt than before consolidating.",
+    ],
     examples: [
       { title: "Meaningful savings", body: "$18,000 in debt averaging 22% APR (typical of credit cards) consolidated into a 4-year loan at 12% produces a noticeably lower monthly payment and less total interest paid." },
       { title: "When it doesn't help", body: "If the new consolidation loan's rate isn't actually lower than your current average rate, this comparison would show no real savings — a sign to keep shopping for a better rate." },
@@ -1625,6 +1790,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Credit card APRs are among the highest interest rates most people ever borrow at, which means minimum payments can drag a balance out for years while interest piles up. Our Credit Card Payoff Calculator shows exactly how long your balance will take to clear at your actual monthly payment.",
     howItWorks:
       "The calculator uses the same logarithmic payoff formula as our general Debt Payoff Calculator, tuned specifically for credit card math — finding how many months it takes to pay off your balance at your chosen payment and APR, and flagging if the payment doesn't even cover the monthly interest charge.",
+    methodology:
+      "Credit card minimum payments are typically structured as a small percentage of the balance (often 1-3%) rather than a fixed dollar amount, which means the minimum payment shrinks as the balance shrinks — a design that maximizes how long it takes to pay off the card and how much interest accrues in the process. Fixing the payment at a constant dollar amount instead (as this calculator assumes) breaks that self-perpetuating cycle, since a constant payment covers a growing share of principal as the balance and its interest charge both decline.",
+    stepByStep: [
+      "Convert the card's APR to a monthly rate by dividing by 12.",
+      "Confirm the chosen monthly payment exceeds the current monthly interest charge (balance × monthly rate).",
+      "Apply the logarithmic payoff formula to find the number of months to reach a zero balance at that fixed payment.",
+      "Multiply payment by months and subtract the original balance to find total interest paid.",
+    ],
+    edgeCases: [
+      "Continuing to charge new purchases while paying down an existing balance effectively resets the payoff math each time, since interest applies to the higher running balance.",
+      "A minimum-payment-only strategy (a shrinking percentage-based payment rather than this calculator's fixed amount) takes meaningfully longer to pay off than this projection shows.",
+      "0% introductory APR balance transfer offers change the effective rate for a limited promotional period, after which the standard APR typically applies to any remaining balance.",
+      "Multiple cards with different APRs are best evaluated individually — paying extra toward the highest-APR card first (avalanche method) minimizes total interest across all of them.",
+    ],
     examples: [
       { title: "Fixed payment above minimum", body: "A $5,000 balance at 24.99% APR paid off at $200/month takes a little over 3 years — much faster than a typical 2-3% minimum payment would." },
       { title: "Minimum payment trap", body: "The same balance paid at a low minimum payment can take well over a decade to clear, with total interest paid sometimes exceeding the original balance." },
@@ -1656,6 +1835,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator applies your card's APR to your average balance, dividing by 12 to find the monthly interest charge — a simplified version of how issuers calculate interest based on your average daily balance across the billing cycle.",
     formula: "Monthly interest = balance × APR ÷ 12",
+    methodology:
+      "Card issuers technically calculate interest daily using an average daily balance across the billing cycle (balance × daily periodic rate × number of days), then sum those daily charges for the statement's total interest — this calculator's simplified balance × APR ÷ 12 approximates that same result closely for a balance that stays roughly steady through the cycle, without needing day-by-day transaction data.",
+    stepByStep: [
+      "Take your average balance for the billing cycle (or current balance, as an approximation).",
+      "Multiply by the card's APR (as a decimal).",
+      "Divide by 12 to find the interest charge for that one month.",
+    ],
+    edgeCases: [
+      "A balance that fluctuates significantly during the billing cycle (a large purchase mid-cycle, for example) makes the true daily-average-balance calculation diverge more from this simplified monthly approximation.",
+      "Most cards offer a grace period with zero interest on new purchases if the previous statement balance was paid in full — carrying any balance forward typically eliminates that grace period.",
+      "Cash advances often accrue interest immediately with no grace period at all, frequently at a higher APR than standard purchases.",
+      "A promotional 0% APR period means this formula produces $0 in interest during that window, reverting to the standard calculation once the promotional period ends.",
+    ],
     examples: [
       { title: "Typical balance", body: "A $3,000 average balance at 24.99% APR accrues about $62.48 in interest that month alone — before any new purchases are even added." },
       { title: "Annual cost", body: "Carrying that same $3,000 balance for a full year at the same APR would cost roughly $750 in interest, assuming the balance stayed constant." },
@@ -1686,6 +1878,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Personal loans come with an often-overlooked cost beyond the interest rate — the origination fee, which is deducted upfront and reduces how much cash you actually receive. Our Personal Loan Calculator accounts for both so you know your real monthly payment and real amount received.",
     howItWorks:
       "The calculator computes your monthly payment using the standard loan amortization formula on your full loan amount, then separately calculates the origination fee as a percentage of that amount — showing you both the payment you'll owe and the smaller amount you'll actually receive after the fee is deducted.",
+    methodology:
+      "The key structural detail this calculator makes visible is that origination fees are almost always calculated on and deducted from the full loan amount, even though your monthly payment is also based on that same full amount — meaning you pay interest on money you never actually received. This is exactly why comparing two loans by interest rate alone can be misleading: a lower rate with a high origination fee can cost more overall than a slightly higher rate with a low or no fee.",
+    stepByStep: [
+      "Calculate the monthly payment using the standard amortization formula on the full loan amount, rate, and term.",
+      "Multiply the loan amount by the origination fee percentage to find the fee amount.",
+      "Subtract the fee from the loan amount to find the real cash you'll receive.",
+      "Compare that real received amount against the required monthly payment for the true cost of borrowing.",
+    ],
+    edgeCases: [
+      "Some lenders advertise a rate range where your actual approved rate and fee depend on creditworthiness, so the final numbers can differ from an initial estimate.",
+      "A loan with no origination fee but a higher rate can end up cheaper than a low-rate loan with a large fee, depending on how long you keep the loan — the trade-off is comparable using an APR-style total-cost calculation.",
+      "Prepayment penalties, when present, add another cost dimension beyond rate and origination fee that this comparison doesn't include.",
+      "The origination fee is a one-time cost, so its relative impact shrinks the longer the loan term, unlike the interest rate, which affects every payment throughout the term.",
+    ],
     examples: [
       { title: "With an origination fee", body: "A $12,000 loan at 11% over 48 months with a 3% origination fee has a monthly payment based on the full $12,000, but you'd actually receive only $11,640 after the $360 fee is deducted." },
       { title: "Comparing offers", body: "A loan with a lower rate but a higher origination fee can end up costing more (or less) than a higher-rate loan with no fee — this calculator makes that trade-off visible." },
@@ -1716,6 +1922,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Federal and private student loans both use standard amortization, but the terms and rates involved make a real difference in what you'll pay monthly and over the life of the loan. Our Student Loan Calculator projects your monthly payment and total cost from your balance, rate, and term.",
     howItWorks:
       "The calculator applies the standard fixed-rate loan payment formula to your total loan balance, interest rate, and repayment term in years, showing your monthly payment alongside total interest paid over the full life of the loan.",
+    methodology:
+      "Once you're in a standard, fixed-term repayment plan, a student loan amortizes exactly like any other fixed-rate installment loan — the interest rate and repayment term are the two levers that determine the trade-off between monthly payment and total lifetime cost. Extending the term to lower the monthly payment always increases total interest paid, since more months means more opportunities for interest to accrue on the outstanding balance.",
+    stepByStep: [
+      "Convert the annual interest rate to a monthly rate.",
+      "Convert the repayment term in years to total months.",
+      "Apply the standard amortization formula to find the monthly payment.",
+      "Multiply the monthly payment by the number of months and subtract the original balance to find total interest paid.",
+    ],
+    edgeCases: [
+      "Federal loans offer income-driven repayment plans that calculate payment as a percentage of discretionary income rather than fixed amortization, producing a completely different (and sometimes variable) monthly payment.",
+      "Federal loan forgiveness programs (Public Service Loan Forgiveness and others) can make this standard-amortization total-cost comparison irrelevant for qualifying borrowers.",
+      "Private student loans generally don't offer income-driven repayment or federal forgiveness programs, making standard amortization the primary repayment structure available.",
+      "Interest may continue accruing during any deferment or forbearance period, adding to the balance before standard repayment even begins.",
+    ],
     examples: [
       { title: "Standard 10-year term", body: "A $30,000 balance at 5.5% over the standard 10-year federal repayment term comes to a monthly payment in the low $300s, with total interest adding several thousand dollars to the original balance." },
       { title: "Extended repayment term", body: "The same balance on a 20-year extended repayment plan lowers the monthly payment significantly but roughly doubles the total interest paid over the life of the loan." },
@@ -1746,6 +1966,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Extra payments on a student loan work exactly like extra payments on any other debt — they go straight to principal and reduce how much interest accrues going forward. Our Student Loan Payoff Calculator shows exactly how much time and interest an extra monthly payment saves.",
     howItWorks:
       "The calculator solves for how many months remain at your current payment, then again with your extra payment added, using the same logarithmic amortization math as our general Loan Payoff Calculator — the difference between the two payoff times is your time saved.",
+    methodology:
+      "Extra payments accelerate payoff because every additional dollar applied to principal immediately stops accruing interest for every remaining month of the loan — the earlier in the loan an extra payment is made, the more months of interest it prevents, which is why consistent extra payments started early produce a larger total interest savings than the same extra amount started later in repayment.",
+    stepByStep: [
+      "Solve for months remaining at the current fixed payment using the logarithmic payoff formula.",
+      "Add the extra payment amount to the current payment and re-solve for months remaining under the higher payment.",
+      "Subtract the second result from the first to find months saved.",
+      "Compare total interest paid under each scenario to find the dollar savings from the extra payment.",
+    ],
+    edgeCases: [
+      "Extra payments only accelerate payoff if the servicer applies them to principal immediately — confirm this rather than assuming, since some servicers default to holding extra amounts toward the next due date.",
+      "Borrowers pursuing federal loan forgiveness programs may find that aggressive extra payments work against their interest, since forgiveness is based on remaining balance after a required number of qualifying payments.",
+      "Comparing student loan extra payments against other financial priorities (higher-interest debt, employer 401(k) match) should factor in the loan's specific rate relative to those alternatives.",
+      "Refinancing a federal loan into a private loan to get a lower rate forfeits federal protections like income-driven repayment and forgiveness eligibility.",
+    ],
     examples: [
       { title: "Modest extra payment", body: "A $25,000 balance at 5.5% with a $270 current payment pays off notably faster with just $100 extra added each month." },
       { title: "Weighing against other goals", body: "Before committing to extra student loan payments, it's worth comparing the loan's rate against other financial priorities — a 5.5% loan versus a higher-interest credit card, for example, changes where extra money is best spent." },
@@ -1776,6 +2010,19 @@ export const financialContent: Record<string, SeoContent> = {
       "College costs have risen faster than general inflation for decades, which means the sticker price today isn't what you'll actually pay when a child (or you) actually enrolls. Our College Cost Calculator projects the future cost using a realistic college-specific inflation rate.",
     howItWorks:
       "The calculator grows today's annual college cost forward using your chosen college inflation rate for each year until enrollment, then sums the projected cost across every year of the program (since costs keep rising during the years a student is actually enrolled, not just before).",
+    methodology:
+      "This applies standard compound growth to a cost rather than an investment, using the same (1+r)^n structure — but critically, it applies that growth separately to each year of the multi-year program rather than treating the whole degree as arriving at one moment. Year two of college is one more year further from today than year one, so it gets one additional year of inflation compounding, and so on through the final year — which is why total projected cost is meaningfully more than simply multiplying the first year's inflated cost by the number of years in the program.",
+    stepByStep: [
+      "Compound today's annual cost forward using the college inflation rate for the number of years until enrollment begins, to find year-one cost.",
+      "Compound the cost forward one additional year for each subsequent year of the program to find each year's projected cost.",
+      "Sum the projected cost across every year of the program for the total projected cost.",
+    ],
+    edgeCases: [
+      "College cost inflation has historically run higher than general CPI inflation over long periods, though the gap between them varies by decade and institution type.",
+      "In-state public tuition, out-of-state public tuition, and private tuition all have very different starting costs and sometimes different inflation trends, so the input should match the specific type of institution being planned for.",
+      "This doesn't account for financial aid, scholarships, or grants, which can substantially reduce the real out-of-pocket cost below the projected sticker price.",
+      "Room and board costs are sometimes tracked separately from tuition and may inflate at a different rate than tuition itself.",
+    ],
     examples: [
       { title: "10 years out", body: "A $28,000 current annual cost, growing at 5% college inflation for 10 years until enrollment, means the first year alone could cost around $45,600 — well above today's sticker price." },
       { title: "Full 4-year program", body: "Summing all four years of that same program (with costs still rising during enrollment) produces a total significantly higher than simply multiplying today's cost by four." },
@@ -1806,6 +2053,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Estimating your federal income tax before you file gives you a head start on budgeting, withholding adjustments, and avoiding surprises. Our Income Tax Estimator applies the current 2025 marginal tax brackets to your income for a fast, accurate estimate.",
     howItWorks:
       "The calculator walks your taxable income through the 2025 federal brackets for your filing status, taxing each slice of income at its corresponding rate, then sums the results into your total estimated tax. It also reports your effective rate (total tax ÷ income) and marginal rate (the rate on your last dollar earned) separately.",
+    methodology:
+      "Progressive brackets tax income in slices, not as a whole — the first slice of everyone's income is taxed at the lowest bracket's rate, the next slice at the next bracket's rate, and so on up to whatever bracket your total income reaches. Summing the tax owed from each slice produces total tax; dividing that total by income produces the effective rate, which is always lower than the marginal rate because of all the lower-taxed income beneath the top bracket.",
+    stepByStep: [
+      "Determine taxable income (income after deductions) and filing status.",
+      "Apply each bracket's rate to the portion of income that falls within that bracket, starting from the lowest.",
+      "Sum the tax owed from every bracket for total estimated tax.",
+      "Divide total tax by income for effective rate; the top bracket reached is the marginal rate.",
+    ],
+    edgeCases: [
+      "This estimates federal tax only — state income tax, FICA payroll tax, and any tax credits are all separate and not included here.",
+      "Long-term capital gains and qualified dividends use a separate preferential rate schedule rather than these ordinary income brackets.",
+      "Bracket thresholds are adjusted annually for inflation, so using outdated thresholds produces an inaccurate estimate.",
+      "Tax credits (unlike deductions) reduce tax owed directly, dollar for dollar, and aren't reflected in this bracket-based calculation of gross tax before credits.",
+    ],
     examples: [
       { title: "Single filer", body: "$75,000 taxable income (single) results in an estimated federal tax around $11,864, an effective rate near 15.8%, even though the marginal rate on the last dollar is 22%." },
       { title: "Married filing jointly", body: "The same $75,000 filed jointly benefits from wider bracket thresholds, resulting in a meaningfully lower estimated tax than filing single." },
@@ -1836,6 +2097,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Job postings and offers list pay in wildly different formats — hourly, weekly, monthly, or annual — making it hard to compare them apples-to-apples at a glance. Our Salary Calculator converts an hourly rate into all the other common pay period formats instantly.",
     howItWorks:
       "The calculator multiplies your hourly rate by your hours per week to find weekly pay, then scales that up to monthly and annual figures using standard 52-week and 12-month conversions, plus an estimated daily rate based on an 8-hour workday.",
+    methodology:
+      "Every pay-period conversion here builds from the same weekly figure, since a week is the one pay period that divides evenly into a year (52 weeks) without the awkward fractional-day issues months introduce. Annual pay is weekly pay times 52; monthly pay is annual pay divided by 12 (not weekly pay times 4, which would undercount since most months have slightly more than 4 weeks); daily pay assumes a standard 8-hour day as a reference point, not a guarantee of actual hours worked that day.",
+    stepByStep: [
+      "Multiply hourly rate by hours worked per week to find weekly pay.",
+      "Multiply weekly pay by 52 to find annual pay.",
+      "Divide annual pay by 12 to find monthly pay (not weekly pay times 4).",
+      "Multiply hourly rate by 8 for an estimated daily rate, based on a standard workday.",
+    ],
+    edgeCases: [
+      "Multiplying weekly pay by 4 to estimate monthly pay is a common but incorrect shortcut — most months have more than 4 weeks, so this method understates true monthly income.",
+      "This annual figure assumes a full 52 weeks worked with no unpaid time off; unpaid vacation or leave would lower actual annual earnings below this projection.",
+      "Overtime pay (often 1.5x rate for hours beyond 40/week) isn't captured by this straight linear conversion.",
+      "Hourly workers with inconsistent or seasonal schedules will see actual pay diverge from this steady, consistent-hours assumption.",
+    ],
     examples: [
       { title: "Standard full-time", body: "$28/hour at 40 hours/week works out to $1,120/week, roughly $4,853/month, and $58,240/year." },
       { title: "Part-time schedule", body: "The same $28/hour rate at 25 hours/week produces a proportionally lower annual figure — useful for evaluating part-time offers against full-time equivalents." },
@@ -1866,6 +2141,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Your gross salary and your actual paycheck are two very different numbers — taxes, FICA, and pre-tax deductions all take a bite before the money reaches your account. Our Take-Home Paycheck Calculator estimates your real net pay per paycheck, based on your pay frequency.",
     howItWorks:
       "The calculator subtracts your pre-tax deductions (like 401(k) contributions or health insurance premiums) from your gross salary to find taxable income, applies simplified federal tax brackets to that amount, subtracts standard FICA payroll tax (7.65%), and divides the result by your number of paychecks per year.",
+    methodology:
+      "Pre-tax deductions do double duty in this calculation: they reduce your taxable income (lowering the federal tax owed) while also being money you don't get to keep as cash, which is why increasing a 401(k) contribution reduces take-home pay by less than the full contribution amount — part of what you 'lose' in cash is offset by paying less tax. FICA, unlike federal income tax, applies to gross wages before pre-tax deductions (with a couple of specific exceptions like traditional health premiums), so it's calculated on a different base than the income tax portion.",
+    stepByStep: [
+      "Subtract pre-tax deductions from gross annual salary to find taxable income.",
+      "Apply simplified federal tax brackets to taxable income to estimate annual federal tax.",
+      "Calculate FICA (7.65%) on gross wages separately.",
+      "Subtract both federal tax and FICA from gross salary, then divide by your number of paychecks per year for net pay per paycheck.",
+    ],
+    edgeCases: [
+      "This excludes state and local income tax entirely, which varies significantly and should be added for a complete picture.",
+      "Post-tax deductions (Roth 401(k) contributions, wage garnishments, some benefit premiums) reduce net pay without reducing taxable income, unlike pre-tax deductions.",
+      "Pay frequency affects the per-paycheck amount but not the annual total — biweekly (26 paychecks) and semi-monthly (24 paychecks) produce different per-paycheck figures for the same annual salary.",
+      "This uses simplified brackets rather than your actual W-4 elections, so real paycheck withholding may differ somewhat from this estimate.",
+    ],
     examples: [
       { title: "Semi-monthly pay", body: "A $70,000 gross salary with $3,000 in pre-tax deductions, paid semi-monthly (24 paychecks/year), produces a specific net amount per paycheck after estimated federal tax and FICA." },
       { title: "Effect of pre-tax deductions", body: "Increasing 401(k) contributions raises pre-tax deductions, which lowers taxable income and slightly reduces the tax bite — meaning take-home pay drops by less than the full contribution amount." },
@@ -1896,6 +2185,19 @@ export const financialContent: Record<string, SeoContent> = {
       "A quoted hourly wage doesn't always translate cleanly to an annual figure, especially once actual weeks worked per year (accounting for unpaid time off) are factored in. Our Hourly to Salary Calculator handles that conversion with your real weekly schedule.",
     howItWorks:
       "The calculator multiplies your hourly rate by your hours per week, then by the number of weeks you actually work per year (which may be less than 52 if you take unpaid time off), to find your true annual salary equivalent.",
+    methodology:
+      "The standard hourly-to-annual shortcut (rate × 2,080, assuming 40 hours × 52 weeks) silently assumes zero unpaid time off, which overstates real annual income for anyone who takes unpaid leave, has irregular seasonal work, or doesn't work a full 52-week year. Substituting actual weeks worked for the blanket 52 turns the same basic multiplication into a more honest, personalized estimate.",
+    stepByStep: [
+      "Multiply hourly rate by hours worked per week to find weekly pay.",
+      "Multiply weekly pay by the actual number of weeks worked per year, not automatically assuming 52.",
+      "The result is your realistic annual salary equivalent.",
+    ],
+    edgeCases: [
+      "Paid time off should generally still be counted as a 'worked' week for this purpose, since it's compensated — only genuinely unpaid weeks should be excluded from the count.",
+      "Seasonal or contract workers with predictable annual gaps (like teachers on a 10-month schedule) should use their actual working weeks rather than 52 for an accurate comparison to salaried positions.",
+      "Overtime hours, if regularly worked, aren't captured by a simple hours-per-week × weeks-worked calculation and would need to be added separately.",
+      "This produces a gross annual figure — actual take-home pay after taxes will be meaningfully lower, as with any gross-to-net comparison.",
+    ],
     examples: [
       { title: "Full 52-week year", body: "$25/hour at 40 hours/week for all 52 weeks comes to exactly $52,000/year." },
       { title: "Accounting for unpaid time off", body: "The same rate and hours but only 50 weeks worked (2 weeks unpaid time off) produces $50,000/year instead — a $2,000 difference from the simpler 52-week assumption." },
@@ -1927,6 +2229,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator applies the IRS-required 92.35% adjustment to your net self-employment earnings (an allowance that approximates the employer half not being separately taxed), then applies the combined 15.3% self-employment tax rate (12.4% Social Security + 2.9% Medicare) to that adjusted amount. It also shows the deductible half you can subtract from income for income tax purposes.",
     formula: "Taxable earnings = net earnings × 92.35%\nSE tax = taxable earnings × 15.3%",
+    methodology:
+      "This is the identical calculation covered under the 1099 Tax Calculator's self-employment tax component, offered here as a standalone tool for anyone who just needs the SE tax figure without the full combined income tax estimate. The 92.35% adjustment approximates the employer-side FICA share a W-2 employer would otherwise pay separately and never include in taxable wages; the 15.3% combines 12.4% Social Security (capped at the annual wage base) and 2.9% Medicare (uncapped).",
+    stepByStep: [
+      "Start with net self-employment earnings (revenue minus deductible business expenses).",
+      "Multiply by 92.35% to find the SE-taxable base.",
+      "Multiply that base by 15.3% to find total self-employment tax.",
+      "Divide by 2 to find the portion deductible against income tax.",
+    ],
+    edgeCases: [
+      "Net earnings under $400 in a year are exempt from self-employment tax entirely.",
+      "Once combined W-2 and self-employment earnings exceed the Social Security wage base, only the 2.9% Medicare portion applies to further self-employment income that year.",
+      "High earners may owe an additional 0.9% Medicare surtax above certain income thresholds, which this base calculation doesn't include.",
+      "This tax applies to net profit, not gross revenue — accurately tracking deductible business expenses directly lowers the SE tax bill.",
+    ],
     examples: [
       { title: "Typical freelance income", body: "$60,000 in net self-employment earnings produces roughly $8,478 in self-employment tax, with $4,239 deductible against income tax." },
       { title: "Why it surprises new freelancers", body: "A W-2 employee earning the same $60,000 only sees half this amount (7.65%) withheld directly, with the employer covering the other half — self-employed workers pay both halves themselves." },
@@ -1958,6 +2274,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "To add VAT (going from a net, pre-tax amount to a gross, tax-included amount), the calculator multiplies by the VAT rate and adds it to the original amount. To remove VAT (going from a gross, tax-included price back to the net amount), it divides by (1 + rate) instead of simply subtracting a percentage — a common point of confusion.",
     formula: "Adding: Gross = Net × (1 + rate)\nRemoving: Net = Gross ÷ (1 + rate)",
+    methodology:
+      "Adding VAT is straightforward multiplication, but removing it isn't simple subtraction because the tax-inclusive price already has the tax baked into a bigger number — 20% of the smaller net amount is not the same as 20% of the larger gross amount. Dividing by (1 + rate) correctly reverses the multiplication that created the gross price in the first place, which is the mathematical reason subtracting a flat percentage from a gross price gives a wrong (too-low) net figure.",
+    stepByStep: [
+      "To add VAT: multiply the net amount by (1 + the VAT rate as a decimal) to find the gross, tax-inclusive amount.",
+      "To remove VAT: divide the gross amount by (1 + the VAT rate as a decimal) to find the net, pre-tax amount.",
+      "Subtract net from gross (either direction) to find the VAT amount itself.",
+    ],
+    edgeCases: [
+      "Many VAT systems apply reduced rates to specific categories (food, books, children's items) or a zero rate to others, rather than one flat rate across everything.",
+      "VAT-registered businesses typically reclaim VAT paid on business purchases, making the effective tax burden different for businesses than for end consumers.",
+      "Different countries set very different standard VAT rates (commonly ranging from under 10% to over 25%), so the rate itself needs to match the specific country and product category.",
+      "US sales tax and VAT are structurally different systems — sales tax is usually added at the point of sale to a displayed pre-tax price, while VAT-inclusive pricing is the norm in most VAT countries.",
+    ],
     examples: [
       { title: "Adding VAT", body: "A $100 net amount with 20% VAT added comes to $120 gross." },
       { title: "Removing VAT (the tricky direction)", body: "A $120 VAT-inclusive price with 20% VAT removed gives back exactly $100 net — notably not $120 minus 20%, which would incorrectly give $96." },
@@ -1989,6 +2318,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your home's assessed value by your local property tax rate (often called a mill rate, expressed here as a percentage) to find your annual property tax bill, then divides by 12 for a monthly equivalent — useful for budgeting alongside a mortgage payment.",
     formula: "Annual property tax = assessed value × tax rate",
+    methodology:
+      "Local governments set a tax rate (sometimes expressed as a percentage, sometimes as a 'mill rate' — dollars per $1,000 of assessed value) high enough to fund the budget they need from property taxes, then apply it uniformly across the local property tax base. Assessed value is a local government's own valuation of a property for tax purposes and frequently differs from actual market value, sometimes significantly, depending on how recently and how the jurisdiction conducts reassessments.",
+    stepByStep: [
+      "Find your property's assessed value from your local tax assessor (not necessarily the same as market value).",
+      "Find your local property tax rate, ideally your specific county or municipal rate rather than a broader state average.",
+      "Multiply assessed value by the tax rate to find the annual property tax bill.",
+      "Divide by 12 for a monthly equivalent, useful for budgeting alongside a mortgage payment.",
+    ],
+    edgeCases: [
+      "Assessed value often lags behind market value, especially in fast-appreciating markets, meaning a home's real market value can be well above what's currently taxed.",
+      "Many jurisdictions offer exemptions (homestead, senior, veteran) that reduce the taxable assessed value below the property's full assessed value.",
+      "Property tax rates and assessments can both change over time, so a rate used for a purchase decision should be periodically reconfirmed.",
+      "A property tax bill not escrowed into a mortgage payment is typically billed separately once or twice a year, requiring separate budgeting outside the mortgage payment itself.",
+    ],
     examples: [
       { title: "Typical rate", body: "A $350,000 assessed home value at a 1.1% tax rate comes to $3,850/year, or about $321/month." },
       { title: "Higher-tax area", body: "The same home value at a 2.2% rate (common in some high-tax states and municipalities) doubles the annual bill to $7,700 — a significant budgeting difference." },
@@ -2019,6 +2362,19 @@ export const financialContent: Record<string, SeoContent> = {
       "Knowing exactly which federal tax bracket your income falls into helps with everything from year-end tax planning to deciding whether extra income (a bonus, freelance work, or overtime) is worth pursuing. Our Marginal Tax Bracket Calculator finds your exact 2025 bracket instantly.",
     howItWorks:
       "The calculator compares your taxable income against the 2025 federal bracket thresholds for your filing status, identifying which bracket your income falls into and reporting that as your marginal rate — the rate that applies to your next dollar earned.",
+    methodology:
+      "Finding your bracket is a lookup, not a calculation — the calculator compares your taxable income against the ordered list of bracket thresholds for your filing status and identifies the highest threshold your income has crossed, since that's the bracket your marginal (next) dollar would fall into. It's a much simpler operation than the full tax calculation, which requires summing tax owed across every bracket below it too.",
+    stepByStep: [
+      "Identify your taxable income and filing status.",
+      "Compare taxable income against each bracket threshold in ascending order for that filing status.",
+      "Identify the highest threshold your income exceeds — that bracket's rate is your marginal rate.",
+    ],
+    edgeCases: [
+      "Being 'in' a bracket doesn't mean your whole income is taxed at that rate — only the marginal rate applies to your next dollar, not your existing income.",
+      "Income sitting exactly at a bracket threshold is a useful reference point for year-end tax planning around additional income or deductible contributions.",
+      "State tax brackets are entirely separate from federal brackets and use their own thresholds and rates.",
+      "A large one-time item like a bonus or capital gain can push part of your income into a bracket you wouldn't otherwise reach, without affecting the rate on income already below that threshold.",
+    ],
     examples: [
       { title: "Middle bracket", body: "$90,000 taxable income (single) falls into the 22% bracket for 2025, meaning any additional income up to the next threshold is taxed at 22%." },
       { title: "Near a bracket boundary", body: "Income sitting just above a bracket threshold means only the portion above that threshold is taxed at the higher rate — not your entire income, a frequently misunderstood point." },
@@ -2050,6 +2406,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator finds annual net operating income (rent minus operating expenses, excluding the mortgage) and divides it by the purchase price for cap rate — a measure of the property's return independent of financing. It separately subtracts mortgage payments from NOI to find annual cash flow, then divides that by your actual cash invested (the down payment) for cash-on-cash return — the metric that reflects your real leveraged return.",
     formula: "Cap rate = annual NOI ÷ purchase price\nCash-on-cash return = annual cash flow ÷ down payment",
+    methodology:
+      "Cap rate deliberately excludes financing so investors can compare properties on their own merits, as if bought entirely with cash — it's a pure measure of the property's operating return relative to its price. Cash-on-cash return instead measures what actually matters to a leveraged buyer: the return on the cash you personally put in (the down payment), after the mortgage payment is subtracted from operating income. Leverage is why cash-on-cash return can exceed cap rate — you're earning a return on the full property value while having only invested a fraction of it as cash.",
+    stepByStep: [
+      "Calculate annual rental income and subtract annual operating expenses (excluding the mortgage) to find net operating income (NOI).",
+      "Divide NOI by the purchase price to find cap rate.",
+      "Subtract annual mortgage payments from NOI to find annual cash flow.",
+      "Divide annual cash flow by the down payment (actual cash invested) to find cash-on-cash return.",
+    ],
+    edgeCases: [
+      "Vacancy periods reduce actual rental income below the full potential rent used in an optimistic NOI estimate — a realistic vacancy allowance should be built into the expense assumptions.",
+      "Major capital expenditures (roof, HVAC replacement) aren't part of routine operating expenses but should be reserved for separately when evaluating true long-term returns.",
+      "A property with negative cash flow but strong appreciation potential can still be a reasonable investment thesis that neither cap rate nor cash-on-cash return alone captures.",
+      "Cap rate comparisons only make sense between similar property types and markets — a 5% cap rate can be excellent in one market and poor in another.",
+    ],
     examples: [
       { title: "Solid cash flow", body: "A $250,000 property with $2,200 monthly rent, $500 monthly expenses, and a $1,100 mortgage payment on a $50,000 down payment produces a healthy cap rate and an even stronger cash-on-cash return, since leverage amplifies the return on actual cash invested." },
       { title: "Why the two metrics differ", body: "Cap rate ignores financing entirely, while cash-on-cash return reflects the actual leverage used — a property can have a modest cap rate but a strong cash-on-cash return if financed well, or vice versa." },
@@ -2081,6 +2451,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator finds your contribution margin (price minus variable cost per unit) — the amount each sale contributes toward covering fixed costs — then divides total fixed costs by that margin to find exactly how many units need to sell before you start turning a profit.",
     formula: "Break-even units = fixed costs ÷ (price per unit − variable cost per unit)",
+    methodology:
+      "Every unit sold contributes its 'contribution margin' (price minus variable cost) toward paying off fixed costs, which stay the same regardless of how many units sell. Once enough units have been sold that their combined contribution margins equal total fixed costs, every additional unit sold contributes pure profit — dividing fixed costs by the per-unit contribution margin finds exactly that threshold.",
+    stepByStep: [
+      "Subtract variable cost per unit from price per unit to find the contribution margin per unit.",
+      "Divide total fixed costs by the contribution margin per unit to find break-even units.",
+      "Multiply break-even units by price per unit to find break-even revenue.",
+    ],
+    edgeCases: [
+      "A contribution margin of zero or negative (variable cost equal to or exceeding price) makes break-even mathematically unreachable at any sales volume — the pricing itself needs to change first.",
+      "This assumes fixed costs and per-unit variable costs stay constant regardless of volume, which breaks down at very high volumes where new fixed costs (additional equipment, staff) might be needed.",
+      "Multi-product businesses need either a blended average contribution margin or separate break-even analysis per product line for an accurate picture.",
+      "Break-even is a floor, not a target — reaching it means costs are covered, not that the business is generating meaningful profit yet.",
+    ],
     examples: [
       { title: "Standard product", body: "$10,000 in fixed costs, a $40 price per unit, and $15 variable cost per unit gives a $25 contribution margin, requiring 400 units sold to break even." },
       { title: "Thin margins", body: "The same fixed costs with only a $5 contribution margin per unit (due to higher variable costs or a lower price) would require 2,000 units — a much harder target to hit." },
@@ -2112,6 +2495,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator subtracts cost from revenue to find profit, then divides that profit by revenue (not cost) to find the margin percentage — the key distinction that separates margin from markup, which divides by cost instead.",
     formula: "Margin = (Revenue − Cost) ÷ Revenue × 100",
+    methodology:
+      "Margin expresses profit as a share of what the customer actually paid (revenue), which is why it can never exceed 100% — even giving a product away for free above its cost approaches but never reaches a 100% margin as cost approaches zero. This is the fundamental difference from markup, which is expressed relative to cost instead and therefore has no such ceiling — a markup can be 200%, 500%, or higher, since cost can be a small fraction of the selling price.",
+    stepByStep: [
+      "Subtract cost from revenue to find profit.",
+      "Divide profit by revenue (not cost) to find the margin as a decimal.",
+      "Multiply by 100 to express margin as a percentage.",
+    ],
+    edgeCases: [
+      "Gross margin (using only direct product cost) and net margin (using all costs, including overhead) are different figures — always be clear which one is being calculated or compared.",
+      "Margin percentages that look similar across products with very different price points can represent very different absolute dollar profits.",
+      "Industries have very different typical margin ranges (software margins are often far higher than retail margins), making cross-industry margin comparisons potentially misleading.",
+      "A margin of exactly 0% means revenue equals cost (breaking even on that sale), while a negative margin means selling below cost.",
+    ],
     examples: [
       { title: "Standard retail example", body: "A $150 selling price on a $90 cost produces a $60 profit and a 40% profit margin." },
       { title: "Margin vs. markup on the same numbers", body: "The same $90 cost and $60 profit represents a 66.7% markup on cost — a very different number from the 40% margin, despite describing the same sale." },
@@ -2143,6 +2539,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your cost by (1 + markup percentage) to find the selling price that achieves your target markup, then shows the resulting dollar profit on the sale.",
     formula: "Selling price = cost × (1 + markup %)",
+    methodology:
+      "Markup measures profit relative to what the seller paid, not what the customer pays — which is the reverse reference point from margin. Because markup is calculated on the smaller number (cost) while margin is calculated on the larger number (revenue, which includes the markup itself), the same dollar profit always produces a markup percentage that's numerically larger than the corresponding margin percentage, which is a frequent source of pricing confusion.",
+    stepByStep: [
+      "Convert the target markup percentage to a decimal.",
+      "Add 1 to that decimal.",
+      "Multiply cost by that sum to find the selling price.",
+      "Subtract cost from selling price to find the resulting dollar profit.",
+    ],
+    edgeCases: [
+      "A markup percentage always converts to a lower margin percentage on the same sale — a 100% markup, for example, always equals exactly a 50% margin, never the other way around.",
+      "Additional costs beyond the base product cost (shipping, payment processing, packaging) should be included in 'cost' for the markup to reflect true profitability.",
+      "Setting a uniform markup percentage across a product line can produce very different margins if unit costs vary significantly across products.",
+      "Competitor pricing sometimes constrains the achievable markup regardless of what would otherwise be a comfortable target margin.",
+    ],
     examples: [
       { title: "40% markup", body: "A $90 cost with a 40% markup produces a $126 selling price and a $36 profit." },
       { title: "Markup vs. margin on the result", body: "That same $126 price and $90 cost actually represents a 28.6% profit margin — notably lower than the 40% markup percentage, since margin and markup use different denominators." },
@@ -2174,6 +2584,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your sale amount by your commission rate to find your commission earned — a straightforward percentage calculation, but useful for quickly checking expected earnings across multiple deals or comparing different commission structures.",
     formula: "Commission = Sale Amount × Commission Rate",
+    methodology:
+      "Flat-rate commission is the simplest possible incentive structure — a fixed percentage applied uniformly to sale value, meaning earnings scale linearly with sales volume. Many real-world commission plans layer additional complexity on top of this base calculation (tiers, splits, caps, or bonuses for hitting targets), but every one of those variations is still built from this same core multiplication applied to each qualifying tier or portion of a sale.",
+    stepByStep: [
+      "Confirm the commission rate that applies to the specific sale.",
+      "Convert the rate to a decimal.",
+      "Multiply the sale amount by that decimal to find the commission earned.",
+    ],
+    edgeCases: [
+      "Tiered commission structures apply different rates to different portions of sales volume (for example, 5% on the first $10,000, 8% above that), requiring the calculation to be run separately for each tier.",
+      "Commission splits between an individual and a broker, agency, or team reduce the take-home amount below the gross commission calculated here.",
+      "Some industries calculate commission on net sale price after discounts, while others use the original list price — confirming which base applies matters for accuracy.",
+      "Draws or advances against future commission complicate the timing of when commission is actually 'earned' versus when it's paid out.",
+    ],
     examples: [
       { title: "Standard sales commission", body: "A $5,000 sale at a 6% commission rate earns $300." },
       { title: "Comparing commission structures", body: "The same $5,000 sale at a higher 8% rate (perhaps for exceeding a sales quota) earns $400 instead — a $100 difference worth understanding when evaluating compensation plans." },
@@ -2205,6 +2628,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator projects your amount forward at your entered inflation rate to show the equivalent future amount needed to buy the same goods and services, and separately shows how much today's purchasing power would be reduced to if left unadjusted over the same period.",
     formula: "Future equivalent = Amount × (1 + inflation rate)^years\nReduced purchasing power = Amount ÷ (1 + inflation rate)^years",
+    methodology:
+      "Inflation compounds exactly like interest, just working against purchasing power instead of growing an account balance — prices rise by a percentage each year, and that percentage applies to an already-higher base the next year. The two directions of this calculator are mirror images: multiplying by (1+rate)^n projects how much more money you'd need in the future to buy today's basket of goods, while dividing by the same factor shows how much a fixed amount held today would be reduced to in today's purchasing-power terms after that many years of inflation.",
+    stepByStep: [
+      "Raise (1 + inflation rate) to the power of the number of years.",
+      "To find the future cost of today's amount: multiply the amount by that result.",
+      "To find today's-dollar purchasing power of a fixed future amount: divide the amount by that same result.",
+    ],
+    edgeCases: [
+      "Inflation rates vary meaningfully year to year and by category (healthcare and education have often outpaced general inflation, for example) — a single flat assumption is a simplification.",
+      "Cash sitting in a non-interest-bearing account loses purchasing power at the full inflation rate, while cash in an interest-bearing account loses purchasing power only at the gap between inflation and the interest rate earned.",
+      "Wage growth that matches or exceeds inflation offsets its effect on real income, even though prices are still technically rising.",
+      "Deflation (negative inflation) is mathematically valid in this same formula and would increase rather than decrease purchasing power over time.",
+    ],
     examples: [
       { title: "Cost of living increase", body: "$10,000 today at 3% inflation for 10 years means you'd need about $13,439 in 10 years to buy what $10,000 buys today." },
       { title: "Eroding purchasing power", body: "That same $10,000 left unspent and un-invested for 10 years at 3% inflation would only have the real purchasing power of about $7,441 in today's terms." },
@@ -2236,6 +2672,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator finds the bond's annual coupon payment (face value times coupon rate), then divides that fixed dollar payment by the bond's current market price — not its face value — to find the current yield, which rises when a bond trades below face value and falls when it trades above.",
     formula: "Current yield = annual coupon payment ÷ current market price",
+    methodology:
+      "A bond's coupon payment is fixed in dollar terms at issuance — it never changes regardless of what happens to the bond's price on the secondary market. As interest rates in the broader market rise, existing bonds with lower fixed coupons become less attractive, so their price falls until the fixed coupon represents a competitive yield again; when rates fall, the reverse happens. Current yield is simply that fixed coupon divided by whatever the bond is trading for today, which is why it moves inversely to price even though the coupon itself never changes.",
+    stepByStep: [
+      "Find the bond's annual coupon payment (face value multiplied by the stated coupon rate).",
+      "Find the bond's current market price.",
+      "Divide the annual coupon payment by the current market price to find current yield.",
+    ],
+    edgeCases: [
+      "Current yield ignores any capital gain or loss that would occur if the bond is held to maturity and redeemed at face value — yield to maturity captures that additional dimension.",
+      "A bond trading significantly below face value (a 'deep discount' bond) can show a current yield that overstates the total return an investor would realize, since it ignores eventual price convergence to face value.",
+      "Callable bonds can be redeemed by the issuer before maturity, which changes the actual holding period and realized return in ways current yield doesn't anticipate.",
+      "Credit risk differences between issuers mean two bonds with identical current yields aren't necessarily equally attractive investments.",
+    ],
     examples: [
       { title: "Bond trading below face value", body: "A $1,000 face value bond with a 5% coupon ($50/year) trading at $950 has a current yield of about 5.26% — higher than the stated coupon rate, since you're buying the same fixed payment at a discount." },
       { title: "Bond trading above face value", body: "The same bond trading at $1,050 instead would have a current yield below 5%, since you're paying a premium for the same fixed coupon payment." },
@@ -2267,6 +2716,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator subtracts the current lifetime exemption from the gross estate value to find the taxable portion (if any), then applies a simplified flat 40% rate — the top federal estate tax bracket — to that excess, since nearly all taxable estates that exceed the exemption fall into or near the top bracket.",
     formula: "Taxable estate = max(estate value − lifetime exemption, 0)\nEstimated tax = taxable estate × 40%",
+    methodology:
+      "The federal estate tax only ever applies to the portion of an estate that exceeds the lifetime exemption — everything below that threshold passes entirely tax-free at the federal level, which is why the vast majority of estates never owe anything. The actual federal rate schedule is graduated from 18% up to 40%, but because the exemption is so large, almost every estate that does owe any tax lands with most or all of its taxable amount in the top 40% bracket, which is why this simplified estimate applies that top rate directly rather than modeling the full graduated schedule.",
+    stepByStep: [
+      "Total the gross value of the estate (all assets at fair market value).",
+      "Subtract the current lifetime exemption amount.",
+      "If the result is zero or negative, no federal estate tax is owed.",
+      "If positive, multiply that excess by the simplified 40% top rate to estimate tax owed.",
+    ],
+    edgeCases: [
+      "Married couples can generally combine exemptions through 'portability,' effectively doubling the exemption available to the surviving spouse's estate.",
+      "Many states impose their own separate estate or inheritance tax with exemption thresholds often far below the federal amount, meaning a state tax bill can apply even when no federal tax is owed.",
+      "The lifetime exemption is shared between gifts made during life and the estate at death — large lifetime gifts reduce the exemption remaining for the estate.",
+      "The federal exemption amount is set by legislation and has changed significantly over past decades, so any specific estimate should be checked against the current year's actual figure.",
+    ],
     examples: [
       { title: "Below the exemption", body: "An $8 million estate is entirely below the roughly $14 million 2025 exemption, meaning zero federal estate tax is owed." },
       { title: "Above the exemption", body: "A $20 million estate exceeds the exemption by about $6 million, producing an estimated federal estate tax of roughly $2.4 million at the simplified 40% rate." },
@@ -2297,6 +2760,19 @@ export const financialContent: Record<string, SeoContent> = {
       "A home equity line of credit gives you flexible access to your home's equity, and payments work differently depending on whether you're in the interest-only draw period or the fully-amortizing repayment period. Our HELOC Payment Calculator shows both.",
     howItWorks:
       "The calculator computes the interest-only payment (just the monthly interest charge on your balance, common during a HELOC's initial draw period) and separately computes the fully-amortizing payment (principal plus interest, spread evenly across your repayment term) for direct comparison.",
+    methodology:
+      "A HELOC's two phases use fundamentally different payment math. During the draw period, the interest-only payment is just balance × monthly rate — none of it reduces principal, so the balance stays flat unless you voluntarily pay more. Once the repayment period begins, the outstanding balance is amortized like a standard loan over the remaining term, which is why the payment typically jumps meaningfully higher at that transition — it now has to cover both ongoing interest and principal reduction within a fixed number of remaining months.",
+    stepByStep: [
+      "For the interest-only payment: multiply the outstanding balance by the monthly interest rate.",
+      "For the amortizing payment: apply the standard loan payment formula to the balance, rate, and remaining repayment term in months.",
+      "Compare the two to see the payment increase that will occur when the draw period ends.",
+    ],
+    edgeCases: [
+      "HELOC rates are typically variable, tied to an index like the prime rate, so both the interest-only and amortizing payments can change over time even without any new borrowing.",
+      "Continuing to draw funds during the draw period increases the balance the eventual amortizing payment will be calculated on.",
+      "Some HELOCs offer a fixed-rate conversion option for all or part of the balance, which would use a different, locked payment calculation than this variable-rate comparison.",
+      "Missing the transition from interest-only to amortizing payments in a household budget is one of the most common HELOC payment shocks borrowers experience.",
+    ],
     examples: [
       { title: "Interest-only draw period", body: "A $40,000 HELOC balance at 9% has an interest-only payment of $300/month — low, but none of it reduces the principal balance." },
       { title: "Repayment period", body: "The same balance switching to a 15-year fully-amortizing repayment period at the same rate produces a significantly higher monthly payment, since it now includes principal." },
@@ -2327,6 +2803,19 @@ export const financialContent: Record<string, SeoContent> = {
       "Instead of starting with a car's sticker price, our Car Affordability Calculator works backward from what you can actually afford to pay each month — a more realistic way to shop that keeps you from overextending.",
     howItWorks:
       "The calculator works backward through the loan payment formula using your monthly payment budget, interest rate, and loan term to find the maximum loan amount that fits your budget, then adds your down payment to find the total car price you can afford.",
+    methodology:
+      "This inverts the standard amortization formula — instead of solving for payment given a known loan amount, it solves for the maximum loan amount given a fixed payment ceiling, rate, and term. Algebraically rearranging M = P × [r(1+r)^n] / [(1+r)^n − 1] for P gives P = M × [(1+r)^n − 1] / [r(1+r)^n], letting the calculator find exactly how large a loan a specific budgeted payment can support.",
+    stepByStep: [
+      "Convert your annual interest rate to a monthly rate and your loan term to months.",
+      "Apply the rearranged amortization formula to your monthly payment budget to find the maximum loan amount it supports.",
+      "Add your down payment to the maximum loan amount to find your total affordable car price.",
+    ],
+    edgeCases: [
+      "This finds the maximum loan a payment supports, not necessarily a comfortable one — many financial planners suggest budgeting below the technical maximum for cushion.",
+      "Sales tax and fees, which get added to the financed amount in most states, aren't automatically included unless factored into the target car price separately.",
+      "A longer loan term increases the affordable price for the same monthly budget, but also means paying interest over more months and often on a depreciating asset.",
+      "This doesn't budget for insurance, maintenance, or fuel, all of which are real ongoing costs beyond the loan payment itself.",
+    ],
     examples: [
       { title: "Standard budget", body: "A $450/month budget, $3,000 down payment, 7% rate, and 60-month term supports a maximum loan around $22,700, for a total affordable car price near $25,700." },
       { title: "Impact of a longer term", body: "Stretching the same budget to a 72-month term increases the affordable loan amount, but also means paying interest over a longer period — worth weighing against the higher affordable price." },
@@ -2358,6 +2847,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator multiplies your monthly lease payment by the number of months in your period to find total lease cost, and separately multiplies your loan payment by the same period and subtracts the car's estimated resale value at the end — since buying leaves you with an asset, while leasing doesn't.",
     formula: "Total lease cost = lease payment × 12 × years\nNet buy cost = loan payment × 12 × years − resale value",
+    methodology:
+      "The critical adjustment this calculator makes is subtracting resale value from the buying side but not the leasing side — leasing simply ends with the car returned, while buying ends with an asset you can sell or keep. Comparing raw payment totals without that adjustment structurally favors leasing every time, since it ignores the one thing buying gives you that leasing doesn't: ownership of something with residual value.",
+    stepByStep: [
+      "Multiply the monthly lease payment by 12, then by the number of years, for total lease cost.",
+      "Multiply the monthly loan payment by 12, then by the number of years, for total loan payments.",
+      "Subtract the car's estimated resale value at the end of the period from total loan payments to find net cost to buy.",
+      "Compare total lease cost against net cost to buy for the true financial comparison.",
+    ],
+    edgeCases: [
+      "Resale value is an estimate and genuinely uncertain — using an optimistic figure skews the comparison toward buying, while a conservative figure skews it toward leasing.",
+      "Lease agreements include mileage limits and end-of-lease wear-and-tear charges that aren't part of the base monthly payment and should be factored in for high-mileage drivers.",
+      "Buying involves ongoing maintenance costs that typically exceed a leased car's costs, since leased vehicles are usually newer and still under warranty for more of the term.",
+      "Sales tax treatment differs between leasing (often taxed on each payment) and buying (typically taxed on the full price upfront), affecting the true comparison in some states.",
+    ],
     examples: [
       { title: "Buying wins", body: "A $400/month lease versus a $550/month loan over 3 years, with a $14,000 estimated resale value at the end, often makes buying cheaper net of resale value, despite the higher monthly payment." },
       { title: "Leasing wins", body: "If resale value is lower than expected or the ownership period is short, the math can favor leasing instead — running your specific numbers is the only way to know for sure." },
@@ -2388,6 +2891,20 @@ export const financialContent: Record<string, SeoContent> = {
       "A 529 plan grows tax-free for qualified education expenses, making it one of the most efficient ways to save for college. Our 529 Plan Calculator projects your account balance at the time your child (or you) heads to college.",
     howItWorks:
       "The calculator compounds your current balance and adds your monthly contribution each period at your expected rate of return, growing the account over the years until college — the same compound growth math as any savings projection, applied specifically to a 529's timeline.",
+    methodology:
+      "The growth mechanics are identical lump-sum-plus-contributions compounding used throughout this site's savings and investment calculators — what makes a 529 different is purely a tax rule layered on top: growth inside the account is never taxed at the federal level (and often not at the state level) as long as withdrawals go toward qualified education expenses, unlike a comparable taxable brokerage account where investment gains would be taxed along the way or at withdrawal.",
+    stepByStep: [
+      "Convert the expected annual rate of return to a monthly rate.",
+      "Compound the current balance forward using that rate over the years until the target enrollment date.",
+      "Add the compounded value of monthly contributions using the standard annuity growth formula.",
+      "Sum both components for the projected balance at time of enrollment.",
+    ],
+    edgeCases: [
+      "529 plans typically shift to more conservative investments automatically as the enrollment date approaches (an 'age-based' investment option), meaning the actual rate of return often declines in later years rather than staying constant.",
+      "Non-qualified withdrawals are subject to income tax plus a 10% penalty on the earnings portion, which is why the tax-free benefit specifically depends on the money being used for qualified expenses.",
+      "Contribution limits vary by state 529 plan, and some states offer a state income tax deduction for contributions, which this federal-focused growth projection doesn't quantify.",
+      "Unused 529 funds can now be rolled over to a Roth IRA for the beneficiary under certain conditions and limits, an option that didn't exist for older accounts.",
+    ],
     examples: [
       { title: "Starting early", body: "$5,000 currently saved plus $250/month at a 6% expected return over 15 years grows to a substantial balance well before enrollment, with a meaningful share coming from growth, not just contributions." },
       { title: "Starting later", body: "The same monthly contribution starting with a shorter 8-year runway reaches a noticeably smaller total — highlighting why starting a 529 plan early matters as much as the amount contributed." },
@@ -2419,6 +2936,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides your annual expenses by your chosen withdrawal rate (commonly 4%, based on historical safe-withdrawal-rate research) to find your FIRE number — the portfolio size that theoretically supports your expenses indefinitely. It then projects your current savings and monthly investments forward to estimate how many years until you reach that number.",
     formula: "FIRE number = annual expenses ÷ withdrawal rate",
+    methodology:
+      "The 4% rule comes from historical research (the 'Trinity Study' and related analyses) into how a diversified stock-and-bond portfolio would have performed across rolling 30-year historical periods if a retiree withdrew a fixed percentage annually, adjusted for inflation. Dividing expenses by the withdrawal rate is mathematically the same as multiplying expenses by 25 (since 1 ÷ 0.04 = 25), which is why '25 times annual expenses' is the shorthand version of the same 4% rule target.",
+    stepByStep: [
+      "Total your annual expenses (or projected retirement expenses).",
+      "Choose a withdrawal rate — 4% is the traditional starting point, though some choose a more conservative 3-3.5% for extra safety margin.",
+      "Divide annual expenses by the withdrawal rate (as a decimal) to find your FIRE number.",
+      "Project your current savings and contributions forward to estimate years remaining until reaching that number.",
+    ],
+    edgeCases: [
+      "The 4% rule was derived from a roughly 30-year retirement horizon — someone retiring in their 30s or 40s faces a much longer retirement and often chooses a lower, more conservative withdrawal rate.",
+      "Sequence-of-returns risk means poor market performance in the first few years of retirement can be far more damaging than the same poor performance later, something a flat withdrawal-rate rule doesn't directly address.",
+      "Healthcare costs before Medicare eligibility (age 65) are a major, often underestimated expense category for early retirees to budget into their annual expenses figure.",
+      "A 'Coast FIRE' or 'Barista FIRE' variant targets a lower number that grows to full FIRE with time alone, or is supplemented by part-time income, rather than needing to hit the full FIRE number before any spending begins.",
+    ],
     examples: [
       { title: "Standard 4% rule", body: "$50,000 in annual expenses at a 4% withdrawal rate means a FIRE number of $1,250,000 — the portfolio size theoretically supporting that spending indefinitely." },
       { title: "More conservative withdrawal rate", body: "The same $50,000 in expenses at a more conservative 3.5% withdrawal rate raises the FIRE number to about $1,428,571 — a meaningfully higher target for extra safety margin." },
@@ -2450,6 +2981,19 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides the initial investment cost by the expected annual cash flow it generates, giving the number of years needed for the cumulative cash flow to equal the original investment — the point at which the investment has 'paid for itself.'",
     formula: "Payback period = initial investment ÷ annual cash flow",
+    methodology:
+      "Payback period deliberately ignores the time value of money and anything that happens after the investment pays for itself — it's designed to answer one narrow, intuitive question: how long until this stops being 'money out' and starts being 'money the business has recouped.' That simplicity is both its strength (easy to explain and compare quickly) and its main limitation, which is why it's typically used as a first screen rather than the final word on an investment decision.",
+    stepByStep: [
+      "Determine the total initial investment cost.",
+      "Estimate the expected annual cash flow the investment will generate.",
+      "Divide initial investment by annual cash flow to find the payback period in years.",
+    ],
+    edgeCases: [
+      "Uneven cash flows (higher or lower in different years) require summing cumulative cash flow year by year until it reaches the initial investment, rather than this simple even-division approach.",
+      "Payback period says nothing about total return over the investment's full useful life — a fast payback with a short useful life afterward could be worse than a slower payback with many more years of cash flow following it.",
+      "This doesn't discount future cash flows to present value, unlike more sophisticated capital budgeting metrics like net present value or internal rate of return.",
+      "Financing costs (interest paid to fund the initial investment) aren't included in this basic calculation and should be considered separately if the investment is debt-financed.",
+    ],
     examples: [
       { title: "Equipment purchase", body: "A $50,000 equipment investment generating $12,000 in annual cash flow has a payback period of about 4.17 years." },
       { title: "Comparing two options", body: "A cheaper $30,000 investment generating only $6,000/year has a longer 5-year payback period — showing that a lower upfront cost doesn't always mean a faster payback." },
@@ -2481,6 +3025,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides the annual dividend paid per share by the current share price to find the yield percentage — a straightforward calculation, but essential for comparing income potential across stocks trading at very different price points.",
     formula: "Dividend yield = annual dividend per share ÷ share price × 100",
+    methodology:
+      "Dividing the dividend by price rather than looking at the dividend amount alone is what makes yield a useful comparison tool — a $2 dividend means very different things for a $40 stock (5% yield) versus a $200 stock (1% yield), even though the raw dollar amount is identical. Because share price constantly moves while the dividend often stays fixed for a stretch of time, yield recalculates continuously even without any change in the underlying dividend policy.",
+    stepByStep: [
+      "Find the stock's total annual dividend paid per share (sum of all dividend payments over a year, or the most recently declared annualized rate).",
+      "Find the current share price.",
+      "Divide annual dividend by share price.",
+      "Multiply by 100 to express the result as a percentage.",
+    ],
+    edgeCases: [
+      "A falling share price mechanically raises dividend yield even when nothing about the company's fundamentals has improved — sometimes a sign of trouble rather than opportunity ('yield trap').",
+      "The payout ratio (dividend as a percentage of earnings) indicates how sustainable a dividend actually is — a very high yield paired with a payout ratio above 100% is a warning sign.",
+      "Special or one-time dividends can temporarily inflate a trailing yield figure that doesn't reflect the regular, ongoing dividend rate.",
+      "Dividend yield alone doesn't capture total return — a lower-yield stock with strong price appreciation can outperform a higher-yield stock with a declining price.",
+    ],
     examples: [
       { title: "Standard dividend stock", body: "A $2.40 annual dividend on an $80 share price gives a 3% dividend yield." },
       { title: "Why price matters", body: "The same $2.40 dividend on a stock priced at $40 instead would yield 6% — a much higher income return relative to the investment, even though the dividend amount is identical." },
@@ -2511,6 +3069,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Reinvesting dividends instead of taking them as cash — commonly called a DRIP — lets your dividend income buy more shares, which then generate their own dividends, compounding your returns significantly over long time horizons. Our Dividend Reinvestment Calculator shows exactly how much difference that makes.",
     howItWorks:
       "The calculator combines your stock's dividend yield and expected price growth into a total return rate, then compounds your initial investment at that combined rate — representing reinvested dividends buying additional shares. It separately shows what your investment would be worth with price growth alone, isolating the specific value reinvesting dividends adds.",
+    methodology:
+      "Reinvested dividends buy additional shares, and those additional shares then generate their own dividends the following period — a compounding effect exactly analogous to interest earning interest, just expressed through growing share count instead of a growing account balance. Combining dividend yield and price growth into one blended rate and compounding the whole investment at that rate is a simplification that approximates this share-accumulation effect without needing to track individual share purchases period by period.",
+    stepByStep: [
+      "Add the dividend yield and expected annual price growth rate together for a combined total return rate.",
+      "Compound the initial investment at that combined rate over the chosen time horizon for the reinvested-dividends scenario.",
+      "Separately, compound the initial investment using price growth alone (excluding yield) for the no-reinvestment comparison.",
+      "Compare the two results to isolate the dollar value added specifically by reinvesting.",
+    ],
+    edgeCases: [
+      "This assumes both dividend yield and price growth rate stay constant for the entire period, when in reality both fluctuate with company performance and market conditions.",
+      "Dividends are taxable income in the year received even when automatically reinvested in a taxable account, unlike growth that isn't realized until shares are eventually sold.",
+      "Dividend cuts (a real risk, especially during economic downturns) would reduce the yield component of total return below this projection's assumption.",
+      "DRIP purchases sometimes occur at a small discount to market price or without trading fees, a minor additional benefit this simplified model doesn't separately quantify.",
+    ],
     examples: [
       { title: "Long time horizon", body: "A $10,000 investment with a 3% dividend yield and 6% annual price growth (9% combined) over 20 years with dividends reinvested grows to notably more than the same investment relying on price growth alone." },
       { title: "The compounding gap", body: "The longer the time horizon, the bigger the gap between reinvesting and not reinvesting becomes — dividend reinvestment's benefit compounds exponentially over decades, not just adds up linearly." },
@@ -2542,6 +3114,20 @@ export const financialContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator divides your total credit card balances by your total credit limits across all cards to find your overall utilization percentage, then rates the result: 10% or below is considered excellent, up to 30% is good, up to 50% is fair, and above that is considered poor for credit scoring purposes.",
     formula: "Credit utilization = total balances ÷ total credit limits × 100",
+    methodology:
+      "Credit scoring models treat utilization as a signal of how reliant someone is on available credit at a given moment — using a small share of available credit suggests financial cushion, while using most or all of it suggests less flexibility, independent of whether payments are being made on time. Because scoring models generally look at the aggregate ratio across all revolving accounts (not each card individually), this calculator's total-balances-over-total-limits approach matches how the number that actually affects your score is computed.",
+    stepByStep: [
+      "Sum the current balances across all credit cards.",
+      "Sum the credit limits across all credit cards.",
+      "Divide total balances by total credit limits.",
+      "Multiply by 100 to express utilization as a percentage.",
+    ],
+    edgeCases: [
+      "Utilization is typically calculated from whatever balance is reported to the credit bureaus on your statement closing date, not your balance at any other point in the month.",
+      "Paying down a balance after the statement closes but before the due date doesn't lower the utilization figure that gets reported that cycle, even though no interest is charged if paid in full.",
+      "Closing an old card reduces total available credit, which can raise overall utilization even if spending habits haven't changed at all.",
+      "Some scoring models also weigh utilization on individual cards, not just the aggregate, so a maxed-out card can hurt scores even if overall utilization looks reasonable.",
+    ],
     examples: [
       { title: "Healthy utilization", body: "$2,500 in total balances against $10,000 in total credit limits gives a 25% utilization ratio — within the 'good' range most scoring models favor." },
       { title: "High utilization", body: "The same $10,000 in limits with $6,000 in balances pushes utilization to 60%, likely dragging down credit scores meaningfully." },
@@ -2572,6 +3158,20 @@ export const financialContent: Record<string, SeoContent> = {
       "Choosing between loan offers isn't always as simple as picking the lowest interest rate — different terms, fees, and payment structures can make a higher-rate loan actually cheaper overall. Our Loan Comparison Calculator lets you compare two loan offers side by side on equal footing.",
     howItWorks:
       "The calculator computes the full monthly payment, total interest, and total cost for two separate loan offers using the standard amortization formula, then shows both sets of results together so you can directly compare the real difference between the offers.",
+    methodology:
+      "Running the identical amortization formula twice — once per offer — and placing the results side by side is what makes an honest comparison possible, since rate and term interact in ways that aren't obvious from either number alone. A lower rate with a longer term can produce both a lower monthly payment and more total interest than a higher rate with a shorter term; only computing both offers fully and comparing total cost reveals which is actually true for any specific pair of offers.",
+    stepByStep: [
+      "For each offer, convert the annual rate to a monthly rate and the term to months.",
+      "Apply the standard amortization formula to each offer to find its monthly payment.",
+      "Multiply each offer's monthly payment by its number of payments to find total cost, then subtract the loan amount to find total interest.",
+      "Compare monthly payment and total cost side by side across both offers.",
+    ],
+    edgeCases: [
+      "Origination fees and other closing costs aren't part of the base amortization formula and should be added to each offer's total cost separately for a fully accurate comparison.",
+      "Offers with different loan amounts (not just different rates or terms) require normalizing before comparison, since a larger loan naturally costs more in absolute terms.",
+      "A lower monthly payment doesn't necessarily mean a better deal — always check total cost across the full term, not just the payment figure.",
+      "APR (which factors in fees) is a more complete single-number comparison than the interest rate alone, though this calculator focuses on payment and interest specifically.",
+    ],
     examples: [
       { title: "Rate versus term trade-off", body: "A shorter-term loan at a slightly higher rate can end up costing less in total interest than a longer-term loan at a lower rate, once the extra months of interest are factored in." },
       { title: "Spotting the better deal", body: "Two offers with similar monthly payments can have meaningfully different total costs once term length differs — this comparison makes that gap visible instead of hidden in the monthly number alone." },
