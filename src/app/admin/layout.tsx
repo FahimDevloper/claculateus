@@ -52,14 +52,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <div className="container-wide py-8">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-foreground">Admin</h1>
-        <nav className="flex gap-1 rounded-full border border-border bg-surface p-1">
+        <nav className="scrollbar-thin flex min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-full border border-border bg-surface p-1">
           {NAV.map((item) => {
             const active = item.href === "/admin" ? pathname === "/admin" : pathname?.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
+                className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
                   active ? "bg-primary text-primary-foreground" : "text-muted hover:text-foreground"
                 }`}
               >
