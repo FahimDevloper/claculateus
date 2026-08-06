@@ -52,7 +52,7 @@ export default function CalculatorRunner({ def }: { def: CalculatorDefinition })
   }
 
   function applyPreset(label: string, presetValues: Partial<FieldValues>) {
-    setValues((prev) => ({ ...prev, ...presetValues }));
+    setValues((prev) => ({ ...prev, ...presetValues }) as FieldValues);
     setActivePreset(label);
   }
 
