@@ -66,6 +66,7 @@ export default async function Footer() {
                   <li key={calc.slug}>
                     <Link
                       href={`/calculators/${calc.slug}`}
+                      prefetch={false}
                       className="text-sm text-muted transition-colors hover:text-primary"
                     >
                       {calc.shortTitle ?? calc.title}
@@ -73,7 +74,7 @@ export default async function Footer() {
                   </li>
                 ))}
               <li>
-                <Link href={`/${c.slug}`} className="text-sm font-medium text-primary">
+                <Link href={`/${c.slug}`} prefetch={false} className="text-sm font-medium text-primary">
                   View all →
                 </Link>
               </li>
@@ -86,14 +87,14 @@ export default async function Footer() {
         <div className="container-wide flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {company.map((l) => (
-              <Link key={l.href} href={l.href} className="text-sm text-muted transition-colors hover:text-primary">
+              <Link key={l.href} href={l.href} prefetch={false} className="text-sm text-muted transition-colors hover:text-primary">
                 {l.label}
               </Link>
             ))}
           </div>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {legal.map((l) => (
-              <Link key={l.href} href={l.href} className="text-sm text-muted transition-colors hover:text-primary">
+              <Link key={l.href} href={l.href} prefetch={false} className="text-sm text-muted transition-colors hover:text-primary">
                 {l.label}
               </Link>
             ))}

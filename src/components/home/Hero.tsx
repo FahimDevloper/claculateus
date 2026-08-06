@@ -46,6 +46,7 @@ export default function Hero({ headline, subheadline }: { headline?: string; sub
                 <Link
                   key={c.slug}
                   href={`/${c.slug}`}
+                  prefetch={false}
                   className="group flex items-center gap-1.5 rounded-full border border-border bg-surface/70 px-3.5 py-2 text-sm font-medium text-foreground backdrop-blur transition hover:-translate-y-0.5 hover:border-primary hover:text-primary"
                 >
                   <CategoryIcon icon={c.icon} width={15} height={15} className="text-muted transition group-hover:text-primary" />

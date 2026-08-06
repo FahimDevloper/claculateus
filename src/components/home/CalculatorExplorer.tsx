@@ -339,6 +339,7 @@ export default function CalculatorExplorer({ overrides, trendingCounts }: Props)
                 >
                   <Link
                     href={`/calculators/${c.slug}`}
+                    prefetch={false}
                     onClick={() => trackSelect(c.slug)}
                     data-explorer-card
                     tabIndex={0}

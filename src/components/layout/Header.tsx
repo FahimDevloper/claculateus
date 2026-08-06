@@ -35,6 +35,7 @@ export default function Header({ logoUrl, customNavLinks = [] }: { logoUrl?: str
               <Link
                 key={c.slug}
                 href={`/${c.slug}`}
+                prefetch={false}
                 className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   active ? "text-primary" : "text-foreground hover:text-primary"
                 }`}
