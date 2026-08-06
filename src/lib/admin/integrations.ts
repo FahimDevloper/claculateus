@@ -10,6 +10,7 @@ export interface IntegrationsSettings {
   gtmContainerId: string;
   bingVerification: string;
   pinterestVerification: string;
+  googleAdsConversionId: string;
 }
 
 export const DEFAULT_INTEGRATIONS_SETTINGS: IntegrationsSettings = {
@@ -20,6 +21,7 @@ export const DEFAULT_INTEGRATIONS_SETTINGS: IntegrationsSettings = {
   gtmContainerId: "",
   bingVerification: "",
   pinterestVerification: "",
+  googleAdsConversionId: "",
 };
 
 const INTEGRATIONS_REF = doc(db, "settings", "integrations");

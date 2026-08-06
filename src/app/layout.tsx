@@ -159,11 +159,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${integrations.gtmContainerId}');`}
           </Script>
         )}
-        {integrations.gaMeasurementId && (
+        {(integrations.gaMeasurementId || integrations.googleAdsConversionId) && (
           <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${integrations.gaMeasurementId}`} strategy="afterInteractive" />
-            <Script id="ga4" strategy="afterInteractive">
-              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${integrations.gaMeasurementId}');`}
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${integrations.gaMeasurementId || integrations.googleAdsConversionId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());${
+                integrations.gaMeasurementId ? `gtag('config','${integrations.gaMeasurementId}');` : ""
+              }${integrations.googleAdsConversionId ? `gtag('config','${integrations.googleAdsConversionId}');` : ""}`}
             </Script>
           </>
         )}

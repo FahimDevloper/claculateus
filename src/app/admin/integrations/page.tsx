@@ -192,6 +192,24 @@ export default function IntegrationsPage() {
 
       <ServiceCard
         icon={<GoogleIcon />}
+        title="Google Ads"
+        description="Adds conversion tracking so you can measure results from Google Ads campaigns. Separate from AdSense."
+        connected={!!settings.googleAdsConversionId}
+        getUrl="https://ads.google.com"
+      >
+        <label className="flex flex-col gap-1.5 text-xs text-muted">
+          Conversion ID
+          <input
+            value={settings.googleAdsConversionId}
+            onChange={(e) => update("googleAdsConversionId", e.target.value)}
+            placeholder="AW-XXXXXXXXX"
+            className="field-input font-mono"
+          />
+        </label>
+      </ServiceCard>
+
+      <ServiceCard
+        icon={<GoogleIcon />}
         title="Google Tag Manager"
         description="Manage all your tracking tags in one place without further code changes."
         connected={!!settings.gtmContainerId}
