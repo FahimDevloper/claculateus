@@ -1,13 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import CalculatorApp from "./CalculatorApp";
-import FinancePanel from "./panels/FinancePanel";
-import ConvertPanel from "./panels/ConvertPanel";
 import HistoryPanel from "./HistoryPanel";
 import { HistoryIcon } from "@/components/icons";
 import { addHistoryEntry, clearHistory, getHistory, HistoryEntry, DATA_MERGED_EVENT } from "@/lib/storage";
+
+function PanelLoading() {
+  return (
+    <div className="glass mx-auto flex h-96 w-full max-w-md items-center justify-center rounded-3xl">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+    </div>
+  );
+}
+
+// Only "basic" mode is visible on first paint (the homepage hero renders this
+// component above the fold), so Finance/Convert are code-split out of the
+// initial bundle and fetched on demand when a visitor actually picks that tab.
+const FinancePanel = dynamic(() => import("./panels/FinancePanel"), { loading: PanelLoading });
+const ConvertPanel = dynamic(() => import("./panels/ConvertPanel"), { loading: PanelLoading });
 
 type Mode = "basic" | "scientific" | "finance" | "convert";
 
