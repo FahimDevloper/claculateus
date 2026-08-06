@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { createPost } from "@/lib/blog/queries";
+import { updatePost } from "@/lib/blog/queries";
+import { slugify } from "@/lib/slugify";
 import { articlesA } from "../../../../scripts/articles-a";
 import { articlesB } from "../../../../scripts/articles-b";
 import { articlesC } from "../../../../scripts/articles-c";
@@ -9,31 +10,30 @@ import { articlesD } from "../../../../scripts/articles-d";
 import { articlesE } from "../../../../scripts/articles-e";
 import type { DraftArticle } from "../../../../scripts/article-type";
 
-const SITE_URL = "https://www.calculateus.com";
-
 const allArticles: DraftArticle[] = [...articlesA, ...articlesB, ...articlesC, ...articlesD, ...articlesE];
 
 function heroImageUrl(a: DraftArticle): string {
   const params = new URLSearchParams({ title: a.title, cat: a.cat6, seed: a.calcSlug });
-  return `${SITE_URL}/blog-image?${params.toString()}`;
+  return `/blog-image?${params.toString()}`;
 }
 
 type Row = { title: string; status: "pending" | "ok" | "error"; message?: string };
 
-export default function BulkImportPage() {
+export default function FixImagesPage() {
   const [rows, setRows] = useState<Row[]>(allArticles.map((a) => ({ title: a.title, status: "pending" })));
   const [running, setRunning] = useState(false);
   const [done, setDone] = useState(false);
 
-  async function runImport() {
+  async function runFix() {
     setRunning(true);
     setDone(false);
     for (let i = 0; i < allArticles.length; i++) {
       const a = allArticles[i];
+      const slug = slugify(a.title);
       try {
         const imageUrl = heroImageUrl(a);
         const heroMarkdown = `![${a.title}](${imageUrl})\n\n${a.contentMarkdown}`;
-        await createPost({
+        await updatePost(slug, {
           title: a.title,
           excerpt: a.excerpt,
           contentMarkdown: heroMarkdown,
@@ -59,20 +59,17 @@ export default function BulkImportPage() {
 
   return (
     <div>
-      <h2 className="mb-2 text-xl font-bold text-foreground">Bulk Import ({allArticles.length} articles)</h2>
+      <h2 className="mb-2 text-xl font-bold text-foreground">Fix Image URLs ({allArticles.length} posts)</h2>
       <p className="mb-6 text-sm text-muted">
-        One-time tool to publish the drafted SEO guide articles. Safe to delete this page after running.
+        One-time fix: switches featuredImageUrl from an absolute production URL to a relative one, so hero images
+        load correctly in both dev and production. Safe to delete this page after running.
       </p>
-      <button
-        onClick={runImport}
-        disabled={running || done}
-        className="btn-primary mb-6 disabled:opacity-50"
-      >
-        {running ? `Importing... (${okCount + errorCount}/${allArticles.length})` : done ? "Done" : "Run Import"}
+      <button onClick={runFix} disabled={running || done} className="btn-primary mb-6 disabled:opacity-50">
+        {running ? `Fixing... (${okCount + errorCount}/${allArticles.length})` : done ? "Done" : "Run Fix"}
       </button>
       {done && (
         <p className="mb-4 text-sm font-semibold text-foreground">
-          {okCount} published, {errorCount} failed.
+          {okCount} fixed, {errorCount} failed.
         </p>
       )}
       <div className="max-h-[600px] overflow-y-auto rounded-xl border border-border">
@@ -84,8 +81,12 @@ export default function BulkImportPage() {
                 <td className="px-3 py-1.5 text-foreground">{r.title}</td>
                 <td className="px-3 py-1.5">
                   {r.status === "pending" && <span className="text-muted">—</span>}
-                  {r.status === "ok" && <span className="text-success">✓ published</span>}
-                  {r.status === "error" && <span className="text-danger" title={r.message}>✗ failed</span>}
+                  {r.status === "ok" && <span className="text-success">✓ fixed</span>}
+                  {r.status === "error" && (
+                    <span className="text-danger" title={r.message}>
+                      ✗ failed
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}
