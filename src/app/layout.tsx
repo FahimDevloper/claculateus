@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://www.calculateus.com";
+const siteUrl = "https://calculateus.com";
 
 // Root layout reads admin-configurable settings (integrations, site
 // settings) from Firestore. Without this, Next.js prerenders the layout

@@ -42,7 +42,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
   const relatedArticles = await getRelatedArticles(def.category);
   const references = getReferences(def.category);
 
-  const siteUrl = "https://www.calculateus.com";
+  const siteUrl = "https://calculateus.com";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",

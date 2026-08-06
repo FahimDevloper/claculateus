@@ -1,6 +1,6 @@
 import { getPublishedPosts } from "@/lib/blog/queries";
 
-const siteUrl = "https://www.calculateus.com";
+const siteUrl = "https://calculateus.com";
 
 function escapeXml(text: string): string {
   return text

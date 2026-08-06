@@ -4,7 +4,7 @@ import { categories } from "@/lib/calculators/categories";
 import { BLOG_CATEGORIES } from "@/lib/blog/types";
 import { getPublishedPosts } from "@/lib/blog/queries";
 
-const siteUrl = "https://www.calculateus.com";
+const siteUrl = "https://calculateus.com";
 
 export const revalidate = 3600;
 

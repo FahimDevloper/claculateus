@@ -13,7 +13,7 @@ import PostCard from "@/components/blog/PostCard";
 
 export const revalidate = 60;
 
-const SITE_URL = "https://www.calculateus.com";
+const SITE_URL = "https://calculateus.com";
 
 function absoluteImageUrl(url: string | undefined): string | undefined {
   if (!url) return undefined;

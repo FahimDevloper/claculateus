@@ -26,7 +26,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   if (!cat) notFound();
 
   const calcs = getCalculatorsByCategory(cat.slug);
-  const siteUrl = "https://www.calculateus.com";
+  const siteUrl = "https://calculateus.com";
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
