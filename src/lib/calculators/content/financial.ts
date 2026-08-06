@@ -829,7 +829,7 @@ export const financialContent: Record<string, SeoContent> = {
       "This models a single lump sum only; regular contributions require a different formula (see the Compound Interest Calculator) that adds a contribution stream on top of this base growth.",
     ],
     examples: [
-      { title: "Monthly compounding", body: "$5,000 at 6% compounded monthly for 5 years grows to roughly $6,749." },
+      { title: "Monthly compounding", body: "$5,000 at 6% compounded monthly for 5 years grows to roughly $6,744." },
       { title: "Daily compounding", body: "The same $5,000 at 6% compounded daily for 5 years grows very slightly higher than monthly compounding — the difference is small but real." },
     ],
     advantages: [
