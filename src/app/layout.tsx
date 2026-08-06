@@ -11,6 +11,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import SyncEngine from "@/components/auth/SyncEngine";
 import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
 import InstallPrompt from "@/components/pwa/InstallPrompt";
+import ErrorReporter from "@/components/monitoring/ErrorReporter";
 import { getSiteSettings } from "@/lib/admin/siteSettings";
 import { getIntegrationsSettings } from "@/lib/admin/integrations";
 
@@ -141,6 +142,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <AuthProvider>
             <SyncEngine />
             <ServiceWorkerRegister />
+            <ErrorReporter />
             {settings.maintenanceMode && (
               <div className="bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground">
                 {settings.maintenanceMessage}

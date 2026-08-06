@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/posts/new", label: "New Post" },
   { href: "/admin/calculators", label: "Calculators" },
   { href: "/admin/analytics", label: "Analytics" },
+  { href: "/admin/errors", label: "Errors" },
   { href: "/admin/media", label: "Media" },
   { href: "/admin/redirects", label: "Redirects" },
   { href: "/admin/not-found", label: "404 Page" },

@@ -108,6 +108,20 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
+    // Client-side error reports (unhandled render errors and global JS
+    // errors), write-only for visitors with a strict shape (no PII beyond
+    // user agent). Lets us see production errors without a third-party
+    // monitoring service. Only the admin can read the log back out.
+    match /error_logs/{docId} {
+      allow create: if request.resource.data.keys().hasOnly(['message', 'stack', 'path', 'userAgent', 'createdAt'])
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.message is string && request.resource.data.message.size() < 2000
+        && (!('stack' in request.resource.data) || (request.resource.data.stack is string && request.resource.data.stack.size() < 2000))
+        && (!('path' in request.resource.data) || (request.resource.data.path is string && request.resource.data.path.size() < 2000))
+        && (!('userAgent' in request.resource.data) || (request.resource.data.userAgent is string && request.resource.data.userAgent.size() < 2000));
+      allow read, update, delete: if isAdmin();
+    }
+
     // Reserved for a future async "AI content generation" job queue. No such
     // feature exists in the app yet — this rule only pre-establishes the
     // security boundary (admin-only) so the collection is safe to start
