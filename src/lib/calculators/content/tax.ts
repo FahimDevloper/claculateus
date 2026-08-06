@@ -6,6 +6,21 @@ export const taxContent: Record<string, SeoContent> = {
       "Federal tax gets most of the attention, but state income tax can take just as big a bite out of your paycheck — and it varies enormously depending on where you live. Someone earning $75,000 in Texas or Florida pays $0 in state income tax; the same salary in California or Oregon can mean thousands of dollars a year. Our State Income Tax Calculator gives you a fast, representative estimate for your state so you're not caught off guard.",
     howItWorks:
       "The calculator applies a single representative flat rate for the state you select to your taxable income. This is a deliberate simplification: nine states charge no income tax at all, most others use progressive brackets similar to the federal system, and a handful (like Pennsylvania and Illinois) really do use one flat rate for everyone. Using one representative rate per state keeps the estimate fast and comparable across all 50 states plus DC, at the cost of some precision for states with steep brackets.",
+    methodology:
+      "State income tax structures fall into three broad groups. No-tax states (currently Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington, and Wyoming) rely on sales tax, property tax, or other revenue instead. Flat-tax states apply one percentage to all taxable income regardless of amount. Progressive-bracket states — the majority — tax income in slices the same way the federal system does, with the rate rising as income climbs through each bracket. This calculator's representative rate approximates the effective rate a typical earner would pay in a bracket-based state, rather than modeling every state's exact bracket table.",
+    stepByStep: [
+      "Identify your state and whether it uses no tax, a flat rate, or progressive brackets.",
+      "For flat-tax and no-tax states, the calculation is direct: multiply income by the flat rate, or by zero.",
+      "For progressive-bracket states, find your income's position within that state's published brackets.",
+      "Apply each bracket's rate only to the income within that bracket, summing the results (the same logic as federal tax).",
+      "Subtract any state-specific standard deduction or exemption before applying brackets, if your state offers one.",
+    ],
+    edgeCases: [
+      "Some cities (like New York City and Philadelphia) layer a local income tax on top of the state tax, which this state-level estimate doesn't include.",
+      "A handful of states tax retirement income (pensions, Social Security) differently than wage income — some exempt it entirely.",
+      "Moving mid-year generally means filing part-year returns in two states, each taxing only the income earned while you were a resident.",
+      "Remote workers can sometimes owe tax to both their home state and the state where their employer is based, depending on each state's rules.",
+    ],
     examples: [
       { title: "No-tax state", body: "$75,000 income in Texas, Florida, Nevada, Washington, or Tennessee → $0 state income tax." },
       { title: "High-tax state", body: "The same $75,000 in California (9.3% representative rate) comes out to roughly $6,975 in estimated state tax; in Oregon (9.9%) it's about $7,425." },
@@ -37,6 +52,21 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "FICA has two parts. Social Security tax is 6.2% of wages up to an annual wage base ($176,100 for 2025) — earn more than that and the Social Security portion stops for the rest of the year. Medicare tax is 1.45% of all wages with no cap, plus an Additional Medicare surtax of 0.9% on wages above $200,000 (single) or $250,000 (married). The calculator applies all three pieces to your entered annual wages.",
     formula: "Social Security = min(wages, $176,100) × 6.2%\nMedicare = wages × 1.45%\nAdditional Medicare = max(wages − threshold, 0) × 0.9%",
+    methodology:
+      "FICA is intentionally split into two differently-behaved taxes. Social Security tax exists to fund a benefit with a maximum payout, so it's capped at the wage base — once your year-to-date wages cross that line, Social Security withholding simply stops for the rest of the year. Medicare has no such cap because it funds a healthcare program without an equivalent per-person benefit ceiling, so it applies to every dollar of wages, plus an extra 0.9% surtax on income above the high-earner threshold that was added by the Affordable Care Act specifically to help fund Medicare expansion.",
+    stepByStep: [
+      "Take your gross wages for the year (or the period you're calculating).",
+      "Apply 6.2% Social Security tax to wages up to the annual wage base cap, and stop applying it above that cap.",
+      "Apply 1.45% Medicare tax to all wages with no cap.",
+      "If wages exceed the Additional Medicare threshold for your filing status, apply an extra 0.9% to only the amount above that threshold.",
+      "Sum the three components for total FICA (employee side).",
+    ],
+    edgeCases: [
+      "If you switch employers mid-year, each employer withholds Social Security tax independently up to the cap — you may end up over-withheld and can claim the excess back as a credit when filing.",
+      "The Additional Medicare surtax threshold is based on total household income for married filers, not per-employer, so employers can't always withhold it correctly on their own.",
+      "Self-employed workers pay both the employee and employer share of FICA (as self-employment tax) since there's no separate employer to split it with.",
+      "The Social Security wage base is adjusted for inflation most years, so the cap used in a manual calculation should always be checked against the current year's published figure.",
+    ],
     examples: [
       { title: "Typical salary", body: "$80,000 in wages → $4,960 Social Security + $1,160 Medicare = $6,120 total FICA, with no Additional Medicare surtax." },
       { title: "High earner", body: "$250,000 in wages (single) → Social Security caps at $10,918, Medicare is $3,625, plus $450 Additional Medicare surtax on the $50,000 over the threshold." },
@@ -68,6 +98,20 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "Short-term gains (assets held one year or less) are taxed as ordinary income at your marginal tax rate, so the calculator finds the tax on your income with and without the gain and takes the difference. Long-term gains (held over a year) get preferential rates of 0%, 15%, or 20% depending on your total taxable income — for 2025, single filers pay 0% up to $48,350, 15% up to $533,400, and 20% above that (roughly double those thresholds for married filing jointly).",
     formula: "Short-term: tax = federalTax(income + gain) − federalTax(income)\nLong-term: tax = gain × rate, where rate ∈ {0%, 15%, 20%} based on total income",
+    methodology:
+      "Short-term gains get no special treatment at all — the IRS simply adds the gain to your ordinary income and taxes the whole stack through the regular progressive brackets, which is why the calculator computes tax with and without the gain and reports the difference. Long-term gains instead sit on their own separate rate schedule with just three tiers (0%, 15%, 20%), and which tier applies is still determined by your total income — the gain effectively 'stacks on top' of your ordinary income to see which long-term bracket it falls into, even though it's taxed at the long-term rate rather than your ordinary marginal rate.",
+    stepByStep: [
+      "Determine whether the asset was held for one year or less (short-term) or more than one year (long-term).",
+      "For short-term gains: calculate tax on your ordinary income alone, then calculate tax on ordinary income plus the gain, and subtract to isolate the tax attributable to the gain.",
+      "For long-term gains: add the gain to your other taxable income to find which long-term bracket (0%, 15%, or 20%) it falls into.",
+      "Multiply the gain by that bracket's rate to get long-term capital gains tax owed.",
+    ],
+    edgeCases: [
+      "Capital losses can offset capital gains dollar-for-dollar, and up to $3,000 of net losses can offset ordinary income each year, with any excess carried forward to future years.",
+      "High earners may also owe the 3.8% Net Investment Income Tax on top of regular capital gains tax once modified adjusted gross income crosses IRS thresholds.",
+      "Collectibles (art, precious metals, some cryptocurrencies) and certain small business stock can have different long-term rates than the standard 0/15/20% schedule.",
+      "Many states tax capital gains as ordinary income with no preferential long-term rate, so the total tax bill is often higher than the federal estimate alone suggests.",
+    ],
     examples: [
       { title: "Long-term gain, middle income", body: "$20,000 long-term gain with $80,000 other income (single) → total income of $100,000 falls in the 15% bracket, so tax owed is about $3,000." },
       { title: "Short-term gain", body: "The same $20,000 gain held less than a year is taxed at your ordinary marginal rate instead — often costing meaningfully more than the long-term rate would." },
@@ -98,6 +142,21 @@ export const taxContent: Record<string, SeoContent> = {
       "Giving someone a large sum of money or valuable property can technically trigger IRS gift tax rules — but in practice, almost nobody ever pays gift tax directly. Our Gift Tax Calculator checks a gift against the annual exclusion so you know whether it's fully covered or needs to be reported.",
     howItWorks:
       "Every year, the IRS lets you give any number of people up to the annual exclusion amount each ($19,000 per recipient for 2025) with zero tax consequences and no paperwork. Give more than that to one person in a year, and the excess doesn't necessarily trigger tax — it just counts against your much larger lifetime gift and estate exemption (currently just under $14 million) and requires filing IRS Form 709.",
+    methodology:
+      "The gift tax system exists mainly to prevent people from avoiding estate tax by giving away their wealth before death. It works as two connected limits: a small annual exclusion that resets every year and requires no paperwork, and a much larger lifetime exemption that's shared between gifts made while alive and your estate at death. Only the amount above the annual exclusion, per recipient, per year, ever touches the lifetime exemption — and only once someone's total lifetime gifts (plus their taxable estate) exceed that lifetime exemption does actual gift or estate tax become due.",
+    stepByStep: [
+      "Identify the total value of the gift and the recipient.",
+      "Compare the gift amount to the current annual exclusion per recipient.",
+      "If the gift is at or below the exclusion, no reporting or tax is required.",
+      "If the gift exceeds the exclusion, calculate the excess amount above the exclusion.",
+      "That excess is reported on Form 709 and subtracted from your remaining lifetime exemption — no tax is due unless your cumulative lifetime gifts exceed the full exemption.",
+    ],
+    edgeCases: [
+      "Payments made directly to a school for tuition or directly to a medical provider for someone's care don't count as gifts at all, regardless of amount.",
+      "Married couples can 'split' a gift, effectively doubling the annual exclusion available for a single recipient even if the money comes from one spouse.",
+      "Gifts of appreciating assets (like stock) use the fair market value at the time of the gift, not the original purchase price, for exclusion purposes.",
+      "The lifetime exemption is scheduled to change based on legislation, so a gift plan built around today's exemption amount should be revisited if tax law changes.",
+    ],
     examples: [
       { title: "Under the exclusion", body: "A $15,000 gift to your child is entirely covered by the $19,000 annual exclusion — no form, no tax." },
       { title: "Over the exclusion", body: "A $50,000 gift to one person means $31,000 counts against your lifetime exemption and Form 709 should be filed, but no tax is due unless your lifetime gifts exceed roughly $14 million." },
@@ -128,6 +187,21 @@ export const taxContent: Record<string, SeoContent> = {
       "Waiting until you file to find out if you owe money or get a refund is stressful — our Tax Refund Estimator gives you that answer months ahead of time using your income and what's already been withheld from your paychecks.",
     howItWorks:
       "The calculator computes your estimated federal tax liability using the 2025 tax brackets for your filing status, then compares that against the total federal tax you've had withheld from your paychecks so far (or expect to have withheld for the full year). If withholding is higher than your liability, you're owed a refund; if it's lower, you'll owe the difference when you file.",
+    methodology:
+      "A refund isn't a bonus from the government — it's simply the return of your own money that was withheld in excess of what you actually owed. Withholding is calculated by your employer using IRS formulas driven by your W-4 elections, which are only an estimate of your full-year tax liability. Your actual liability is the amount produced by running your real annual income through the tax brackets after deductions. The gap between what was withheld throughout the year and what you actually owe is what determines whether you get a refund or a bill.",
+    stepByStep: [
+      "Total your expected income for the year from all sources subject to withholding.",
+      "Subtract your standard deduction (or itemized deductions, if higher) to find taxable income.",
+      "Run taxable income through the federal tax brackets for your filing status to find total tax liability.",
+      "Total the federal tax withheld from your paychecks so far, plus any expected for the rest of the year.",
+      "Subtract liability from total withholding: a positive number is your estimated refund, a negative number is what you'll owe.",
+    ],
+    edgeCases: [
+      "This estimate doesn't include tax credits (Child Tax Credit, Earned Income Tax Credit, education credits), which directly reduce tax owed and can turn an estimated bill into an actual refund.",
+      "Freelance or investment income with no withholding at all can create a surprise bill even when paycheck withholding looks correct.",
+      "A large change in income partway through the year (new job, raise, bonus) can throw off a refund estimate based on year-to-date withholding pace.",
+      "Owing more than $1,000 at filing time can trigger an IRS underpayment penalty unless you meet certain safe-harbor withholding thresholds throughout the year.",
+    ],
     examples: [
       { title: "Refund expected", body: "$70,000 income (single) with $9,000 withheld → estimated tax liability is about $8,232, meaning a refund of roughly $768." },
       { title: "Amount owed", body: "The same income with only $7,000 withheld falls short of the $8,232 liability, meaning about $1,232 would be owed at filing time." },
@@ -159,6 +233,21 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator subtracts your filing status's standard deduction from your gross wages to find taxable income, runs that through the 2025 federal tax brackets to find income tax owed, then separately calculates FICA payroll tax (Social Security + Medicare) on your gross wages. Net pay is gross wages minus both.",
     formula: "Taxable income = wages − standard deduction\nNet pay = wages − federal income tax − FICA tax",
+    methodology:
+      "This calculator combines two entirely separate tax systems that both apply to the same W-2 wages. Federal income tax is progressive and deduction-based — it's reduced by your standard deduction before the brackets apply, and it funds general government spending. FICA payroll tax is flat and has no deduction at all — it applies to gross wages directly (up to the Social Security cap) and funds Social Security and Medicare specifically. Because they're calculated independently and then both subtracted from gross wages, understanding each piece separately is the key to reconciling a real pay stub.",
+    stepByStep: [
+      "Start with gross wages (Box 1 on a W-2, or your expected annual salary).",
+      "Subtract the standard deduction for your filing status to get taxable income.",
+      "Apply the federal tax brackets to taxable income to find federal income tax owed.",
+      "Separately, apply FICA tax (6.2% Social Security up to the wage base, plus 1.45% Medicare) to gross wages.",
+      "Subtract both federal income tax and FICA tax from gross wages to estimate net take-home pay.",
+    ],
+    edgeCases: [
+      "Pre-tax deductions like 401(k) contributions and health insurance premiums reduce Box 1 wages below your stated salary before this calculation even starts.",
+      "This estimate excludes state and local income tax entirely, which can be a significant additional deduction depending on where you live.",
+      "Your actual paycheck withholding depends on your W-4 elections and may not exactly match your true annual tax liability — a mismatch shows up as a refund or bill at filing time.",
+      "Bonuses and other supplemental wages are often withheld at a different flat rate than regular wages, so a single paycheck's net pay can look different from this steady-state estimate.",
+    ],
     examples: [
       { title: "Single filer", body: "$75,000 in wages (single) → taxable income of $60,000 after the $15,000 standard deduction, about $7,182 in federal income tax, plus $5,738 FICA, for an estimated net pay near $62,080." },
       { title: "Married filer", body: "The same $75,000 filed jointly benefits from the larger $30,000 standard deduction, lowering taxable income to $45,000 and reducing the federal tax owed noticeably." },
@@ -238,6 +327,21 @@ export const taxContent: Record<string, SeoContent> = {
       "The IRS expects freelancers and self-employed workers to pay tax as they earn it, not just once a year — that's what quarterly estimated payments are for. Our Quarterly Estimated Tax Calculator takes your expected annual self-employment income and splits your total tax liability into four payments.",
     howItWorks:
       "The calculator first estimates your total annual tax liability the same way our 1099 Tax Calculator does — self-employment tax plus federal income tax on your net earnings — then divides that total by four to produce an equal quarterly payment amount, matching how the IRS structures its estimated tax due dates.",
+    methodology:
+      "The IRS runs on a pay-as-you-go system: tax is meant to be paid as income is earned, not settled entirely at filing time. W-2 employees satisfy this automatically through paycheck withholding, but self-employed workers have no employer to withhold anything, so the IRS requires quarterly estimated payments instead. The 'safe harbor' rule generally means you avoid a penalty if you pay at least 90% of the current year's tax liability (or 100–110% of last year's, depending on income) across the four due dates, which is why this calculator's even quarterly split is a reasonable default even though real income often fluctuates throughout the year.",
+    stepByStep: [
+      "Estimate total annual net self-employment income for the year.",
+      "Calculate total self-employment tax (15.3% on 92.35% of net income) and federal income tax on the reduced taxable base, exactly as in the 1099 Tax Calculator.",
+      "Add both together for total estimated annual tax liability.",
+      "Divide that total by four to get the standard even quarterly payment.",
+      "Adjust individual quarters up or down if income is seasonal or uneven rather than steady throughout the year.",
+    ],
+    edgeCases: [
+      "If your income is seasonal, the IRS allows the 'annualized income installment method' to pay unevenly across quarters rather than a flat even split, which can reduce or eliminate penalties.",
+      "Underpaying even one quarter can trigger a penalty for that quarter specifically, even if the full year's tax is eventually paid in full.",
+      "State estimated tax payments are usually a separate requirement with their own due dates and rules, not covered by this federal-only estimate.",
+      "A significant income change partway through the year should prompt recalculating remaining payments rather than continuing with the original even split.",
+    ],
     examples: [
       { title: "Consistent freelance income", body: "$80,000 in expected net self-employment income (single) produces roughly $20,000 in total annual tax, or about $5,000 due each quarter." },
       { title: "Part-time side income", body: "$25,000 in net side income still requires quarterly payments if you expect to owe $1,000 or more for the year — even modest freelance income can trigger the requirement." },
@@ -269,6 +373,20 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "The IRS allows employers to withhold supplemental wages like bonuses at a flat 22% federal rate (for bonuses under $1 million) instead of using your regular W-4 withholding formula. The calculator applies that 22% flat rate plus standard FICA payroll tax to your bonus amount to estimate your net bonus payout.",
     formula: "Net bonus = bonus − (bonus × 22%) − FICA tax on the bonus",
+    methodology:
+      "The IRS created the flat supplemental-wage withholding rate specifically because bonuses don't fit neatly into the regular per-paycheck withholding formula, which assumes a steady salary spread evenly across the year. Rather than trying to recalculate your entire W-4 withholding around a one-time payment, employers can simply withhold a flat 22% (or a higher flat rate above the $1 million threshold in a year) and let the difference between withholding and your true liability sort itself out when you file. This is why bonus paychecks often feel over-withheld — the flat rate doesn't know your actual marginal tax bracket.",
+    stepByStep: [
+      "Start with the gross bonus amount.",
+      "Multiply by 22% to find the flat federal withholding (for bonuses under $1 million in the year).",
+      "Calculate FICA tax on the bonus the same way as regular wages (6.2% Social Security up to the cap, 1.45% Medicare).",
+      "Subtract both the federal withholding and FICA from the gross bonus to find the net amount received.",
+    ],
+    edgeCases: [
+      "Bonuses that push total supplemental wages over $1 million in a calendar year are withheld at 37% on the excess, not 22%.",
+      "Some employers use the 'aggregate method' instead, combining the bonus with your regular paycheck and withholding based on your normal W-4 — this can produce a different (sometimes higher) withholding amount than the flat 22% method.",
+      "The 22% withheld is not your final tax rate — if your actual marginal rate is lower, the excess comes back as part of your refund when you file.",
+      "State supplemental wage withholding rates are separate from the federal 22% and vary by state, sometimes significantly.",
+    ],
     examples: [
       { title: "Typical bonus", body: "A $5,000 bonus → $1,100 federal withholding (22%) + $382.50 FICA = about $3,517.50 net." },
       { title: "Larger bonus", body: "A $20,000 bonus follows the same flat rates → roughly $4,400 federal withholding + $1,530 FICA, netting about $14,070." },
@@ -299,6 +417,20 @@ export const taxContent: Record<string, SeoContent> = {
       "Overtime pay often gets a bad reputation for being 'taxed more' — in reality it's taxed at the same rates as your regular income, but because it stacks on top of your regular wages, it can push some of your earnings into a higher bracket. Our Overtime Tax Calculator shows the real impact.",
     howItWorks:
       "The calculator computes your estimated federal tax with your regular wages alone, then again with overtime pay added on top, and reports the difference as the extra tax attributable to the overtime. Because tax brackets are progressive, this extra income is taxed at your marginal rate — the rate that applies to your last dollar earned, not your average rate.",
+    methodology:
+      "The confusion around overtime taxation comes from how payroll systems withhold, not from the actual tax code. When a paycheck suddenly includes a lot of overtime, payroll software often annualizes that single paycheck (treating it as if you earned that much every pay period all year) to estimate withholding, which produces a much higher withholding rate on that one paycheck than your true annual tax rate. The tax code itself, however, just adds overtime pay to your regular wages and taxes the combined total through the normal brackets — there is no special overtime tax rate anywhere in the law.",
+    stepByStep: [
+      "Calculate estimated annual federal tax using regular wages alone.",
+      "Add the overtime pay to regular wages and recalculate federal tax on the combined total.",
+      "Subtract the first result from the second to isolate the tax specifically attributable to the overtime.",
+      "Divide that tax by the overtime amount to see the effective marginal rate applied to just the extra pay.",
+    ],
+    edgeCases: [
+      "If regular wages already sit near the top of a tax bracket, overtime pay can push part of it into a higher bracket, raising the marginal rate on just that portion.",
+      "FICA tax also applies to overtime pay at the same flat rates as regular wages, and should be added on top of this federal income tax estimate for a full picture.",
+      "A single paycheck's withholding (often calculated using an annualized estimate) can look much higher than the actual tax owed on that overtime once the full year is averaged out.",
+      "Nonexempt employees' overtime rate itself (time-and-a-half or double-time) is a separate wage-and-hour law question, unrelated to how that pay is taxed once earned.",
+    ],
     examples: [
       { title: "Overtime within the same bracket", body: "$60,000 regular wages plus $6,000 overtime (single) both fall within the 22% bracket, so the extra tax on the overtime is roughly $1,320, leaving about $4,680 in extra take-home pay." },
       { title: "Overtime crossing into a higher bracket", body: "If regular wages were closer to the top of the 22% bracket, some of the overtime could spill into the 24% bracket, slightly increasing the marginal rate applied to the last portion." },
@@ -330,6 +462,20 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator runs your taxable income through the 2025 federal brackets to find your total tax owed, then divides that total by your income to get your effective (average) rate. Your marginal rate — the rate on your last dollar earned — is reported separately, since it's almost always higher than your effective rate.",
     formula: "Effective rate = total tax ÷ total income\nMarginal rate = the tax bracket rate applied to your last dollar of income",
+    methodology:
+      "Effective rate is a blended average across every bracket your income passes through, while marginal rate is a single data point — the rate on the bracket your last dollar landed in. Because the US system is progressive, lower brackets always pull the effective rate down below the marginal rate: the first slice of everyone's income, no matter how high their total earnings, is taxed at the lowest bracket's rate. The gap between the two numbers grows as income rises and passes through more brackets, which is exactly why a high earner's marginal rate (say 37%) can look alarming while their effective rate sits far lower.",
+    stepByStep: [
+      "Calculate total federal tax owed by running taxable income through all applicable brackets.",
+      "Divide total tax owed by total taxable income to get the effective (average) rate.",
+      "Separately, identify which bracket the last dollar of income falls into — that bracket's rate is the marginal rate.",
+      "Compare the two: the marginal rate will always be equal to or higher than the effective rate.",
+    ],
+    edgeCases: [
+      "Both figures here reflect federal income tax only — adding FICA and state tax to the numerator would produce a higher, more complete effective rate.",
+      "Tax credits (as opposed to deductions) reduce tax owed dollar-for-dollar and lower effective rate more than deductions of the same size would.",
+      "A raise that increases your marginal rate never decreases your take-home pay — only the income within the new, higher bracket is taxed at that rate, not your entire income.",
+      "Effective rate calculated on gross income versus taxable income (after deductions) will produce noticeably different numbers, so it's worth being clear about which base is being used.",
+    ],
     examples: [
       { title: "Middle income", body: "$90,000 taxable income (single) → about $15,246 in federal tax, an effective rate near 16.9%, even though the marginal rate on the last dollar earned is 22%." },
       { title: "Why they diverge", body: "Only the income within each bracket is taxed at that bracket's rate — the first $11,600 is taxed at 10% regardless of total income, which is why effective rate always lags behind marginal rate." },
@@ -360,6 +506,21 @@ export const taxContent: Record<string, SeoContent> = {
       "The US federal tax system is progressive, meaning different slices of your income are taxed at different rates — not your entire income at one flat rate. Our Marginal Tax Rate Calculator shows exactly how much tax comes from each bracket, up to your income level, in a clear table.",
     howItWorks:
       "The calculator walks through the 2025 federal tax brackets for your filing status in order, calculating how much of your income falls into each bracket and the tax owed from that slice alone. Your marginal rate is simply the rate of the highest bracket your income reaches — the rate that would apply to one more dollar earned.",
+    methodology:
+      "Progressive brackets work like a series of buckets stacked on top of each other, each with its own capacity and rate. Your income fills the lowest bucket first, then spills into the next one once the first is full, and so on, with each bucket taxed only at its own rate regardless of how many buckets you eventually fill. This is fundamentally different from a flat tax, where one rate would apply to the entire amount at once — under a bracket system, moving into a new bracket only ever affects the portion of income that falls above the previous bracket's threshold.",
+    stepByStep: [
+      "List the tax brackets and thresholds for your filing status, in ascending order.",
+      "Starting from the lowest bracket, calculate how much of your income falls within each bracket's range.",
+      "Multiply the income within each bracket by that bracket's rate to get the tax owed from that slice.",
+      "Sum the tax owed across all brackets for your total federal tax liability.",
+      "The rate of the highest bracket reached is your marginal rate.",
+    ],
+    edgeCases: [
+      "Bracket thresholds differ significantly by filing status (single, married filing jointly, married filing separately, head of household), so the same income can land in different brackets depending on how you file.",
+      "Bracket thresholds are typically adjusted for inflation each year, so a bracket table from a prior year can misstate current thresholds.",
+      "Long-term capital gains and qualified dividends use an entirely separate rate schedule (0/15/20%) rather than these ordinary income brackets.",
+      "Some tax credits phase out gradually as income rises within a bracket, creating an effective marginal rate on that income that's higher than the stated bracket rate alone would suggest.",
+    ],
     examples: [
       { title: "Single filer at $150,000", body: "Income moves through the 10%, 12%, 22%, and 24% brackets — the last dollar earned falls in the 24% bracket, making that your marginal rate, even though your effective rate is meaningfully lower." },
       { title: "Reading the table", body: "The breakdown shows exactly how much tax comes from the 10% bracket, how much from the 12% bracket, and so on — useful for seeing precisely where your tax bill comes from." },
@@ -390,6 +551,21 @@ export const taxContent: Record<string, SeoContent> = {
       "A single-member LLC is, by IRS default, a 'disregarded entity' — meaning it's taxed exactly like a sole proprietorship unless you elect otherwise. Our LLC Tax Calculator estimates your total federal tax under that default pass-through treatment.",
     howItWorks:
       "Since LLC profit passes straight through to your personal return, the math is identical to self-employment tax: 15.3% self-employment tax on 92.35% of net profit, plus federal income tax on your profit minus half your SE tax and your standard deduction. This calculator assumes default sole-proprietorship taxation — LLCs that elect S-Corp or C-Corp status should use those dedicated calculators instead.",
+    methodology:
+      "The IRS doesn't actually have an 'LLC tax' — the LLC is a state-law legal structure, and the federal government taxes it based on whichever tax classification the owner chooses or defaults into. A single-member LLC defaults to being a 'disregarded entity,' meaning the IRS taxes it exactly as if the LLC didn't exist for federal tax purposes and the business income simply flowed onto the owner's personal return via Schedule C, subject to self-employment tax on the full profit. This is the single biggest reason profitable LLC owners eventually consider an S-Corp election — under default treatment, 100% of profit is exposed to self-employment tax, with no way to shelter any of it in distributions.",
+    stepByStep: [
+      "Start with net LLC profit (revenue minus deductible business expenses).",
+      "Calculate self-employment tax: 92.35% of net profit, then 15.3% of that base.",
+      "Subtract half the self-employment tax and your standard deduction from net profit to find taxable income.",
+      "Apply federal income tax brackets to that taxable income.",
+      "Add self-employment tax and federal income tax together for total estimated federal tax.",
+    ],
+    edgeCases: [
+      "Multi-member LLCs default to partnership taxation rather than disregarded-entity taxation, which involves filing a separate partnership return (Form 1065) even though the tax math per member is similar.",
+      "An LLC can elect S-Corp or C-Corp taxation via IRS filing without changing its legal LLC status at all — the election only changes federal tax treatment.",
+      "State-level LLC taxes and annual franchise fees are separate from this federal estimate and vary significantly by state.",
+      "Business losses in early years can offset other income on the owner's personal return, subject to passive activity and at-risk limitation rules.",
+    ],
     examples: [
       { title: "Default taxation", body: "$100,000 net business profit (single, default LLC taxation) → roughly $14,130 self-employment tax plus federal income tax on the reduced taxable base, for a substantial total tax bill." },
       { title: "Why some LLCs elect S-Corp", body: "The same $100,000 profit taxed as an S-Corp (see our S-Corp Tax Calculator) can reduce payroll tax by only applying it to a 'reasonable salary' portion rather than the full profit." },
@@ -421,6 +597,21 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator splits your net business profit into a salary (subject to FICA payroll tax, both employee and employer shares since you effectively pay both as the owner) and distributions (not subject to payroll tax). It compares the resulting payroll tax against what you'd owe as a sole proprietor paying full self-employment tax on all of it, showing the estimated savings.",
     formula: "Payroll tax = FICA on salary × 2 (employee + employer share)\nSavings = self-employment tax on full profit − payroll tax on salary alone",
+    methodology:
+      "The tax mechanics behind an S-Corp election come down to a single distinction the IRS draws between wages and distributions. Wages paid to an owner-employee are subject to FICA payroll tax exactly like any other employee's paycheck (with the S-Corp itself paying the employer half, though economically that cost still comes from the same business). Distributions of remaining profit to a shareholder, by contrast, are not wages at all under the tax code and so never touch FICA. The entire strategy hinges on legitimately splitting profit into a reasonable salary (taxed) and distributions (not taxed for payroll purposes) rather than taking it all as one lump sum the way a sole proprietor must.",
+    stepByStep: [
+      "Determine total net business profit for the year.",
+      "Set a reasonable salary for the owner's role, based on what a similar employee would be paid in the market.",
+      "Calculate FICA payroll tax on that salary, doubled to represent both the employee and employer shares (both ultimately come from the business).",
+      "The remainder of profit after salary is taken as distributions, which avoid payroll tax entirely.",
+      "Compare total payroll tax under the S-Corp split against what self-employment tax would have been on the full profit as a sole proprietor, to see the estimated savings.",
+    ],
+    edgeCases: [
+      "The IRS actively audits S-Corps with salaries that look artificially low relative to the work performed — 'reasonable compensation' is a real legal requirement, not an optional guideline.",
+      "S-Corps require running actual payroll, filing a separate corporate tax return, and often more bookkeeping than sole-proprietor taxation, all of which cost money that should be weighed against the payroll tax savings.",
+      "At low profit levels, the administrative overhead of an S-Corp can exceed any tax savings, making the election net-negative.",
+      "Distributions are still subject to regular federal income tax — the savings here are specifically payroll/self-employment tax, not income tax as a whole.",
+    ],
     examples: [
       { title: "Meaningful savings", body: "$150,000 net profit with an $80,000 reasonable salary → payroll tax applies only to the $80,000, while $70,000 in distributions avoids it, saving several thousand dollars versus paying self-employment tax on the full $150,000." },
       { title: "Salary set too low", body: "Setting salary far below what's 'reasonable' for the work performed increases the tax savings shown here, but also increases audit risk — the IRS specifically scrutinizes unreasonably low S-Corp salaries." },
@@ -452,6 +643,20 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "Since 2018, federal corporate income tax has been a flat 21% on net taxable corporate income, with no brackets to navigate. The calculator simply multiplies your entered net income by 21% to find federal tax owed, and shows after-tax income as the remainder.",
     formula: "Federal corporate tax = net taxable income × 21%",
+    methodology:
+      "Before the Tax Cuts and Jobs Act of 2017, C-Corporations were taxed on a graduated bracket system with a top rate of 35%, similar in spirit to individual income tax. The 2017 reform replaced that entirely with one flat rate for every C-Corp, regardless of size or profit level, specifically to simplify corporate tax planning and make US corporate rates more competitive internationally. Net taxable income for this purpose means revenue minus all allowable business deductions, depreciation, and other adjustments — it's a business-level profit figure calculated well before the tax itself is applied.",
+    stepByStep: [
+      "Calculate total corporate revenue for the tax year.",
+      "Subtract all allowable business deductions, including operating expenses, depreciation, and interest, to find net taxable income.",
+      "Multiply net taxable income by the flat 21% federal rate to get federal corporate tax owed.",
+      "Subtract the tax from net taxable income to find after-tax corporate profit.",
+    ],
+    edgeCases: [
+      "State corporate income tax is entirely separate from this federal calculation and ranges from 0% in some states to well over 9% in others.",
+      "Profit distributed to shareholders as dividends is taxed again at the individual level — this 'double taxation' is a defining feature of C-Corp structure that pass-through entities avoid.",
+      "Certain industries and corporate structures qualify for specific credits and deductions (R&D credit, Section 199A in limited cases, etc.) that reduce net taxable income below what a simple revenue-minus-expenses calculation would show.",
+      "Net operating losses from prior years can typically offset current-year taxable income, subject to specific carryforward limitation rules.",
+    ],
     examples: [
       { title: "Mid-size corporation", body: "$500,000 in net taxable income → $105,000 in federal corporate tax, leaving $395,000 after-tax." },
       { title: "Smaller corporation", body: "$50,000 in net taxable income → $10,500 federal tax, at the exact same 21% rate — the flat rate applies equally regardless of size." },
@@ -483,6 +688,21 @@ export const taxContent: Record<string, SeoContent> = {
     howItWorks:
       "The calculator adds your declared goods value and shipping/insurance costs together to find the total dutiable value, then applies your entered duty rate as a percentage to find the duty owed. The result is added back to find your total landed cost — what the shipment actually costs once it clears customs.",
     formula: "Dutiable value = declared value + shipping & insurance\nDuty = dutiable value × duty rate\nLanded cost = dutiable value + duty",
+    methodology:
+      "Customs duty is calculated on the 'dutiable value' of a shipment, not just the price of the goods themselves — most customs authorities, including US Customs and Border Protection, use a CIF-style basis (Cost, Insurance, and Freight) that folds shipping and insurance costs into the base before applying the duty rate. The duty rate itself is set by tariff schedules tied to a product's Harmonized System (HS) classification code and its country of origin, which is why identical-looking products can face very different duty rates depending on exactly how they're classified and where they were made.",
+    stepByStep: [
+      "Determine the declared value of the goods being imported.",
+      "Add shipping and insurance costs to the declared value to find the dutiable value.",
+      "Look up the applicable duty rate for the product's HS classification and country of origin.",
+      "Multiply the dutiable value by the duty rate to find duty owed.",
+      "Add the duty back to the dutiable value to find the total landed cost.",
+    ],
+    edgeCases: [
+      "Many countries offer a 'de minimis' threshold below which small shipments owe no duty at all — this threshold varies enormously by country and changes periodically.",
+      "Trade agreements between specific countries can reduce or eliminate duty on qualifying goods, which a generic duty-rate lookup won't reflect.",
+      "Additional fees like merchandise processing fees, harbor maintenance fees, or anti-dumping duties can apply on top of standard duty and aren't included in this simplified estimate.",
+      "Misclassifying a product's HS code (even unintentionally) can result in incorrect duty being charged and potential penalties on customs audit.",
+    ],
     examples: [
       { title: "Standard shipment", body: "$2,000 in declared goods, $100 shipping, 5% duty rate → $2,100 dutiable value, $105 in duty, for a total landed cost of $2,205." },
       { title: "Higher duty rate", body: "The same shipment at a 15% duty rate (common for certain product categories) triples the duty owed to $315, a meaningful jump in total cost." },
