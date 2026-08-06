@@ -30,12 +30,15 @@ const siteUrl = "https://calculateus.com";
 // Root layout reads admin-configurable settings (integrations, site
 // settings) from Firestore. Without this, Next.js prerenders the layout
 // once at build time and those changes never reach the live site.
-// 5 minutes balances that against TTFB: every page under this layout
+// 1 hour balances that against TTFB: every page under this layout
 // (all 220+ calculators, every blog post) falls out of cache and needs a
 // fresh render on the next hit once this window passes, so a shorter
 // value means more real visitors and crawlers landing on a slow,
-// regenerating page instead of a fast cached one.
-export const revalidate = 300;
+// regenerating page instead of a fast cached one. This is a low-traffic
+// site, so a wide window matters more here than it would once regular
+// traffic keeps pages continuously warm — admin changes still show up
+// within the hour, which is fine for settings that aren't time-critical.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
