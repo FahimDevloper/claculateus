@@ -10,6 +10,8 @@ import ReadingProgress from "@/components/blog/ReadingProgress";
 import ShareButtons from "@/components/blog/ShareButtons";
 import CommentsSection from "@/components/blog/CommentsSection";
 import PostCard from "@/components/blog/PostCard";
+import { getIntegrationsSettings } from "@/lib/admin/integrations";
+import AdSlot from "@/components/ads/AdSlot";
 
 export const revalidate = 60;
 
@@ -51,6 +53,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { html, headings } = renderMarkdown(post.contentMarkdown);
   const related = await getRelatedPosts(post).catch(() => []);
   const cat = getBlogCategory(post.category);
+  const integrations = await getIntegrationsSettings();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -138,6 +141,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </div>
               </div>
             )}
+
+            <AdSlot
+              enabled={integrations.adSlotsEnabled}
+              publisherId={integrations.adsensePublisherId}
+              slotId={integrations.adSlotBlogArticle}
+              className="mt-10"
+            />
 
             <CommentsSection postSlug={post.slug} />
           </article>

@@ -11,6 +11,12 @@ export interface IntegrationsSettings {
   bingVerification: string;
   pinterestVerification: string;
   googleAdsConversionId: string;
+  /** Master switch for manual ad-slot placements below. Off by default so
+   *  nothing renders while AdSense approval is pending. */
+  adSlotsEnabled: boolean;
+  adSlotCalculatorBottom: string;
+  adSlotCalculatorArticle: string;
+  adSlotBlogArticle: string;
 }
 
 export const DEFAULT_INTEGRATIONS_SETTINGS: IntegrationsSettings = {
@@ -22,6 +28,10 @@ export const DEFAULT_INTEGRATIONS_SETTINGS: IntegrationsSettings = {
   bingVerification: "",
   pinterestVerification: "",
   googleAdsConversionId: "",
+  adSlotsEnabled: false,
+  adSlotCalculatorBottom: "",
+  adSlotCalculatorArticle: "",
+  adSlotBlogArticle: "",
 };
 
 const INTEGRATIONS_REF = doc(db, "settings", "integrations");

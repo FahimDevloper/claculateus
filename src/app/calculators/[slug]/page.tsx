@@ -14,6 +14,8 @@ import { getCalculatorOverride } from "@/lib/admin/calculatorOverrides";
 import { getRelatedArticles } from "@/lib/blog/relatedArticles";
 import { getReferences } from "@/lib/calculators/references";
 import { expandKeywords } from "@/lib/calculators/keywordExpansion";
+import { getIntegrationsSettings } from "@/lib/admin/integrations";
+import AdSlot from "@/components/ads/AdSlot";
 
 export function generateStaticParams() {
   return allCalculators.map((c) => ({ slug: c.slug }));
@@ -41,6 +43,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
   const seoContent = getSeoContent(def.slug);
   const relatedArticles = await getRelatedArticles(def.category);
   const references = getReferences(def.category);
+  const integrations = await getIntegrationsSettings();
 
   const siteUrl = "https://calculateus.com";
   const jsonLd = {
@@ -124,8 +127,22 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
       <div className="container-wide py-10">
         <CalculatorPageClient slug={def.slug} />
 
+        <AdSlot
+          enabled={integrations.adSlotsEnabled}
+          publisherId={integrations.adsensePublisherId}
+          slotId={integrations.adSlotCalculatorBottom}
+          className="mt-10"
+        />
+
         {seoContent && <SeoContent content={seoContent} title={def.shortTitle ?? def.title} />}
         {seoContent && <ContentByline />}
+
+        <AdSlot
+          enabled={integrations.adSlotsEnabled}
+          publisherId={integrations.adsensePublisherId}
+          slotId={integrations.adSlotCalculatorArticle}
+          className="mt-10"
+        />
 
         {def.faqs && def.faqs.length > 0 && (
           <Reveal className="mt-16">

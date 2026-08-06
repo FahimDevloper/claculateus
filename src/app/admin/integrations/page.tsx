@@ -188,6 +188,65 @@ export default function IntegrationsPage() {
             — AdSense checks this automatically.
           </p>
         )}
+
+        <div className="mt-2 flex flex-col gap-3 rounded-xl border border-border bg-surface-2 p-4">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-foreground">Ad slot placements</p>
+              <p className="mt-0.5 text-xs text-muted">
+                Reserved-space ad units on calculator and blog pages. Keep this off while your AdSense application is
+                pending — nothing renders (and no space is reserved) until you switch it on.
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={settings.adSlotsEnabled}
+              onClick={() => update("adSlotsEnabled", !settings.adSlotsEnabled)}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition ${
+                settings.adSlotsEnabled ? "bg-primary" : "bg-border"
+              }`}
+            >
+              <span
+                className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  settings.adSlotsEnabled ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+
+          <label className="flex flex-col gap-1.5 text-xs text-muted">
+            Below calculator tool — ad slot ID
+            <input
+              value={settings.adSlotCalculatorBottom}
+              onChange={(e) => update("adSlotCalculatorBottom", e.target.value)}
+              placeholder="e.g. 1234567890"
+              className="field-input font-mono"
+            />
+          </label>
+          <label className="flex flex-col gap-1.5 text-xs text-muted">
+            In calculator article — ad slot ID
+            <input
+              value={settings.adSlotCalculatorArticle}
+              onChange={(e) => update("adSlotCalculatorArticle", e.target.value)}
+              placeholder="e.g. 1234567890"
+              className="field-input font-mono"
+            />
+          </label>
+          <label className="flex flex-col gap-1.5 text-xs text-muted">
+            In blog article — ad slot ID
+            <input
+              value={settings.adSlotBlogArticle}
+              onChange={(e) => update("adSlotBlogArticle", e.target.value)}
+              placeholder="e.g. 1234567890"
+              className="field-input font-mono"
+            />
+          </label>
+          <p className="text-xs text-muted">
+            Create each ad unit in AdSense under Ads → By ad unit → Display ads, then paste its slot ID here. Leave a
+            field blank to skip that placement.
+          </p>
+        </div>
       </ServiceCard>
 
       <ServiceCard
