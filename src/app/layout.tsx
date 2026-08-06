@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import ThemeInit from "@/components/theme/ThemeInit";
@@ -11,6 +12,7 @@ import SyncEngine from "@/components/auth/SyncEngine";
 import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
 import InstallPrompt from "@/components/pwa/InstallPrompt";
 import { getSiteSettings } from "@/lib/admin/siteSettings";
+import { getIntegrationsSettings } from "@/lib/admin/integrations";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,6 +86,7 @@ const websiteJsonLd = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getSiteSettings();
+  const integrations = await getIntegrationsSettings();
   const accentColor = HEX_COLOR.test(settings.accentColor) ? settings.accentColor : null;
 
   return (
@@ -103,8 +106,29 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             }}
           />
         )}
+        {integrations.gscVerification && <meta name="google-site-verification" content={integrations.gscVerification} />}
+        {integrations.bingVerification && <meta name="msvalidate.01" content={integrations.bingVerification} />}
+        {integrations.pinterestVerification && <meta name="p:domain_verify" content={integrations.pinterestVerification} />}
+        {integrations.adsensePublisherId && <meta name="google-adsense-account" content={integrations.adsensePublisherId} />}
+        {integrations.adsensePublisherId && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${integrations.adsensePublisherId}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        {integrations.gtmContainerId && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${integrations.gtmContainerId}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            />
+          </noscript>
+        )}
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
@@ -125,6 +149,24 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             <InstallPrompt />
           </AuthProvider>
         </MotionConfig>
+        {integrations.gtmContainerId && (
+          <Script id="gtm" strategy="afterInteractive">
+            {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${integrations.gtmContainerId}');`}
+          </Script>
+        )}
+        {integrations.gaMeasurementId && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${integrations.gaMeasurementId}`} strategy="afterInteractive" />
+            <Script id="ga4" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${integrations.gaMeasurementId}');`}
+            </Script>
+          </>
+        )}
+        {integrations.adsensePublisherId && integrations.adsenseAutoAds && (
+          <Script id="adsense-auto-ads" strategy="afterInteractive">
+            {`(adsbygoogle=window.adsbygoogle||[]).push({google_ad_client:"${integrations.adsensePublisherId}",enable_page_level_ads:true});`}
+          </Script>
+        )}
       </body>
     </html>
   );
