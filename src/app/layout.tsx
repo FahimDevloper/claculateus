@@ -26,6 +26,11 @@ const geistMono = Geist_Mono({
 
 const siteUrl = "https://www.calculateus.com";
 
+// Root layout reads admin-configurable settings (integrations, site
+// settings) from Firestore. Without this, Next.js prerenders the layout
+// once at build time and those changes never reach the live site.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
