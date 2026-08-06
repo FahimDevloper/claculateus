@@ -88,6 +88,8 @@ export default function Header({ logoUrl, customNavLinks = [] }: { logoUrl?: str
             className="btn-ghost inline-flex h-9 w-9 items-center justify-center rounded-lg lg:hidden"
             onClick={() => setMobileOpen((o) => !o)}
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
@@ -108,6 +110,7 @@ export default function Header({ logoUrl, customNavLinks = [] }: { logoUrl?: str
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            id="mobile-nav"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}

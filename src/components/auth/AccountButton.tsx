@@ -62,6 +62,9 @@ export default function AccountButton() {
     <div className="relative">
       <button
         onClick={() => setMenuOpen((o) => !o)}
+        aria-label={`Account menu for ${user.displayName ?? user.email ?? "your account"}`}
+        aria-haspopup="true"
+        aria-expanded={menuOpen}
         className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-primary text-sm font-bold text-primary-foreground"
       >
         {user.photoURL ? (
