@@ -25,7 +25,7 @@ export default async function Footer() {
 
   return (
     <footer className="relative mt-32 border-t border-border bg-surface">
-      <div className="container-wide grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="container-wide grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-6">
         <div className="lg:col-span-2">
           <Link href="/" className="flex items-center gap-2">
             {settings.logoUrl ? (

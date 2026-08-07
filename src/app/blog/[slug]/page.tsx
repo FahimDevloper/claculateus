@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       )}
 
       <div className="container-wide py-10">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_220px]">
           <article className="prose-legal max-w-[72ch] [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-foreground [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-foreground [&_p]:mt-4 [&_p]:leading-relaxed [&_p]:text-foreground [&_a]:text-primary [&_strong]:text-foreground [&_li]:text-foreground">
             <div dangerouslySetInnerHTML={{ __html: html }} />
 
@@ -159,7 +159,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {related.length > 0 && (
           <Reveal className="mt-16">
             <h2 className="text-xl font-bold text-foreground">Related articles</h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
               {related.map((p) => (
                 <PostCard key={p.slug} post={p} />
               ))}

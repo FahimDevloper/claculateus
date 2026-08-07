@@ -58,7 +58,7 @@ export default function SeoContent({ content, title }: { content: SeoContentType
         {content.examples.length > 0 && (
           <section className="flex flex-col gap-4">
             <h2 className="text-xl font-bold text-foreground">Examples</h2>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {content.examples.map((ex, i) => (
                 <div key={i} className="card p-4">
                   <h3 className="text-sm font-semibold text-foreground">{ex.title}</h3>
@@ -69,7 +69,7 @@ export default function SeoContent({ content, title }: { content: SeoContentType
           </section>
         )}
 
-        <div className="grid gap-8 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           <section className="flex flex-col gap-3">
             <h3 className="text-lg font-bold text-foreground">Advantages</h3>
             <ul className="flex flex-col gap-2">
@@ -110,7 +110,7 @@ export default function SeoContent({ content, title }: { content: SeoContentType
 
         <section className="flex flex-col gap-3">
           <h3 className="text-lg font-bold text-foreground">Common Use Cases</h3>
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {content.useCases.map((u, i) => (
               <li key={i} className="flex gap-2 text-sm text-muted">
                 <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />

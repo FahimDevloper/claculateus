@@ -83,7 +83,7 @@ export default function CalculatorRunner({ def }: { def: CalculatorDefinition })
               ))}
             </div>
           )}
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {basicFields.map((f) => (
               <FieldRenderer
                 key={f.id}
@@ -104,7 +104,7 @@ export default function CalculatorRunner({ def }: { def: CalculatorDefinition })
                 {showAdvanced ? "Hide advanced options ▴" : "Show advanced options ▾"}
               </button>
               {showAdvanced && (
-                <div className="mt-4 grid gap-4 border-t border-border/60 pt-4 sm:grid-cols-2 print:border-0">
+                <div className="mt-4 grid grid-cols-1 gap-4 border-t border-border/60 pt-4 sm:grid-cols-2 print:border-0">
                   {advancedFields.map((f) => (
                     <FieldRenderer
                       key={f.id}

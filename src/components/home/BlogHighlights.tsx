@@ -23,7 +23,7 @@ export default async function BlogHighlights() {
           View all →
         </Link>
       </Reveal>
-      <div className="grid gap-5 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         {posts.map((p) => (
           <PostCard key={p.slug} post={p} />
         ))}

@@ -35,7 +35,7 @@ export default function WhyChooseUs() {
         </div>
       </Reveal>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {rest.map((p, i) => (
           <Reveal key={p.title} delay={Math.min(i * 0.05, 0.2)}>
             <div className="card flex h-full gap-3 p-5">

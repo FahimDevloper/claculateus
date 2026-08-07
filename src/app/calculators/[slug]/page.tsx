@@ -161,7 +161,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
         {related.length > 0 && (
           <Reveal className="mt-16">
             <h2 className="text-xl font-bold text-foreground">Related calculators</h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((c) => (
                 <Link
                   key={c.slug}
@@ -179,7 +179,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
         {relatedArticles.length > 0 && (
           <Reveal className="mt-16">
             <h2 className="text-xl font-bold text-foreground">Related articles</h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {relatedArticles.map((post) => (
                 <Link
                   key={post.slug}

@@ -77,7 +77,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         {calcs.length === 0 ? (
           <p className="text-muted">More {cat.title.toLowerCase()} calculators are on the way.</p>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {calcs.map((c, i) => (
               <Reveal key={c.slug} delay={Math.min(i * 0.03, 0.3)}>
                 <Link
