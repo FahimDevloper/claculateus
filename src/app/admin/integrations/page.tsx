@@ -170,15 +170,12 @@ export default function IntegrationsPage() {
             className="field-input font-mono"
           />
         </label>
-        <label className="flex items-center gap-2 text-sm text-foreground">
-          <input
-            type="checkbox"
-            checked={settings.adsenseAutoAds}
-            onChange={(e) => update("adsenseAutoAds", e.target.checked)}
-            className="h-4 w-4"
-          />
-          Enable Auto ads
-        </label>
+        {settings.adsensePublisherId && (
+          <p className="text-xs text-muted">
+            Auto ads are controlled from your AdSense account itself (Ads → Overview → Auto ads) — no separate
+            toggle needed here once the Publisher ID above is set.
+          </p>
+        )}
         {settings.adsensePublisherId && (
           <p className="text-xs text-muted">
             ads.txt is now live at{" "}

@@ -141,7 +141,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <Script
             id="adsbygoogle-loader"
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${integrations.adsensePublisherId}`}
-            strategy="beforeInteractive"
+            strategy="afterInteractive"
             crossOrigin="anonymous"
           />
         )}
@@ -193,11 +193,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
               }${integrations.googleAdsConversionId ? `gtag('config','${integrations.googleAdsConversionId}');` : ""}`}
             </Script>
           </>
-        )}
-        {integrations.adsensePublisherId && integrations.adsenseAutoAds && (
-          <Script id="adsense-auto-ads" strategy="afterInteractive">
-            {`(adsbygoogle=window.adsbygoogle||[]).push({google_ad_client:"${integrations.adsensePublisherId}",enable_page_level_ads:true});`}
-          </Script>
         )}
       </body>
     </html>
