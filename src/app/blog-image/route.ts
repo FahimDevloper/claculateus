@@ -70,11 +70,16 @@ export async function GET(req: NextRequest) {
     return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#ffffff" opacity="${op.toFixed(2)}" />`;
   }).join("");
 
-  const lines = wrapTitle(title, 26);
+  // Cards across the site crop this 1200x630 image to very different aspect
+  // ratios (a tall narrow mobile card vs. a wide desktop featured banner) via
+  // object-cover, which always crops symmetrically from the center. Centered,
+  // narrower-than-necessary text survives that far better than left-aligned
+  // text anchored near one edge, which routinely lost its first/last words.
+  const lines = wrapTitle(title, 20);
   const lineHeight = 62;
   const startY = 630 / 2 - ((lines.length - 1) * lineHeight) / 2 + 18;
   const textSpans = lines
-    .map((line, i) => `<tspan x="80" y="${startY + i * lineHeight}">${escapeXml(line)}</tspan>`)
+    .map((line, i) => `<tspan x="600" y="${startY + i * lineHeight}">${escapeXml(line)}</tspan>`)
     .join("");
 
   const iconRotate = h % 12 - 6;
@@ -91,8 +96,8 @@ export async function GET(req: NextRequest) {
   <g transform="translate(900 60) rotate(${iconRotate})" opacity="0.16">
     <path d="${icon}" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" transform="scale(4)" />
   </g>
-  <text x="80" y="${startY}" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="52" fill="#ffffff">${textSpans}</text>
-  <text x="80" y="580" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="22" fill="#ffffff" opacity="0.85">Calculateus.com</text>
+  <text x="600" y="${startY}" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="52" fill="#ffffff">${textSpans}</text>
+  <text x="600" y="580" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="22" fill="#ffffff" opacity="0.85">Calculateus.com</text>
 </svg>`;
 
   return new Response(svg, {
