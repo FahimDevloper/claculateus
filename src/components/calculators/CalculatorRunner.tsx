@@ -63,7 +63,7 @@ export default function CalculatorRunner({ def }: { def: CalculatorDefinition })
 
   return (
     <div>
-      <div className="grid gap-6 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
         <div className="card-lg p-5 sm:p-6 lg:col-span-3 print:border-0 print:shadow-none">
           {def.presets && def.presets.length > 0 && (
             <div className="no-print mb-5 flex flex-wrap gap-2">
