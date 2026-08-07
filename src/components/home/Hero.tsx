@@ -23,7 +23,7 @@ export default function Hero({ headline, subheadline }: { headline?: string; sub
       <div className="gradient-mesh" />
       <div className="container-wide relative py-16 sm:py-20 lg:py-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-          <motion.div variants={container} initial="hidden" animate="show">
+          <motion.div variants={container} initial={false} animate="show">
             <motion.span variants={item} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface/80 px-3 py-1 text-xs font-medium text-muted backdrop-blur">
               {allCalculators.length}+ free calculators, zero sign-up
             </motion.span>
@@ -57,7 +57,7 @@ export default function Hero({ headline, subheadline }: { headline?: string; sub
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
