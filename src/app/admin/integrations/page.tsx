@@ -165,11 +165,18 @@ export default function IntegrationsPage() {
           Publisher ID
           <input
             value={settings.adsensePublisherId}
-            onChange={(e) => update("adsensePublisherId", e.target.value)}
+            onChange={(e) => update("adsensePublisherId", e.target.value.trim())}
             placeholder="ca-pub-XXXXXXXXXXXXXXXX"
             className="field-input font-mono"
           />
         </label>
+        {settings.adsensePublisherId && !/^ca-pub-\d{16}$/.test(settings.adsensePublisherId) && (
+          <p className="text-xs text-warning">
+            That doesn&apos;t look like a Publisher ID — it should be exactly &quot;ca-pub-&quot; followed by 16
+            digits, with nothing else pasted in (no HTML tags, no extra text). AdSense verification and ads.txt will
+            fail silently if this is wrong.
+          </p>
+        )}
         {settings.adsensePublisherId && (
           <p className="text-xs text-muted">
             Auto ads are controlled from your AdSense account itself (Ads → Overview → Auto ads) — no separate
