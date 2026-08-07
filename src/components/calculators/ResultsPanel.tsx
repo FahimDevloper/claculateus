@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { CalculatorDefinition, ComputeResult, FieldValues } from "@/lib/calculators/types";
 import ExportActions from "./ExportActions";
@@ -12,6 +13,12 @@ interface Props {
 }
 
 export default function ResultsPanel({ result, def, values }: Props) {
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
+
   return (
     <div className="glass sticky top-20 overflow-hidden rounded-2xl print:static print:shadow-none">
       <div className="border-b border-border/60 bg-[color-mix(in_oklab,var(--surface-2)_70%,transparent)] px-5 py-3">
@@ -38,7 +45,7 @@ export default function ResultsPanel({ result, def, values }: Props) {
                     <dt className="text-xs font-medium uppercase tracking-wide text-muted">{item.label}</dt>
                     <motion.dd
                       key={item.value}
-                      initial={{ opacity: 0, y: 6 }}
+                      initial={isFirstRender.current ? false : { opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.18 }}
                       className="mt-1 text-2xl font-bold text-primary sm:text-3xl"

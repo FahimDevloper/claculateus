@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, KeyboardEvent } from "react";
+import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import { getMemory, setMemory as persistMemory } from "@/lib/storage";
 import { CopyIcon, ShareIcon } from "@/components/icons";
@@ -68,6 +68,11 @@ export default function CalculatorApp({ initialMode, onEquals, compact, showMode
   const [copied, setCopied] = useState(false);
   const [hasMemory, setHasMemory] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
 
   function inputDigit(d: string) {
     if (resetNext || display === "0") {
@@ -264,7 +269,7 @@ export default function CalculatorApp({ initialMode, onEquals, compact, showMode
         <div className="h-5 truncate text-sm text-muted">{expression || " "}</div>
         <motion.div
           key={display}
-          initial={{ opacity: 0, y: 6 }}
+          initial={isFirstRender.current ? false : { opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="mt-1 truncate text-4xl font-bold text-foreground"
